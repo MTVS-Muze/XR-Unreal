@@ -13,6 +13,8 @@
 #include "EnhancedInputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Plugins/Runtime/XRBase/Source/XRBase/Public/HeadMountedDisplayFunctionLibrary.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 
 
@@ -21,13 +23,15 @@ AMyCharacter::AMyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+	//VR카메라
 	hmdCam = CreateDefaultSubobject<UCameraComponent>(TEXT("HMD Camera"));
 	hmdCam->SetupAttachment(RootComponent);
-
+	hmdCam->bAutoActivate = false;
+	//VR카메라 메쉬
 	hmdMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HMD Mesh"));
 	hmdMesh->SetupAttachment(hmdCam);
-
+	
+	//왼쪽 컨트롤러
 	leftMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Left Motion Controller"));
 	leftMotionController->SetupAttachment(RootComponent);
 	leftMotionController->SetTrackingMotionSource(FName("Left"));
@@ -40,7 +44,8 @@ AMyCharacter::AMyCharacter()
 	{
 		leftHand->SetSkeletalMesh(TempLeft.Object);
 	}
-
+	////////////////////////////////////////////////
+	//오른쪽 컨트롤러
 	rightMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Right Motion Controller"));
 	rightMotionController->SetupAttachment(RootComponent);
 	
@@ -52,7 +57,8 @@ AMyCharacter::AMyCharacter()
 	{
 		rightHand->SetSkeletalMesh(TempRight.Object);
 	}
-
+	////////////////////////////////////////////////
+	////////////////////////////////////////////////
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationPitch = true;
 
@@ -60,6 +66,24 @@ AMyCharacter::AMyCharacter()
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
+
+	//3인칭 카메라 세팅
+	Third_CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("FollowCamera"));
+	Third_CameraBoom->SetupAttachment(RootComponent);
+	Third_CameraBoom->TargetArmLength = 400.0f;
+	Third_CameraBoom->bUsePawnControlRotation = true;
+
+	Third_FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Third_FollowCamera"));
+	Third_FollowCamera->SetupAttachment(Third_CameraBoom);
+	Third_FollowCamera->bUsePawnControlRotation = false;
+
+	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempThirdMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
+	if (TempThirdMesh.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(TempThirdMesh.Object);
+	}
+	
+
 }
 
 // Called when the game starts or when spawned
@@ -80,7 +104,7 @@ void AMyCharacter::BeginPlay()
 	}
 	pc = GetController<APlayerController>();
 
-	//UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Stage);
+	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Stage);
 
 	if (pc)
 	{

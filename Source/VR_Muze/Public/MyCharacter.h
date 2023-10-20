@@ -45,6 +45,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class USkeletalMeshComponent* rightHand;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class USpringArmComponent* Third_CameraBoom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UCameraComponent* Third_FollowCamera;
+
 	
 
 public:

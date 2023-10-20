@@ -53,8 +53,8 @@ void UMoveComponent::Move(const struct FInputActionValue& value)
 		FVector rightVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::Y);
 
 
-		player->AddMovementInput(forwardVec, controllerInput.X);
-		player->AddMovementInput(rightVec, controllerInput.Y);
+		player->AddMovementInput(forwardVec, controllerInput.Y);
+		player->AddMovementInput(rightVec, controllerInput.X);
 	}
 
 }
@@ -68,6 +68,9 @@ void UMoveComponent::Rotate(const struct FInputActionValue& value)
 		{
 			player->pc->AddYawInput(rightConInput.X);
 			player->pc->AddPitchInput(rightConInput.Y);
+
+			player->AddControllerYawInput(rightConInput.X);
+			player->AddControllerPitchInput(rightConInput.Y);
 		}
 	}
 }
