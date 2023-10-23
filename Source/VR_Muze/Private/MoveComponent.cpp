@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "MoveComponent.h"
 #include "InputAction.h"
 #include "EnhancedInputComponent.h"
 #include "MyCharacter.h"
-#include "MoveComponent.h"
 
 // Sets default values for this component's properties
 UMoveComponent::UMoveComponent()
@@ -52,6 +52,8 @@ void UMoveComponent::Move(const struct FInputActionValue& value)
 		FVector forwardVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::X);
 		FVector rightVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::Y);
 
+		const FRotator Rotation = player->Controller->GetControlRotation();
+		const FRotator YawRotation(0,Rotation.Yaw, 0);
 
 		player->AddMovementInput(forwardVec, controllerInput.Y);
 		player->AddMovementInput(rightVec, controllerInput.X);

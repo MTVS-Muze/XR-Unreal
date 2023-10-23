@@ -8,7 +8,7 @@ public class VR_Muze : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HTTP", "Json", "JsonUtilities", "EnhancedInput", "UMG", "Niagara", "Slate", "SlateCore", "HeadMountedDisplay","XRBase"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HTTP", "Json", "JsonUtilities", "EnhancedInput", "UMG", "Niagara", "Slate", "SlateCore", "HeadMountedDisplay","XRBase", "OnlineSubsystem", "OnlineSubsystemSteam"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

@@ -15,6 +15,7 @@
 #include "../Plugins/Runtime/XRBase/Source/XRBase/Public/HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/WidgetInteractionComponent.h"
 
 
 
@@ -61,29 +62,31 @@ AMyCharacter::AMyCharacter()
 	////////////////////////////////////////////////
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationPitch = true;
-
-	GetCharacterMovement()->bOrientRotationToMovement = false;
-	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	//
+	//GetCharacterMovement()->bOrientRotationToMovement = false;
+	//GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
 
 	//3ÀÎÄª Ä«¸Þ¶ó ¼¼ÆÃ
 	Third_CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("FollowCamera"));
 	Third_CameraBoom->SetupAttachment(RootComponent);
-	Third_CameraBoom->TargetArmLength = 400.0f;
+	Third_CameraBoom->TargetArmLength = 10.0f;
 	Third_CameraBoom->bUsePawnControlRotation = true;
 
 	Third_FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Third_FollowCamera"));
 	Third_FollowCamera->SetupAttachment(Third_CameraBoom);
 	Third_FollowCamera->bUsePawnControlRotation = false;
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempThirdMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
-	if (TempThirdMesh.Succeeded())
-	{
-		GetMesh()->SetSkeletalMesh(TempThirdMesh.Object);
-	}
+	//ConstructorHelpers::FObjectFinder<USkeletalMesh>TempThirdMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
+	//if (TempThirdMesh.Succeeded())
+	//{
+	//	GetMesh()->SetSkeletalMesh(TempThirdMesh.Object);
+	//}
 	
-
+	//À§Á¬ interaction
+	WidgetInteractor = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("Widget_Interactor"));
+	WidgetInteractor->InteractionSource=EWidgetInteractionSource::Mouse;
 }
 
 // Called when the game starts or when spawned
