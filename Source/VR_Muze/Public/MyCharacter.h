@@ -51,7 +51,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UCameraComponent* Third_FollowCamera;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UWidgetInteractionComponent* WidgetInteractor;
 
 public:
 	class APlayerController* pc;
