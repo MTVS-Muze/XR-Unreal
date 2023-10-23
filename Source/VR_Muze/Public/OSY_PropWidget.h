@@ -27,7 +27,14 @@ public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_Exit;
 	
-	
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_CSVSingle;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_CSVAll;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_CSVFile;
+
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> proptest;
 
@@ -44,6 +51,19 @@ public:
 
 	UFUNCTION()
 	void LevelTravel();
+
+	UFUNCTION()
+	void ReadCSVSingle();
+
+	UFUNCTION()
+	void ReadCSVAll();
+
+	UFUNCTION()
+	void ReadCSVFile();
+
+public:
+	UPROPERTY(EditAnywhere,Category=MySettings)
+	class UDataTable* levelInfoTable;
 
 	
 };
