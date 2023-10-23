@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Components/EditableText.h"
 #include "Components/WidgetSwitcher.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 void UMainWidget::NativeConstruct()
 {
@@ -30,6 +31,8 @@ void UMainWidget::OnClickedButtonMedia()
 void UMainWidget::OnClickedButtonCreativeMode()
 {
 	SwitchCanvas(1);
+
+	
 }
 
 void UMainWidget::OnClickedButtonBackModeSelect()
@@ -45,6 +48,10 @@ void UMainWidget::OnClickedButtonCreateBox()
 void UMainWidget::OnClickedButtonCreateEnd()
 {
 	//SwitchCanvas(2);
+
+	FName LevelName = "3_CreativeMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }
 
 void UMainWidget::OnClickedButtonBackBoxList()

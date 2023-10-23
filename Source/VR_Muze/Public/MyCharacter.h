@@ -26,9 +26,44 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere)
-	class UBoxComponent* compBox;
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UCameraComponent* hmdCam;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UStaticMeshComponent* hmdMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UMotionControllerComponent* leftMotionController;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class USkeletalMeshComponent* leftHand;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UMotionControllerComponent* rightMotionController;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class USkeletalMeshComponent* rightHand;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class USpringArmComponent* Third_CameraBoom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UCameraComponent* Third_FollowCamera;
 
 	
+
+public:
+	class APlayerController* pc;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	class UMoveComponent* moveComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inputs")
+	class UInputMappingContext* imc_Mapping;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inputs")
+	TArray<class UInputAction*> inputActions;
+
 
 };

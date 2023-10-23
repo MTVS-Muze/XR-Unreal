@@ -21,6 +21,13 @@ public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_BoxSpawn;
 
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Save;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Exit;
+	
+	
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> proptest;
 
@@ -31,6 +38,12 @@ public:
 public:
 	UFUNCTION()
 	void SpawnBox();
+
+	UFUNCTION()
+	void SaveData();
+
+	UFUNCTION()
+	void LevelTravel();
 
 	
 };
