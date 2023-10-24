@@ -3,6 +3,7 @@
 
 #include "MediaLobbyWidget.h"
 #include "Components/Button.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 void UMediaLobbyWidget::NativeConstruct()
 {
@@ -14,6 +15,12 @@ void UMediaLobbyWidget::NativeConstruct()
 void UMediaLobbyWidget::BackSelectMode()
 {
 	//StartLevel로 돌아가기
+
+	FName LevelName = "2_LobbyMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+
+	UE_LOG(LogTemp, Warning, TEXT("PleaseGo"));
 
 }
 

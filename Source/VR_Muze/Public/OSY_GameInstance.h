@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "OSY_GameInstance.generated.h"
 
 /**
@@ -15,12 +16,9 @@ class VR_MUZE_API UOSY_GameInstance : public UGameInstance
 	GENERATED_BODY()
 
 protected:
-	
-
 	UOSY_GameInstance();
 
 public:
-
 	virtual void Init() override;
 
 	// widget source
@@ -37,4 +35,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CloseSideToolPanel();
 	
+public:
+	//네트워크
+	UPROPERTY()
+	FString mySessionName;
+
+	IOnlineSessionPtr sessionInterface;
+
+	void CreateMuzeSession();
+
+	void OnCreatedMuzeSession(FName sessionName, bool bWasSuccessful);
 };
