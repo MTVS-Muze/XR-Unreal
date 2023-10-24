@@ -59,12 +59,13 @@ void UOSY_PropWidget::ReadCSVSingle()
 {
 	if (levelInfoTable != nullptr)
 	{
-		FLevelInfoTable* result = levelInfoTable->FindRow<FLevelInfoTable>("111111","Level information");
+		/*FLevelInfoTable* result = levelInfoTable->FindRow<FLevelInfoTable>("111111", "Level information");
 
 		if (result != nullptr)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Name : %s, Job : %s, HP : %d, MP:%d"),*result->name, *result->job,result->hp,result->mp);
 		}
+		*/
 	}
 }
 
@@ -80,9 +81,9 @@ void UOSY_PropWidget::ReadCSVAll()
 			FString resulText;
 			for (FLevelInfoTable* levelInfo : levelInfoList)
 			{
-				resulText.Append(FString::Printf(TEXT("Name : %s, Job : %s, HP : %d, MP:%d\n"), *levelInfo->name, *levelInfo->job, levelInfo->hp, levelInfo->mp));
+				//resulText.Append(FString::Printf(TEXT("Name : %s, Job : %s, HP : %d, MP:%d\n"), *levelInfo->name, *levelInfo->job, levelInfo->hp, levelInfo->mp));
 
-				UE_LOG(LogTemp, Warning, TEXT("Name : %s, Job : %s, HP : %d, MP:%d\n"), *levelInfo->name, *levelInfo->job, levelInfo->hp, levelInfo->mp);
+				//UE_LOG(LogTemp, Warning, TEXT("Name : %s, Job : %s, HP : %d, MP:%d\n"), *levelInfo->name, *levelInfo->job, levelInfo->hp, levelInfo->mp);
 
 			}
 		}
@@ -91,24 +92,27 @@ void UOSY_PropWidget::ReadCSVAll()
 
 void UOSY_PropWidget::ReadCSVFile()
 {
-	TArray<FLevelInfoTable*> levelDataList;
+	TArray<FLevelInfoTable> levelDataList;
 
-	FString path="D: / Unreal / XR - Unreal / Content / DEV / OOSY / CSVData / PlayerInfoTable.csv";
+	FString path="D:\\Unreal\\XR-Unreal\\Content\\CSVData\\levelInfo.csv";
 
-	UOSY_CSVParseLibrary::ReadMyCSV(path,levelDataList);
+// 	FString strResult;
+// 	FFileHelper::LoadFileToString(strResult, *path);
+	UOSY_CSVParseLibrary::ReadMyCSV(path, levelDataList);
 
-	UE_LOG(LogTemp,Warning,TEXT("Path : %s"),*path);
-	UE_LOG(LogTemp,Warning,TEXT("LevelDataList : %d"),levelDataList.Num());
-
+	//UE_LOG(LogTemp,Warning,TEXT("Path : %s"),*path);
+	//UE_LOG(LogTemp,Warning,TEXT("LevelDataList : %d"),levelDataList.Num());
 
 	if (levelDataList.Num() > 0)
 	{
 		FString resultText;
-		for (FLevelInfoTable* levelInfo : levelDataList)
+		for (FLevelInfoTable levelInfo : levelDataList)
 		{
 			
-			resultText.Append(FString::Printf(TEXT("Name: %s, Job: %s, HP: %d, MP: %d\r\n"), *levelInfo->name, *levelInfo->job, levelInfo->hp, levelInfo->mp));
+			//resultText.Append(FString::Printf(TEXT("Name: %s, Job: %s, HP: %d, MP: %d\r\n"), *levelInfo.name, *levelInfo.job, levelInfo.hp, levelInfo.mp));
 
+			UE_LOG(LogTemp, Warning, TEXT("Name : %s, spawnTime : %f, dieTime : %f, locationX : %f,locationY : %f, locationZ : %f, scale : %f, texture : %d"), *levelInfo.name, levelInfo.spawnTime, levelInfo.dieTime, levelInfo.locationX, levelInfo.locationY, levelInfo.locationZ, levelInfo.scale,levelInfo.texture);
 		}
 	}
+	
 }
