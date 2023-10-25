@@ -18,31 +18,50 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-	//贸澜 困连
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
+	//困连1
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ViewMain)
+	class UScrollBox* sb_RoomList;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ViewMain)
+	class UButton* btn_BackMain;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ViewMain)
+	class UButton* btn_Join;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ViewMain)
+	class UButton* btn_CreateRoom;
+
+	UFUNCTION()
+	void SwitchCanvas(int32 index);
+
+public:
+	//困连2
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MakingRoom)
 	class UWidgetSwitcher* ws_SwitchSofa;
 
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = ModeSelect)
-	class UEditableText* edit_roomName;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
+	class UEditableText* edit_roomName;				
 
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = ModeSelect)
-	class USlider* slider_playerCount;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = ModeSelect)
-	class UButton* btn_Next;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = ModeSelect)
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
+	class USlider* slider_playerCount;				
+													
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
+	class UTextBlock* text_sliderCount;				
+													
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
+	class UButton* btn_Next;						
+													
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
 	class UButton* btn_Back;
 
 	class UOSY_GameInstance* gi;
 public:
 	UFUNCTION()
-	void InitializeComboBox();
-
-	//UFUNCTION()
-	//void OnComboBoxSelectionChanged(FString SelectedNum, ESelectInfo::Type SelectionType);
+	void OnSliderMoved(float value);
 
 	UFUNCTION()
-	void OnClickCreateRoom();
+	void OnClickNextButton(int32 index);
+
+
 
 };
