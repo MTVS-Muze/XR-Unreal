@@ -12,4 +12,6 @@ void UKJS_ViewModeWidget::NativeConstruct()
 void UKJS_ViewModeWidget::SwitchIndex(int32 index)
 {
 	ws_UISwitch->SetActiveWidgetIndex(index);
+
+	
 }
