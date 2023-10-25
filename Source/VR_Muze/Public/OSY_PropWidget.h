@@ -81,5 +81,8 @@ public:
 	UPROPERTY(EditAnywhere,Category=MySettings)
 	class UDataTable* levelInfoTable;
 
+	UPROPERTY(EditAnywhere,Category=MySettings)
+	class AOSY_NiagaraSpawner* factory;
+
 	
 };

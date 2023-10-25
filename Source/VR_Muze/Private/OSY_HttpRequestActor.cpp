@@ -6,12 +6,15 @@
 #include "Runtime/Online/HTTP/Public/Interfaces/IHttpRequest.h"
 #include "Runtime/Online/HTTP/Public/Interfaces/IHttpResponse.h"
 #include "OSY_CSVParseLibrary.h"
+#include "OSY_GameInstance.h"
 
 // Sets default values
 AOSY_HttpRequestActor::AOSY_HttpRequestActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	//MyGameInstance = Cast<UOSY_GameInstance>(GetGameInstance());
 
 }
 
@@ -50,9 +53,20 @@ void AOSY_HttpRequestActor::OnReceivedData(FHttpRequestPtr Request, FHttpRespons
 	if (bConnectedSuccessfully)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Success"));
+
+		FString SavePath = FPaths::ProjectContentDir() + TEXT("SavedData.csv");
 		FString CSVData = Response->GetContentAsString();
+
+		if (FFileHelper::SaveStringToFile(CSVData, *SavePath))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Data saved to file: %s"), *SavePath);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to save data to file: %s"), *SavePath);
+		}
 		
-		UE_LOG(LogTemp,Warning,TEXT("%s"),*CSVData);
+		//UE_LOG(LogTemp,Warning,TEXT("%s"),*CSVData);
 
 		// CSV 데이터를 파싱합니다.
 		TArray<FString> ParsedData = UOSY_CSVParseLibrary::ParseCSVFile(CSVData);
@@ -66,15 +80,18 @@ void AOSY_HttpRequestActor::OnReceivedData(FHttpRequestPtr Request, FHttpRespons
 			CSVColumns.Empty();
 			Line.ParseIntoArray(CSVColumns, TEXT(","), false);  // 각 줄을 열로 분할
 
-			// 이제 CSVColumns 배열에 해당 줄의 데이터가 열별로 저장됩니다.
-			// 필요에 따라 데이터 처리를 추가하십시오.
-			// 예를 들어, CSVColumns 배열을 사용하여 원하는 방식으로 데이터를 처리하거나 데이터 구조에 맞게 변환할 수 있습니다.
 		}
+
+		// Save data
+		if (MyGameInstance)
+		{
+			MyGameInstance->HttpRecieveData = CSVLines;
+		}
+
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed..."));
-
 	}
 }
 
@@ -112,6 +129,9 @@ void AOSY_HttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TShared
 	if (bConnectedSuccessfully)
 	{
 		FString receivedData = Response->GetContentAsString();
+		FString SavePath = FPaths::ProjectContentDir() + TEXT("SavedData.csv");
+
+
 		UE_LOG(LogTemp,Warning,TEXT("Success"));
 		//gm->SetLogText(receivedData);
 	}

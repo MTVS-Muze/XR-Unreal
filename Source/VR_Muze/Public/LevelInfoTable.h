@@ -13,6 +13,7 @@ struct VR_MUZE_API FLevelInfoTable : public FTableRowBase
 {
 	GENERATED_BODY()
 
+	
 public :
 	UPROPERTY(EditAnywhere)
 	FString name;

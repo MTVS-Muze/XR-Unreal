@@ -19,6 +19,23 @@ UOSY_GameInstance::UOSY_GameInstance()
 
 
 	mySessionName = TEXT("Muze");
+
+	
+
+	// Save data
+	//UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetGameInstance());
+	//if (MyGameInstance)
+	//{
+    //	MyGameInstance->HttpRecieveData = "YourDataHere";
+	//}
+
+	// Load data
+	//UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetGameInstance());
+	//if (MyGameInstance)
+	//{
+	//	FString LoadedData = HttpRecieveData->MyDataToStore;
+    // LoadedData에 데이터가 저장됩니다.
+	//}
 }
 
 void UOSY_GameInstance::Init()

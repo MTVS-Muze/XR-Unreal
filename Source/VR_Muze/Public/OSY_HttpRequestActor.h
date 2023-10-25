@@ -45,4 +45,7 @@ public:
 	UPROPERTY()
 	FString sourceURL;
 
+	// GameInstance
+	class UOSY_GameInstance* MyGameInstance;
+
 };
