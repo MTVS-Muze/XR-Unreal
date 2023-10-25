@@ -16,19 +16,35 @@ struct VR_MUZE_API FLevelInfoTable : public FTableRowBase
 public :
 	UPROPERTY(EditAnywhere)
 	FString name;
+	
 	UPROPERTY(EditAnywhere)
-	FString job;
+	float spawnTime;
 	UPROPERTY(EditAnywhere)
-	int32 hp;
+	float dieTime;
 	UPROPERTY(EditAnywhere)
-	int32 mp;
+	float locationX;
+	UPROPERTY(EditAnywhere)
+	float locationY;
+	UPROPERTY(EditAnywhere)
+	float locationZ;
+	UPROPERTY(EditAnywhere)
+	float scale;
+	UPROPERTY(EditAnywhere)
+	int texture ;
+
+
 
 	/// <summary>
-	/// 구조체 데이터 Set 함수
+	/// 
 	/// </summary>
-	/// <param name="n">이름</param>
-	/// <param name="j">직업</param>
-	/// <param name="h">체력</param>
-	/// <param name="m">마력</param>
-	FORCEINLINE void Set(FString n, FString j, int32 h, int32 m){ name = n; job = j ; hp =h; mp=m;};
+	/// <param name="n">나이아가라이름</param>
+	/// <param name="s">생성시간</param>
+	/// <param name="d">죽는시간</param>
+	/// <param name="lx">X좌표</param>
+	/// <param name="ly">Y좌표</param>
+	/// <param name="lz">Z좌표</param>
+	/// <param name="sc">스케일</param>
+	/// <param name="t">적용텍스쳐인덱스</param>
+	FORCEINLINE void Set(FString n, float s, float d, float lx, float ly, float lz, float sc , int t)
+	{ name = n; spawnTime = s, dieTime = d , locationX = lx, locationY = ly, locationZ = lz, scale = sc, texture = t;};
 };

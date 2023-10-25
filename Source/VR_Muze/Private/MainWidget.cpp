@@ -9,7 +9,6 @@
 
 void UMainWidget::NativeConstruct()
 {
-
 	btn_Media->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonMedia);
 	btn_Creative->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreativeMode);
 	btn_BackModeSelect->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonBackModeSelect);
@@ -25,7 +24,9 @@ void UMainWidget::SwitchCanvas(int32 index)
 
 void UMainWidget::OnClickedButtonMedia()
 {
+	FName LevelName = "4_ViewMapLobby";
 
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }
 
 void UMainWidget::OnClickedButtonCreativeMode()
