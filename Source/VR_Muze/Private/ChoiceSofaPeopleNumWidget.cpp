@@ -5,19 +5,23 @@
 
 void UChoiceSofaPeopleNumWidget::NativeConstruct()
 {
-	
+	//btn_Back->OnClicked.AddDynamic(this,)
 }
 
-void UChoiceSofaPeopleNumWidget::InitializeComboBox()
+void UChoiceSofaPeopleNumWidget::SwitchCanvas(int32 index)
 {
 
 }
 
-
-void UChoiceSofaPeopleNumWidget::OnClickCreateRoom()
+void UChoiceSofaPeopleNumWidget::OnSliderMoved(float value)
 {
-
 }
+
+void UChoiceSofaPeopleNumWidget::OnClickNextButton(int32 index)
+{
+}
+
+
 
 //인덱스 1번은 1명, 2번은 2명, 3번은 3명, 4번은 4명으로 제한된다.
 //인덱스 1번을 고르면 1명의 자리배치로 자동으로 방이 만들어진다.
