@@ -27,7 +27,7 @@ public:
 	void SwitchCanvas(int32 index);
 
 public:
-	//위젯1
+	//ViewMain
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ViewMain)
 	class UScrollBox* sb_RoomList;
 
@@ -41,7 +41,7 @@ public:
 	class UButton* btn_CreateRoom;
 
 public:
-	//위젯1 바인딩 함수
+	//ViewMain 바인딩 함수
 	UFUNCTION()
 	void BackSelectMode();
 
@@ -53,9 +53,7 @@ public:
 
 
 public:
-	//위젯2
-
-
+	//MakingRoom
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
 	class UEditableText* edit_roomName;				
 
@@ -72,15 +70,50 @@ public:
 	class UButton* btn_Back;
 
 	class UOSY_GameInstance* gi;
+
 public:
+	//MakingRoom 바인딩 함수
 	UFUNCTION()
 	void OnSliderMoved(float value);
 
 	UFUNCTION()
-	void OnClickNextButton(int32 index);
+	void OnClickNextButton();
+
+	UFUNCTION()
+	void OnClickBackButton();
 	
+public:
+	//Single 요소
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
+	class UCheckBox* Check_Sit1;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
+	class UCheckBox* Check_Sit2;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
+	class UImage* img_SingleSit1;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
+	class UImage* img_SingleSit2;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
+	class UButton* btn_BackSingle;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
+	class UButton* btn_CreateSingle;
+
+public:
+	//Single 함수
+	UFUNCTION()
+	void BackMakingRoom();
+
+	UFUNCTION()
+	void CreateSingleRoom();
+
+	UFUNCTION()
+	void OnCheckedSit1(bool bIsChcecked);
+
+	UFUNCTION()
+	void OnCheckedSit2(bool bIsChcecked);
 
 };
