@@ -13,5 +13,12 @@ UCLASS()
 class VR_MUZE_API AOSY_CreativeGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AOSY_CreativeGameModeBase();
+	virtual void BeginPlay() override;
+
+private:
+	class UDataTable* LevelInfoTable;
+
 };

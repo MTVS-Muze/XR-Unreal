@@ -13,12 +13,7 @@ void UOSY_CSVParseLibrary::ReadMyCSV(FString filePath, TArray< FLevelInfoTable>&
 	const TCHAR* delimeter1[] = { TEXT("\r"),TEXT("\n") };
 	TArray<FString> lineData;
 	rawCSV.ParseIntoArray(lineData, delimeter1, 2, true);
-	//levelInfoList.SetNum(lineData.Num()-1);
 
-
-
-	//UE_LOG(LogTemp, Warning, TEXT("Line :%s"), lineData.Num());
-	
 	for (int32 i = 1; i < lineData.Num(); i++)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *lineData[i]);
