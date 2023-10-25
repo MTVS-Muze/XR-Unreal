@@ -7,6 +7,9 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "LevelInfoTable.h"
 #include "OSY_CSVParseLibrary.h"
+#include "OSY_HttpDownloader.h"
+#include "OSY_HttpRequestActor.h"
+#include "Runtime/Engine/Public/EngineUtils.h"
 
 void UOSY_PropWidget::NativeConstruct()
 {
@@ -17,6 +20,13 @@ void UOSY_PropWidget::NativeConstruct()
 	btn_CSVAll->OnClicked.AddDynamic(this, &UOSY_PropWidget::ReadCSVAll);
 
 	btn_CSVFile->OnClicked.AddDynamic(this, &UOSY_PropWidget::ReadCSVFile);
+	btn_SendCSV->OnClicked.AddDynamic(this, &UOSY_PropWidget::SendCSV);
+	btn_PostCSV->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostCSV);
+
+	for (TActorIterator<AOSY_HttpRequestActor> it(GetWorld()); it; ++it)
+	{
+		HttpActor = *it;
+	}
 
 }
 
@@ -96,12 +106,7 @@ void UOSY_PropWidget::ReadCSVFile()
 
 	FString path="D:\\Unreal\\XR-Unreal\\Content\\CSVData\\levelInfo.csv";
 
-// 	FString strResult;
-// 	FFileHelper::LoadFileToString(strResult, *path);
 	UOSY_CSVParseLibrary::ReadMyCSV(path, levelDataList);
-
-	//UE_LOG(LogTemp,Warning,TEXT("Path : %s"),*path);
-	//UE_LOG(LogTemp,Warning,TEXT("LevelDataList : %d"),levelDataList.Num());
 
 	if (levelDataList.Num() > 0)
 	{
@@ -109,10 +114,30 @@ void UOSY_PropWidget::ReadCSVFile()
 		for (FLevelInfoTable levelInfo : levelDataList)
 		{
 			
-			//resultText.Append(FString::Printf(TEXT("Name: %s, Job: %s, HP: %d, MP: %d\r\n"), *levelInfo.name, *levelInfo.job, levelInfo.hp, levelInfo.mp));
 
 			UE_LOG(LogTemp, Warning, TEXT("Name : %s, spawnTime : %f, dieTime : %f, locationX : %f,locationY : %f, locationZ : %f, scale : %f, texture : %d"), *levelInfo.name, levelInfo.spawnTime, levelInfo.dieTime, levelInfo.locationX, levelInfo.locationY, levelInfo.locationZ, levelInfo.scale,levelInfo.texture);
 		}
 	}
 	
+}
+
+void UOSY_PropWidget::SendCSV()
+{
+	if (HttpActor != nullptr)
+	{
+		HttpActor->SendRequest(url);
+
+	}
+	//FString url = "";
+}
+
+void UOSY_PropWidget::PostCSV()
+{
+	if (HttpActor != nullptr)
+	{
+		HttpActor->PostRequest(url);
+
+	}
+	//FString url = "";
+	//HttpActor.PostRequest(url);
 }

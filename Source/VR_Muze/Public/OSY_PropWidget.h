@@ -34,13 +34,23 @@ public:
 	class UButton* btn_CSVAll;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_CSVFile;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_SendCSV;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_PostCSV;
 
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> proptest;
 
+	UPROPERTY()
+	FString url ="http://192.168.0.10:8080/map/test";
+
 	//UPROPERTY(VisibleAnywhere)
 	//class AKJS_TestSpawnActor* Cube;
 
+
+	UPROPERTY()
+	class AOSY_HttpRequestActor* HttpActor;
 
 public:
 	UFUNCTION()
@@ -60,6 +70,12 @@ public:
 
 	UFUNCTION()
 	void ReadCSVFile();
+
+	UFUNCTION()
+	void SendCSV();
+
+	UFUNCTION()
+	void PostCSV();
 
 public:
 	UPROPERTY(EditAnywhere,Category=MySettings)

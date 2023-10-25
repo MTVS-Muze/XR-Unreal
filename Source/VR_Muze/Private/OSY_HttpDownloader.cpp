@@ -36,6 +36,7 @@ void UOSY_HttpDownloader::OnReceivedData(FHttpRequestPtr Request, FHttpResponseP
 {
 	if (bConnectedSuccessfully)
 	{
+		UE_LOG(LogTemp,Warning,TEXT("Success"));
 		FString CSVData = Response->GetContentAsString();
 
 		// CSV 데이터를 파싱합니다.
@@ -43,4 +44,10 @@ void UOSY_HttpDownloader::OnReceivedData(FHttpRequestPtr Request, FHttpResponseP
 
 		// ParsedData를 원하는 방식으로 처리하거나 출력할 수 있습니다.
 	}
+	else
+	{
+		UE_LOG(LogTemp,Warning,TEXT("Failed..."));
+
+	}
+
 }

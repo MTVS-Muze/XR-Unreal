@@ -64,3 +64,25 @@ TArray<FString> UOSY_CSVParseLibrary::ParseCSVFile(const FString& CSVData)
 	return ParsedData;
 }
 
+FString UOSY_CSVParseLibrary::MakeCSV(TArray<TMap<FString, FString>> data)
+{
+	FString csvData;
+
+	for (const TMap<FString, FString>& rowData : data)
+	{
+		for (auto It = rowData.CreateConstIterator(); It; ++It)
+		{
+			csvData += It.Key();
+			csvData += TEXT(",");
+			csvData += It.Value();
+			csvData += TEXT(",");
+		}
+		// 각 행의 마지막 쉼표 제거
+		csvData.RemoveAt(csvData.Len() - 1, 1);
+		csvData += TEXT("\n");
+	}
+
+	return csvData;
+	
+}
+

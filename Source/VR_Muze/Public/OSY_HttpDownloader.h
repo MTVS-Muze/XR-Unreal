@@ -22,10 +22,8 @@ public:
 	void ExecuteDownload(FString SourceURL, FString Path, FString Name);
 
 
-private:
 	
 
-private:
 	// Ex: http://www.example.com/file.mp3
 
 	// Ex: /Folder/Packs/
@@ -36,7 +34,7 @@ private:
 	FString name;
 	
 
-private:
+public:
 	UFUNCTION()
 	void SendRequest(const FString url);
 

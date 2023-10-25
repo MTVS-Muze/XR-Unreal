@@ -20,5 +20,7 @@ public:
 	static void ReadMyCSV(FString filePath, TArray<struct FLevelInfoTable>& levelInfoList);
 
 	static TArray<FString> ParseCSVFile(const FString& CSVData);
+
+	static FString MakeCSV(TArray<TMap<FString, FString>> data);
 	
 };
