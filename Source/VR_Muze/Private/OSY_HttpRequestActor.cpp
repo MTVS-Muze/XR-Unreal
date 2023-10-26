@@ -7,6 +7,8 @@
 #include "Runtime/Online/HTTP/Public/Interfaces/IHttpResponse.h"
 #include "OSY_CSVParseLibrary.h"
 #include "OSY_GameInstance.h"
+#include "OSY_CreativeGameModeBase.h"
+#include "OSY_JsonParseLibrary.h"
 
 // Sets default values
 AOSY_HttpRequestActor::AOSY_HttpRequestActor()
@@ -22,6 +24,10 @@ AOSY_HttpRequestActor::AOSY_HttpRequestActor()
 void AOSY_HttpRequestActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
+
+
 	
 }
 
@@ -42,7 +48,7 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 	// 요청하기 위한 정보를 설정한다.
 	req->SetURL(url);
 	req->SetVerb(TEXT("GET"));
-	req->SetHeader(TEXT("Content-Type"), TEXT("text/csv"));
+	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 	req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedData);
 	req->ProcessRequest();
 
@@ -52,46 +58,42 @@ void AOSY_HttpRequestActor::OnReceivedData(FHttpRequestPtr Request, FHttpRespons
 {
 	if (bConnectedSuccessfully)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Success"));
-
-		FString SavePath = FPaths::ProjectContentDir() + TEXT("SavedData.csv");
-		FString CSVData = Response->GetContentAsString();
-
-		if (FFileHelper::SaveStringToFile(CSVData, *SavePath))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Data saved to file: %s"), *SavePath);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("Failed to save data to file: %s"), *SavePath);
-		}
 		
-		//UE_LOG(LogTemp,Warning,TEXT("%s"),*CSVData);
+		FString res = Response->GetContentAsString();
 
-		// CSV 데이터를 파싱합니다.
-		TArray<FString> ParsedData = UOSY_CSVParseLibrary::ParseCSVFile(CSVData);
 
-		TArray<FString> CSVLines;
-		CSVData.ParseIntoArray(CSVLines, TEXT("\n"), true);
+		 UOSY_JsonParseLibrary JsonParser; // 클래스 인스턴스를 직접 생성
 
-		TArray<FString> CSVColumns;
-		for (const FString& Line : CSVLines)
+		TSharedPtr<FJsonObject> ParsedData = JsonParser.ParseJSON(res);
+
+		if (ParsedData.IsValid())
 		{
-			CSVColumns.Empty();
-			Line.ParseIntoArray(CSVColumns, TEXT(","), false);  // 각 줄을 열로 분할
+			// JSON 데이터를 파싱한 후 필요한 값을 추출합니다.
+			int Id = ParsedData->GetIntegerField("id");
+			FString MemberId = ParsedData->GetStringField("memberId");
+			FString Title = ParsedData->GetStringField("title");
+			FString Song = ParsedData->GetStringField("song");
+			FString Data = ParsedData->GetStringField("data");
+			FString CreatedDate = ParsedData->GetStringField("createdDate");
 
-		}
+			UE_LOG(LogTemp, Warning, TEXT("Id: %d"), Id);
+			UE_LOG(LogTemp, Warning, TEXT("MemberId: %s"), *MemberId);
+			UE_LOG(LogTemp, Warning, TEXT("Title: %s"), *Title);
+			UE_LOG(LogTemp, Warning, TEXT("Song: %s"), *Song);
+			UE_LOG(LogTemp, Warning, TEXT("Data: %s"), *Data);
+			UE_LOG(LogTemp, Warning, TEXT("CreatedDate: %s"), *CreatedDate);
 
-		// Save data
-		if (MyGameInstance)
-		{
-			MyGameInstance->HttpRecieveData = CSVLines;
+			// 나머지 코드...
 		}
+		UE_LOG(LogTemp, Warning, TEXT("Successed.."));
+		UE_LOG(LogTemp, Warning, TEXT("% s"), *res);
 
 	}
+
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed..."));
+
+		UE_LOG(LogTemp, Warning, TEXT("Failed.."));
 	}
 }
 
@@ -107,10 +109,8 @@ void AOSY_HttpRequestActor::PostRequest(const FString url)
 	level1.Add("scale", "2");
 	level1.Add("texture", "1");
 	
-	TArray<TMap<FString, FString>> levelData;
-	levelData.Add(level1);
 
-	FString MyCSVData = UOSY_CSVParseLibrary::MakeCSV(levelData);
+	FString MyJsonData = UOSY_JsonParseLibrary::MakeJson(level1);
 	//gm->SetLogText(MyJsonData);
 
 	// 요청 설정
@@ -118,8 +118,8 @@ void AOSY_HttpRequestActor::PostRequest(const FString url)
 	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
 	req->SetURL(url);
 	req->SetVerb(TEXT("POST"));
-	req->SetHeader(TEXT("Content-Type"), TEXT("text/csv"));
-	req->SetContentAsString(MyCSVData);
+	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+	req->SetContentAsString(MyJsonData);
 	req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnPostData);
 	req->ProcessRequest();
 }
@@ -133,6 +133,7 @@ void AOSY_HttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TShared
 
 
 		UE_LOG(LogTemp,Warning,TEXT("Success"));
+
 		//gm->SetLogText(receivedData);
 	}
 	else
@@ -160,5 +161,25 @@ void AOSY_HttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TShared
 		UE_LOG(LogTemp,Warning,TEXT("Recode : %s"),responseCode);
 			//gm->SetLogText(FString::Printf(TEXT("Recode : %d"), responseCode));
 	}
+}
+
+void AOSY_HttpRequestActor::SaveJson(const FString jsonData)
+{
+	// 지정된 이름의 폴더가 없으면 해당 폴더를 만든다.
+	FPlatformFileManager& fileManager = FPlatformFileManager::Get();
+	IPlatformFile& platformFile = fileManager.GetPlatformFile();
+
+
+	FString dirPath = FPaths::ProjectContentDir() + "/Jso00nData";
+	if (!platformFile.DirectoryExists(*dirPath))
+	{
+		platformFile.CreateDirectory(*dirPath);
+	}
+
+	FString fullPath = dirPath + "MyJson.json";
+	UE_LOG(LogTemp, Warning, TEXT("save Path :%s"), *fullPath);
+	bool bIsSaved = FFileHelper::SaveStringToFile(jsonData, *fullPath);
+	
+	UE_LOG(LogTemp, Warning, TEXT("%s"), bIsSaved ? *FString("Json Saved Successfully!!") : *FString("FAILED saving file->.."));
 }
 
