@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Runtime/Online/HTTP/Public/HttpFwd.h"
+#include "OSY_JsonParseLibrary.h"
 #include "OSY_HttpRequestActor.generated.h"
 
 UCLASS()
@@ -48,4 +49,10 @@ public:
 	// GameInstance
 	class UOSY_GameInstance* MyGameInstance;
 
+	UPROPERTY()
+	class AOSY_CreativeGameModeBase* gm;
+
+	// 파일 세이브하기
+	void SaveJson(const FString jsonData);
+	
 };

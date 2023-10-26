@@ -43,7 +43,7 @@ public:
 	TSubclassOf<class AActor> proptest;
 
 	UPROPERTY()
-	FString url ="http://192.168.0.10:8080/map/test";
+	FString url ="http://192.168.0.232:8080/map/test/1";
 
 	//UPROPERTY(VisibleAnywhere)
 	//class AKJS_TestSpawnActor* Cube;
@@ -52,12 +52,21 @@ public:
 	UPROPERTY()
 	class AOSY_HttpRequestActor* HttpActor;
 
+
+
 public:
+	FVector SavedLocation;
+	FRotator SavedRotation;
+	FVector SavedScale;
+
 	UFUNCTION()
 	void SpawnBox();
 
 	UFUNCTION()
-	void SaveData();
+	void SaveJsonData();
+
+	UFUNCTION()
+	void LoadJsonData();
 
 	UFUNCTION()
 	void LevelTravel();
@@ -72,10 +81,10 @@ public:
 	void ReadCSVFile();
 
 	UFUNCTION()
-	void SendCSV();
+	void SendJSon();
 
 	UFUNCTION()
-	void PostCSV();
+	void PostJSon();
 
 public:
 	UPROPERTY(EditAnywhere,Category=MySettings)
@@ -83,6 +92,15 @@ public:
 
 	UPROPERTY(EditAnywhere,Category=MySettings)
 	class AOSY_NiagaraSpawner* factory;
+
+public:
+	//JSON
+
+	TArray<FVector> SavedLocations;
+	TArray<FRotator> SavedRotations;
+	TArray<FVector> SavedScales;
+
+	
 
 	
 };

@@ -6,9 +6,21 @@
 #include "GameFramework/GameModeBase.h"
 #include "OSY_CreativeGameModeBase.generated.h"
 
-/**
- * 
- */
+USTRUCT(BlueprintType)
+struct FActorTransformInfo
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FVector Location;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FRotator Rotation;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FVector Scale;
+};
 UCLASS()
 class VR_MUZE_API AOSY_CreativeGameModeBase : public AGameModeBase
 {
@@ -20,5 +32,12 @@ public:
 
 private:
 	class UDataTable* LevelInfoTable;
+
+
+	UPROPERTY(EditAnywhere,Category = MySettings)
+	TSubclassOf <class UOSY_PropWidget> httpWidget;
+	
+	class UOSY_PropWidget* httpUI;
+
 
 };
