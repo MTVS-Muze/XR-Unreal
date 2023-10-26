@@ -54,5 +54,9 @@ public:
 
 	// 파일 세이브하기
 	void SaveJson(const FString jsonData);
+
+	void ResetTime();
+
+	float currenTime = 0;
 	
 };

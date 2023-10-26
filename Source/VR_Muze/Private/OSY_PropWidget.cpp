@@ -12,9 +12,14 @@
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "OSY_NiagaraSpawner.h"
 
+
+
 void UOSY_PropWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
+
 	btn_BoxSpawn->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnBox);
+	btn_SphereSpawn->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnSphere);
 	btn_Save->OnClicked.AddDynamic(this, &UOSY_PropWidget::SaveJsonData);
 	btn_Exit->OnClicked.AddDynamic(this, &UOSY_PropWidget::LevelTravel);
 	btn_CSVSingle->OnClicked.AddDynamic(this, &UOSY_PropWidget::LoadJsonData);
@@ -32,11 +37,50 @@ void UOSY_PropWidget::NativeConstruct()
 	factory = Cast<AOSY_NiagaraSpawner>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_NiagaraSpawner::StaticClass()));
 
 }
+
+
+void UOSY_PropWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+
+	if (bShouldTick)
+	{
+
+	CurrentTime+=InDeltaTime;
+	}
+
+	UE_LOG(LogTemp,Warning,TEXT("%f"),CurrentTime)
+
+	for (int32 i = PendingSpawns.Num() - 1; i >= 0; --i)
+	{
+		const FActorSpawnInfo& SpawnInfo = PendingSpawns[i];
+		if (CurrentTime >= SpawnInfo.SpawnTime)
+		{
+			// 액터를 생성합니다.
+			UWorld* World = GetWorld();
+			if (World && SpawnInfo.ActorClass)
+			{
+				FActorSpawnParameters Params;
+				Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+				AActor* SpawnedActor = World->SpawnActor<AActor>(SpawnInfo.ActorClass, SpawnInfo.Location, SpawnInfo.Rotation, Params);
+				if (SpawnedActor)
+				{
+					SpawnedActor->SetActorScale3D(SpawnInfo.Scale);
+					SpawnedActor->SetActorHiddenInGame(false);
+				}
+			}
+
+			// 생성한 액터의 정보는 리스트에서 제거합니다.
+			PendingSpawns.RemoveAt(i);
+		}
+	}
+}
+
 #pragma region CSV
 void UOSY_PropWidget::SpawnBox()
 {
-	FVector spawnLoc = FVector(200,0,0);
-	FRotator spawnRot = FRotator(0,0,0);
+	FVector spawnLoc = FVector(200, 0, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
 
 	UWorld* World = GetWorld();
 	if (World)
@@ -44,27 +88,55 @@ void UOSY_PropWidget::SpawnBox()
 		FActorSpawnParameters param;
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AActor* SpawnedProp = World->SpawnActor<AActor>(proptest, spawnLoc, spawnRot);
-		
+
 		if (SpawnedProp)
 		{
 			SavedLocations.Add(SpawnedProp->GetActorLocation());
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
-			SavedScales.Add(SpawnedProp->GetActorScale());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(proptest);
+			SavedSpawnTimes.Add(HttpActor->currenTime);
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnSphere()
+{
+	FVector spawnLoc = FVector(200, -200, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), HttpActor->currenTime);
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Sphereproptest, spawnLoc, spawnRot);
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(Sphereproptest);
+			SavedSpawnTimes.Add(HttpActor->currenTime);
 		}
 	}
 }
 
 void UOSY_PropWidget::SaveJsonData()
 {
-
 	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
 
-	// 저장할 데이터를 JSON 객체에 추가
 	TArray<TSharedPtr<FJsonValue>> LocationsArray;
 	TArray<TSharedPtr<FJsonValue>> RotationsArray;
 	TArray<TSharedPtr<FJsonValue>> ScalesArray;
+	TArray<TSharedPtr<FJsonValue>> ActorClassesArray;
+	TArray<TSharedPtr<FJsonValue>> SpawnTimeArray;
 
-	for (int i = 0; i < SavedLocations.Num(); i++) {
+	for (int i = 0; i < SavedLocations.Num(); i++)
+	{
 		TSharedPtr<FJsonObject> LocationObj = MakeShareable(new FJsonObject);
 		LocationObj->SetNumberField(TEXT("X"), SavedLocations[i].X);
 		LocationObj->SetNumberField(TEXT("Y"), SavedLocations[i].Y);
@@ -82,75 +154,75 @@ void UOSY_PropWidget::SaveJsonData()
 		ScaleObj->SetNumberField(TEXT("Y"), SavedScales[i].Y);
 		ScaleObj->SetNumberField(TEXT("Z"), SavedScales[i].Z);
 		ScalesArray.Add(MakeShareable(new FJsonValueObject(ScaleObj)));
+
+		ActorClassesArray.Add(MakeShareable(new FJsonValueString(SavedActorClasses[i]->GetName())));
+		SpawnTimeArray.Add(MakeShareable(new FJsonValueNumber(SavedSpawnTimes[i])));
+
 	}
 
 	JsonObject->SetArrayField(TEXT("Locations"), LocationsArray);
 	JsonObject->SetArrayField(TEXT("Rotations"), RotationsArray);
 	JsonObject->SetArrayField(TEXT("Scales"), ScalesArray);
+	JsonObject->SetArrayField(TEXT("ActorClasses"), ActorClassesArray);
+	JsonObject->SetArrayField(TEXT("SpawnTime"), SpawnTimeArray);
 
-	// JSON을 문자열로 변환
 	FString JsonString;
 	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
 	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
 
-	// JSON 문자열을 파일로 저장
 	FString SavePath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
 	FFileHelper::SaveStringToFile(JsonString, *SavePath);
-	UE_LOG(LogTemp, Warning, TEXT("path : %s"), *SavePath);
-
 }
 
 void UOSY_PropWidget::LoadJsonData()
 {
 	FString LoadPath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
 
-	// JSON 파일을 문자열로 읽어옴
 	FString JsonString;
 	if (FFileHelper::LoadFileToString(JsonString, *LoadPath))
 	{
 		TSharedPtr<FJsonObject> JsonObject;
 		TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create(JsonString);
 
-		// JSON 문자열을 JSON 객체로 파싱
 		if (FJsonSerializer::Deserialize(JsonReader, JsonObject))
 		{
-			// JSON 객체에서 데이터를 추출
-			if (JsonObject->HasField(TEXT("Locations")) && JsonObject->HasField(TEXT("Rotations")) && JsonObject->HasField(TEXT("Scales")))
+			if (JsonObject->HasField(TEXT("Locations")) && JsonObject->HasField(TEXT("Rotations")) && JsonObject->HasField(TEXT("Scales")) && JsonObject->HasField(TEXT("ActorClasses")) && JsonObject->HasField(TEXT("SpawnTime")))
 			{
 				TArray<TSharedPtr<FJsonValue>> LocationsArray = JsonObject->GetArrayField(TEXT("Locations"));
 				TArray<TSharedPtr<FJsonValue>> RotationsArray = JsonObject->GetArrayField(TEXT("Rotations"));
 				TArray<TSharedPtr<FJsonValue>> ScalesArray = JsonObject->GetArrayField(TEXT("Scales"));
+				TArray<TSharedPtr<FJsonValue>> ActorClassesArray = JsonObject->GetArrayField(TEXT("ActorClasses"));
+				TArray<TSharedPtr<FJsonValue>> SpawnTimeArray = JsonObject->GetArrayField(TEXT("SpawnTime"));
 
-				UWorld* World = GetWorld();
-				if (World)
+				for (int i = 0; i < LocationsArray.Num(); i++)
 				{
-					for (int i = 0; i < LocationsArray.Num(); i++)
-					{
-						TSharedPtr<FJsonObject> LocationObj = LocationsArray[i]->AsObject();
-						TSharedPtr<FJsonObject> RotationObj = RotationsArray[i]->AsObject();
-						TSharedPtr<FJsonObject> ScaleObj = ScalesArray[i]->AsObject();
+					TSharedPtr<FJsonObject> LocationObj = LocationsArray[i]->AsObject();
+					TSharedPtr<FJsonObject> RotationObj = RotationsArray[i]->AsObject();
+					TSharedPtr<FJsonObject> ScaleObj = ScalesArray[i]->AsObject();
 
-						FVector LoadedLocation(LocationObj->GetNumberField(TEXT("X")), LocationObj->GetNumberField(TEXT("Y")), LocationObj->GetNumberField(TEXT("Z")));
-						FRotator LoadedRotation(RotationObj->GetNumberField(TEXT("Pitch")), RotationObj->GetNumberField(TEXT("Yaw")), RotationObj->GetNumberField(TEXT("Roll")));
-						FVector LoadedScale(ScaleObj->GetNumberField(TEXT("X")), ScaleObj->GetNumberField(TEXT("Y")), ScaleObj->GetNumberField(TEXT("Z")));
+					FVector LoadedLocation(LocationObj->GetNumberField(TEXT("X")), LocationObj->GetNumberField(TEXT("Y")), LocationObj->GetNumberField(TEXT("Z")));
+					FRotator LoadedRotation(RotationObj->GetNumberField(TEXT("Pitch")), RotationObj->GetNumberField(TEXT("Yaw")), RotationObj->GetNumberField(TEXT("Roll")));
+					FVector LoadedScale(ScaleObj->GetNumberField(TEXT("X")), ScaleObj->GetNumberField(TEXT("Y")), ScaleObj->GetNumberField(TEXT("Z")));
 
-						UE_LOG(LogTemp, Warning, TEXT("sLoc : X=%f, Y=%f, Z=%f"), LoadedLocation.X, LoadedLocation.Y, LoadedLocation.Z);
-						UE_LOG(LogTemp, Warning, TEXT("sRot : Pitch=%f, Yaw=%f, Roll=%f"), LoadedRotation.Pitch, LoadedRotation.Yaw, LoadedRotation.Roll);
-						UE_LOG(LogTemp, Warning, TEXT("sSca : X=%f, Y=%f, Z=%f"), LoadedScale.X, LoadedScale.Y, LoadedScale.Z);
+					FString ActorClassName = ActorClassesArray[i]->AsString();
+					UClass* ActorClass = FindObject<UClass>(ANY_PACKAGE, *ActorClassName);
 
-						// 액터를 스폰
-						FActorSpawnParameters Params;
-						Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-						AActor* SpawnedActor = World->SpawnActor<AActor>(proptest, LoadedLocation, LoadedRotation, Params);
-						if (SpawnedActor)
-						{
-							SpawnedActor->SetActorScale3D(LoadedScale);
-						}
-					}
+					float SavedTime = SpawnTimeArray[i]->AsNumber();
+
+					// 액터 생성 정보를 구조체에 저장하고, 이를 리스트에 추가합니다.
+					FActorSpawnInfo SpawnInfo;
+					SpawnInfo.Location = LoadedLocation;
+					SpawnInfo.Rotation = LoadedRotation;
+					SpawnInfo.Scale = LoadedScale;
+					SpawnInfo.ActorClass = ActorClass;
+					SpawnInfo.SpawnTime = SavedTime;
+
+					PendingSpawns.Add(SpawnInfo);
 				}
 			}
 		}
 	}
+	bShouldTick = true;
 }
 
 void UOSY_PropWidget::LevelTravel()
@@ -165,13 +237,7 @@ void UOSY_PropWidget::ReadCSVSingle()
 {
 	if (levelInfoTable != nullptr)
 	{
-		/*FLevelInfoTable* result = levelInfoTable->FindRow<FLevelInfoTable>("111111", "Level information");
-
-		if (result != nullptr)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Name : %s, Job : %s, HP : %d, MP:%d"),*result->name, *result->job,result->hp,result->mp);
-		}
-		*/
+		
 	}
 }
 
@@ -200,24 +266,7 @@ void UOSY_PropWidget::ReadCSVFile()
 		UE_LOG(LogTemp, Warning, TEXT("ReadCSVFile Success"));
 		factory->spawnStart();
 	}
-/*
-	TArray<FLevelInfoTable> levelDataList;
 
-	FString path="D:\\Unreal\\XR-Unreal\\Content\\CSVData\\levelInfo.csv";
-
-	UOSY_CSVParseLibrary::ReadMyCSV(path, levelDataList);
-
-	if (levelDataList.Num() > 0)
-	{
-		FString resultText;
-		for (FLevelInfoTable levelInfo : levelDataList)
-		{
-			
-
-			UE_LOG(LogTemp, Warning, TEXT("Name : %s, spawnTime : %f, dieTime : %f, locationX : %f,locationY : %f, locationZ : %f, scale : %f, texture : %d"), *levelInfo.name, levelInfo.spawnTime, levelInfo.dieTime, levelInfo.locationX, levelInfo.locationY, levelInfo.locationZ, levelInfo.scale,levelInfo.texture);
-		}
-	}
-	*/
 }
 
 void UOSY_PropWidget::SendJSon()

@@ -36,6 +36,9 @@ void AOSY_HttpRequestActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	currenTime+= DeltaTime;
+	
+
 }
 
 
@@ -181,5 +184,10 @@ void AOSY_HttpRequestActor::SaveJson(const FString jsonData)
 	bool bIsSaved = FFileHelper::SaveStringToFile(jsonData, *fullPath);
 	
 	UE_LOG(LogTemp, Warning, TEXT("%s"), bIsSaved ? *FString("Json Saved Successfully!!") : *FString("FAILED saving file->.."));
+}
+
+void AOSY_HttpRequestActor::ResetTime()
+{
+	currenTime = 0;
 }
 
