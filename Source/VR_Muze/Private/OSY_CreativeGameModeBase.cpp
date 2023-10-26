@@ -4,6 +4,7 @@
 #include "OSY_CreativeGameModeBase.h"
 #include "UObject/ConstructorHelpers.h"
 #include "LevelInfoTable.h"
+#include "OSY_PropWidget.h"
 
 AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
 {
@@ -12,11 +13,20 @@ AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
     {
         LevelInfoTable = DataTable.Object;
     }
+
+   
+
 }
 
 void AOSY_CreativeGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
+
+    httpUI = CreateWidget<UOSY_PropWidget>(GetWorld(), httpWidget);
+    if (httpUI != nullptr)
+    {
+        httpUI->AddToViewport();
+    }
 
     if (LevelInfoTable != nullptr)
     {
@@ -38,3 +48,4 @@ void AOSY_CreativeGameModeBase::BeginPlay()
         }
     }
 }
+
