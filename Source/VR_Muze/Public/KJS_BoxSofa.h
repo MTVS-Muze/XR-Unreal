@@ -23,4 +23,26 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	UPROPERTY(EditAnywhere, Category = "StaticMeshList")
+	TArray<UStaticMesh*> StaticMeshOptions;
+
+	UPROPERTY(EditAnywhere, Category = "SkeletalMeshList")
+	TArray<USkeletalMesh*> SkeletalMeshOptions;
+
+	UPROPERTY(EditAnywhere, Category = "Base")
+	class UStaticMeshComponent* SelectedStaticMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Base")
+	class USkeletalMeshComponent* SelectedSkeletalMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Base")
+	class UBoxComponent* boxComp;
+
+	UPROPERTY(EditAnywhere, Category = "Base")
+	class UMediaLobbyWidget* ViewWidget;
+	
+	UFUNCTION()
+	void SetMesh();
+
 };
