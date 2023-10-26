@@ -69,6 +69,7 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
 	class UButton* btn_Back;
 
+	UPROPERTY()
 	class UOSY_GameInstance* gi;
 
 public:
@@ -85,10 +86,10 @@ public:
 public:
 	//Single 요소
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
-	class UCheckBox* Check_Sit1;
+	class UCheckBox* Check_SingleSit1;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
-	class UCheckBox* Check_Sit2;
+	class UCheckBox* Check_SingleSit2;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
 	class UImage* img_SingleSit1;
@@ -101,6 +102,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
 	class UButton* btn_CreateSingle;
+
+	UPROPERTY(EditAnywhere)
+	class AKJS_BoxSofa* BoxSofa;
 
 public:
 	//Single 함수
@@ -115,5 +119,6 @@ public:
 
 	UFUNCTION()
 	void OnCheckedSit2(bool bIsChcecked);
+
 
 };
