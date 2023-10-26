@@ -8,6 +8,8 @@
 #include "Runtime/UMG/Public/Components/Slider.h"
 #include "Components/TextBlock.h"
 #include "Components/CheckBox.h"
+#include "KJS_BoxSofa.h"
+#include "OSY_GameInstance.h"
 
 void UMediaLobbyWidget::NativeConstruct()
 {
@@ -19,9 +21,8 @@ void UMediaLobbyWidget::NativeConstruct()
 	btn_Back->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickBackButton);
 	btn_BackSingle->OnClicked.AddDynamic(this, &UMediaLobbyWidget::BackMakingRoom);
 	btn_CreateSingle->OnClicked.AddDynamic(this, &UMediaLobbyWidget::CreateSingleRoom);
-	Check_Sit1->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedSit1);
-	Check_Sit2->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedSit2);
-	
+	Check_SingleSit1->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedSit1);
+	Check_SingleSit2->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedSit2);
 }
 
 void UMediaLobbyWidget::SwitchCanvas(int32 index)
@@ -84,11 +85,11 @@ void UMediaLobbyWidget::BackMakingRoom()
 
 void UMediaLobbyWidget::OnCheckedSit1(bool bIsChcecked)
 {
-	bIsChcecked = (Check_Sit1->GetCheckedState() == ECheckBoxState::Checked);
+	bIsChcecked = (Check_SingleSit1->GetCheckedState() == ECheckBoxState::Checked);
 
 	if (bIsChcecked)
 	{
-		Check_Sit2->SetIsChecked(false);
+		Check_SingleSit2->SetIsChecked(false);
 	}
 
 	//Sit1이 Check상태이면 Sit2는 체크상태로 바꾸지 못한다.
@@ -97,38 +98,44 @@ void UMediaLobbyWidget::OnCheckedSit1(bool bIsChcecked)
 
 void UMediaLobbyWidget::OnCheckedSit2(bool bIsChcecked)
 {
-	bIsChcecked = (Check_Sit2->GetCheckedState() == ECheckBoxState::Checked);
+	bIsChcecked = (Check_SingleSit2->GetCheckedState() == ECheckBoxState::Checked);
 
 	if (bIsChcecked)
 	{
-		Check_Sit1->SetIsChecked(false);
+		Check_SingleSit1->SetIsChecked(false);
 	}
 }
 
 void UMediaLobbyWidget::CreateSingleRoom()
 {
+	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
+	if (gi)
+	{
+		//gi->Sit1CheckState = CheckState;
+		gi->CheckboxStates.Add("Check_SingleSit1", Check_SingleSit1->GetCheckedState());
+		gi->CheckboxStates.Add("Check_SingleSit2", Check_SingleSit2->GetCheckedState());
+	}
 
-	if (Check_Sit1->GetCheckedState() == ECheckBoxState::Checked)
+	//ECheckBoxState CheckState = Check_SingleSit1->GetCheckedState();
+
+	if (Check_SingleSit1->GetCheckedState() == ECheckBoxState::Checked)
 	{
 		FName LevelName = "5_Box";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-
-		FActorSpawnParameters params;
-		//AActor* Cube = GetWorld()->SpawnActor<AActor>(ACubeActor::StaticClass)
+		
 	}
 
 
-	else if (Check_Sit2->GetCheckedState() == ECheckBoxState::Checked)
+	else if (Check_SingleSit2->GetCheckedState() == ECheckBoxState::Checked)
 	{
-		FName LevelName = "6_Box";
+		FName LevelName = "5_Box";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-
-		FActorSpawnParameters params;
-		//AActor* Cube = GetWorld()->SpawnActor<AActor>(ACubeActor::StaticClass)
 	}
+
+
 }
 
 

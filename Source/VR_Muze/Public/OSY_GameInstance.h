@@ -95,4 +95,10 @@ public:
 
 	void OnCreatedMuzeSession(FName sessionName, bool bWasSuccessful);
 
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+   //ECheckBoxState Sit1CheckState;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TMap<FString, ECheckBoxState> CheckboxStates;
+
 };
