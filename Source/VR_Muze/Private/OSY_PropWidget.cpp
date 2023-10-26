@@ -60,28 +60,33 @@ void UOSY_PropWidget::SaveJsonData()
 	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
 
 	// 저장할 데이터를 JSON 객체에 추가
-
-	// 저장할 데이터를 JSON 배열에 추가
 	TArray<TSharedPtr<FJsonValue>> LocationsArray;
 	TArray<TSharedPtr<FJsonValue>> RotationsArray;
 	TArray<TSharedPtr<FJsonValue>> ScalesArray;
 
-	for (const FVector& Location : SavedLocations)
-	{
+	for (int i = 0; i < SavedLocations.Num(); i++) {
 		TSharedPtr<FJsonObject> LocationObj = MakeShareable(new FJsonObject);
-		LocationObj->SetNumberField(TEXT("X"), Location.X);
-		LocationObj->SetNumberField(TEXT("Y"), Location.Y);
-		LocationObj->SetNumberField(TEXT("Z"), Location.Z);
+		LocationObj->SetNumberField(TEXT("X"), SavedLocations[i].X);
+		LocationObj->SetNumberField(TEXT("Y"), SavedLocations[i].Y);
+		LocationObj->SetNumberField(TEXT("Z"), SavedLocations[i].Z);
 		LocationsArray.Add(MakeShareable(new FJsonValueObject(LocationObj)));
-	}
-	
 
-// 	JsonObject->SetNumberField(TEXT("LocX"), SavedLocation.X);
-// 	JsonObject->SetNumberField(TEXT("LocY"), SavedLocation.Y);
-// 	JsonObject->SetNumberField(TEXT("LocZ"), SavedLocation.Z);
-// 	JsonObject->SetNumberField(TEXT("ScaX"), SavedScale.X);
-// 	JsonObject->SetNumberField(TEXT("ScaY"), SavedScale.Y);
-// 	JsonObject->SetNumberField(TEXT("ScaZ"), SavedScale.Z);
+		TSharedPtr<FJsonObject> RotationObj = MakeShareable(new FJsonObject);
+		RotationObj->SetNumberField(TEXT("Pitch"), SavedRotations[i].Pitch);
+		RotationObj->SetNumberField(TEXT("Yaw"), SavedRotations[i].Yaw);
+		RotationObj->SetNumberField(TEXT("Roll"), SavedRotations[i].Roll);
+		RotationsArray.Add(MakeShareable(new FJsonValueObject(RotationObj)));
+
+		TSharedPtr<FJsonObject> ScaleObj = MakeShareable(new FJsonObject);
+		ScaleObj->SetNumberField(TEXT("X"), SavedScales[i].X);
+		ScaleObj->SetNumberField(TEXT("Y"), SavedScales[i].Y);
+		ScaleObj->SetNumberField(TEXT("Z"), SavedScales[i].Z);
+		ScalesArray.Add(MakeShareable(new FJsonValueObject(ScaleObj)));
+	}
+
+	JsonObject->SetArrayField(TEXT("Locations"), LocationsArray);
+	JsonObject->SetArrayField(TEXT("Rotations"), RotationsArray);
+	JsonObject->SetArrayField(TEXT("Scales"), ScalesArray);
 
 	// JSON을 문자열로 변환
 	FString JsonString;
@@ -92,11 +97,6 @@ void UOSY_PropWidget::SaveJsonData()
 	FString SavePath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
 	FFileHelper::SaveStringToFile(JsonString, *SavePath);
 	UE_LOG(LogTemp, Warning, TEXT("path : %s"), *SavePath);
-
-
-	UE_LOG(LogTemp, Warning, TEXT("Loc : X=%f, Y=%f, Z=%f"), SavedLocation.X, SavedLocation.Y, SavedLocation.Z);
-	UE_LOG(LogTemp, Warning, TEXT("Rot : Pitch=%f, Yaw=%f, Roll=%f"), SavedRotation.Pitch, SavedRotation.Yaw, SavedRotation.Roll);
-	UE_LOG(LogTemp, Warning, TEXT("Sca : X=%f, Y=%f, Z=%f"), SavedScale.X, SavedScale.Y, SavedScale.Z);
 
 }
 
@@ -115,22 +115,39 @@ void UOSY_PropWidget::LoadJsonData()
 		if (FJsonSerializer::Deserialize(JsonReader, JsonObject))
 		{
 			// JSON 객체에서 데이터를 추출
-			if (JsonObject->HasField(TEXT("LocX")) && JsonObject->HasField(TEXT("LocY")) && JsonObject->HasField(TEXT("LocZ")) && JsonObject->HasField(TEXT("ScaX")) && JsonObject->HasField(TEXT("ScaY")) && JsonObject->HasField(TEXT("ScaZ")))
+			if (JsonObject->HasField(TEXT("Locations")) && JsonObject->HasField(TEXT("Rotations")) && JsonObject->HasField(TEXT("Scales")))
 			{
-					float locX = JsonObject->GetNumberField(TEXT("LocX"));
-					float locY = JsonObject->GetNumberField(TEXT("LocY"));
-					float locZ = JsonObject->GetNumberField(TEXT("LocX"));
-					float scaX = JsonObject->GetNumberField(TEXT("scaX"));
-					float scaY = JsonObject->GetNumberField(TEXT("scaY"));
-					float scaZ = JsonObject->GetNumberField(TEXT("scaX"));
+				TArray<TSharedPtr<FJsonValue>> LocationsArray = JsonObject->GetArrayField(TEXT("Locations"));
+				TArray<TSharedPtr<FJsonValue>> RotationsArray = JsonObject->GetArrayField(TEXT("Rotations"));
+				TArray<TSharedPtr<FJsonValue>> ScalesArray = JsonObject->GetArrayField(TEXT("Scales"));
 
-					// 추출한 데이터를 사용
-					FVector LoadedLocation(locX, locY, locZ);
-					FVector LoadedScale(scaX, scaY, scaZ);
+				UWorld* World = GetWorld();
+				if (World)
+				{
+					for (int i = 0; i < LocationsArray.Num(); i++)
+					{
+						TSharedPtr<FJsonObject> LocationObj = LocationsArray[i]->AsObject();
+						TSharedPtr<FJsonObject> RotationObj = RotationsArray[i]->AsObject();
+						TSharedPtr<FJsonObject> ScaleObj = ScalesArray[i]->AsObject();
 
-					UE_LOG(LogTemp, Warning, TEXT("sLoc : X=%f, Y=%f, Z=%f"), LoadedLocation.X, LoadedLocation.Y, LoadedLocation.Z);
-					UE_LOG(LogTemp, Warning, TEXT("sSca : X=%f, Y=%f, Z=%f"), LoadedScale.X, LoadedScale.Y, LoadedScale.Z);
-					// LoadedLocation을 사용하거나 필요한 대로 처리
+						FVector LoadedLocation(LocationObj->GetNumberField(TEXT("X")), LocationObj->GetNumberField(TEXT("Y")), LocationObj->GetNumberField(TEXT("Z")));
+						FRotator LoadedRotation(RotationObj->GetNumberField(TEXT("Pitch")), RotationObj->GetNumberField(TEXT("Yaw")), RotationObj->GetNumberField(TEXT("Roll")));
+						FVector LoadedScale(ScaleObj->GetNumberField(TEXT("X")), ScaleObj->GetNumberField(TEXT("Y")), ScaleObj->GetNumberField(TEXT("Z")));
+
+						UE_LOG(LogTemp, Warning, TEXT("sLoc : X=%f, Y=%f, Z=%f"), LoadedLocation.X, LoadedLocation.Y, LoadedLocation.Z);
+						UE_LOG(LogTemp, Warning, TEXT("sRot : Pitch=%f, Yaw=%f, Roll=%f"), LoadedRotation.Pitch, LoadedRotation.Yaw, LoadedRotation.Roll);
+						UE_LOG(LogTemp, Warning, TEXT("sSca : X=%f, Y=%f, Z=%f"), LoadedScale.X, LoadedScale.Y, LoadedScale.Z);
+
+						// 액터를 스폰
+						FActorSpawnParameters Params;
+						Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+						AActor* SpawnedActor = World->SpawnActor<AActor>(proptest, LoadedLocation, LoadedRotation, Params);
+						if (SpawnedActor)
+						{
+							SpawnedActor->SetActorScale3D(LoadedScale);
+						}
+					}
+				}
 			}
 		}
 	}
