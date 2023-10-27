@@ -11,7 +11,15 @@ void UKJS_MediaListUI::NativeConstruct()
 
 void UKJS_MediaListUI::TransferPlayMediaLevel()
 {
+/*
 	FName LevelName = "MediaLobbyMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+*/
+	
+	// юс╫ц
+
+	FName LevelName = "OSY_TMap";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }

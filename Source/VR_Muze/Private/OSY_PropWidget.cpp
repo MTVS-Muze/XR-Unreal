@@ -27,14 +27,15 @@ void UOSY_PropWidget::NativeConstruct()
 
 
 	btn_Save->OnClicked.AddDynamic(this, &UOSY_PropWidget::SaveJsonData);
-	btn_Exit->OnClicked.AddDynamic(this, &UOSY_PropWidget::LevelTravel);
-	
-	btn_GetJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::SendJSon);
-	btn_PostJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostJSon);
 	btn_LoadJsonData->OnClicked.AddDynamic(this, &UOSY_PropWidget::LoadJsonData);
 	
-	btn_TickPlay->OnClicked.AddDynamic(this, &UOSY_PropWidget::TickPlay);
+	btn_GetJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::GetJSon);
+	btn_PostJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostJSon);
+	
+	btn_StartTick->OnClicked.AddDynamic(this, &UOSY_PropWidget::StartTick);
+	btn_StopTick->OnClicked.AddDynamic(this, &UOSY_PropWidget::StopTick);
 
+	btn_Exit->OnClicked.AddDynamic(this, &UOSY_PropWidget::BackToMain);
 	
 
 	for (TActorIterator<AOSY_HttpRequestActor> it(GetWorld()); it; ++it)
@@ -229,6 +230,7 @@ void UOSY_PropWidget::SpawnNiagara6()
 }
 #pragma endregion 
 
+#pragma region Json Save&Load
 void UOSY_PropWidget::SaveJsonData()
 {
 	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
@@ -339,41 +341,25 @@ void UOSY_PropWidget::LoadJsonData()
 			}
 		}
 	}
-	TickPlay();
+	//StartTick();
 }
+#pragma endregion
 
-void UOSY_PropWidget::LevelTravel()
-{
-	FName LevelName = "2_LobbyMap";
-
-	UGameplayStatics::OpenLevel(GetWorld(),LevelName,true);
-}
-
-// 특정라인의 데이터를 읽는 함수
-void UOSY_PropWidget::ReadCSVSingle()
-{
-	if (levelInfoTable != nullptr)
-	{
-		
-	}
-}
-
-void UOSY_PropWidget::TickPlay()
+#pragma region Tick Controll
+void UOSY_PropWidget::StartTick()
 {
 	bShouldTick= true; 
 }
 
-void UOSY_PropWidget::ReadCSVFile()
+void UOSY_PropWidget::StopTick()
 {
-	if (factory != nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ReadCSVFile Success"));
-		factory->spawnStart();
-	}
-
+	bShouldTick = false;
+	CurrentTime =0;
 }
+#pragma endregion
 
-void UOSY_PropWidget::SendJSon()
+#pragma region Json Get&Post
+void UOSY_PropWidget::GetJSon()
 {
 	if (HttpActor != nullptr)
 	{
@@ -392,6 +378,34 @@ void UOSY_PropWidget::PostJSon()
 	
 }
 #pragma endregion
+
+
+void UOSY_PropWidget::BackToMain()
+{
+	FName LevelName = "2_LobbyMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(),LevelName,true);
+}
+
+
+// 특정라인의 데이터를 읽는 함수
+void UOSY_PropWidget::ReadCSVSingle()
+{
+	if (levelInfoTable != nullptr)
+	{
+		
+	}
+}
+
+void UOSY_PropWidget::ReadCSVFile()
+{
+	if (factory != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ReadCSVFile Success"));
+		factory->spawnStart();
+	}
+
+}
 
 
 

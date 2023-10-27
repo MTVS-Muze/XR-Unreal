@@ -47,8 +47,11 @@ public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_LoadJsonData;
 
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_TickPlay;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
+	class UButton* btn_StartTick;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
+	class UButton* btn_StopTick;
 	
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_GetJson;
@@ -108,19 +111,23 @@ public:
 	void LoadJsonData();
 
 	UFUNCTION()
-	void LevelTravel();
+	void BackToMain();
+
 
 	UFUNCTION()
 	void ReadCSVSingle();
 
 	UFUNCTION()
-	void TickPlay();
+	void StartTick();
+
+	UFUNCTION()
+	void StopTick();
 
 	UFUNCTION()
 	void ReadCSVFile();
 
 	UFUNCTION()
-	void SendJSon();
+	void GetJSon();
 
 	UFUNCTION()
 	void PostJSon();
