@@ -91,9 +91,6 @@ void UMediaLobbyWidget::OnCheckedSit1(bool bIsChcecked)
 	{
 		Check_SingleSit2->SetIsChecked(false);
 	}
-
-	//Sit1이 Check상태이면 Sit2는 체크상태로 바꾸지 못한다.
-	//Sit1이 Check상태에서 Create버튼을 누르면 Box라는 이름의 레벨로 이동하고 레벨의 일정 위치에 sit1이 Check상태일때 해당하는 Prop이 Box라는 이름의 레벨에 생성된다.
 }
 
 void UMediaLobbyWidget::OnCheckedSit2(bool bIsChcecked)
@@ -118,13 +115,18 @@ void UMediaLobbyWidget::CreateSingleRoom()
 	}
 
 	//ECheckBoxState CheckState = Check_SingleSit1->GetCheckedState();
+	if (Check_SingleSit1->GetCheckedState() != ECheckBoxState::Checked && Check_SingleSit2->GetCheckedState() != ECheckBoxState::Checked)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("At least one checkbox should be checked."));
+		return;
+	}
 
 	if (Check_SingleSit1->GetCheckedState() == ECheckBoxState::Checked)
 	{
 		FName LevelName = "5_Box";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-		
+
 	}
 
 
@@ -134,6 +136,7 @@ void UMediaLobbyWidget::CreateSingleRoom()
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
+
 
 
 }
