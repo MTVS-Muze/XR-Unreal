@@ -17,17 +17,25 @@
 void UOSY_PropWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+	
+	btn_Niagara1->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara1);
+	btn_Niagara2->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara2);
+	btn_Niagara3->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara3);
+	btn_Niagara4->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara4);
+	btn_Niagara5->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara5);
+	btn_Niagara6->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara6);
 
-	btn_BoxSpawn->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnBox);
-	btn_SphereSpawn->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnSphere);
+
 	btn_Save->OnClicked.AddDynamic(this, &UOSY_PropWidget::SaveJsonData);
 	btn_Exit->OnClicked.AddDynamic(this, &UOSY_PropWidget::LevelTravel);
-	btn_CSVSingle->OnClicked.AddDynamic(this, &UOSY_PropWidget::LoadJsonData);
-	btn_CSVAll->OnClicked.AddDynamic(this, &UOSY_PropWidget::ReadCSVAll);
+	
+	btn_GetJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::SendJSon);
+	btn_PostJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostJSon);
+	btn_LoadJsonData->OnClicked.AddDynamic(this, &UOSY_PropWidget::LoadJsonData);
+	
+	btn_TickPlay->OnClicked.AddDynamic(this, &UOSY_PropWidget::TickPlay);
 
-	btn_CSVFile->OnClicked.AddDynamic(this, &UOSY_PropWidget::ReadCSVFile);
-	btn_SendCSV->OnClicked.AddDynamic(this, &UOSY_PropWidget::SendJSon);
-	btn_PostCSV->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostJSon);
+	
 
 	for (TActorIterator<AOSY_HttpRequestActor> it(GetWorld()); it; ++it)
 	{
@@ -48,7 +56,7 @@ void UOSY_PropWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 	CurrentTime+=InDeltaTime;
 	}
-
+	
 	UE_LOG(LogTemp,Warning,TEXT("%f"),CurrentTime)
 
 	for (int32 i = PendingSpawns.Num() - 1; i >= 0; --i)
@@ -76,8 +84,8 @@ void UOSY_PropWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	}
 }
 
-#pragma region CSV
-void UOSY_PropWidget::SpawnBox()
+#pragma region Niagara
+void UOSY_PropWidget::SpawnNiagara1()
 {
 	FVector spawnLoc = FVector(200, 0, 0);
 	FRotator spawnRot = FRotator(0, 0, 0);
@@ -87,43 +95,139 @@ void UOSY_PropWidget::SpawnBox()
 	{
 		FActorSpawnParameters param;
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		AActor* SpawnedProp = World->SpawnActor<AActor>(proptest, spawnLoc, spawnRot);
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara1, spawnLoc, spawnRot);
 
 		if (SpawnedProp)
 		{
 			SavedLocations.Add(SpawnedProp->GetActorLocation());
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
 			SavedScales.Add(SpawnedProp->GetActorScale3D());
-			SavedActorClasses.Add(proptest);
+			SavedActorClasses.Add(Niagara1);
 			SavedSpawnTimes.Add(HttpActor->currenTime);
 		}
 	}
 }
 
-void UOSY_PropWidget::SpawnSphere()
+void UOSY_PropWidget::SpawnNiagara2()
 {
 	FVector spawnLoc = FVector(200, -200, 0);
 	FRotator spawnRot = FRotator(0, 0, 0);
 
-	//UE_LOG(LogTemp, Warning, TEXT("%f"), HttpActor->currenTime);
 
 	UWorld* World = GetWorld();
 	if (World)
 	{
 		FActorSpawnParameters param;
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		AActor* SpawnedProp = World->SpawnActor<AActor>(Sphereproptest, spawnLoc, spawnRot);
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara2, spawnLoc, spawnRot);
 
 		if (SpawnedProp)
 		{
 			SavedLocations.Add(SpawnedProp->GetActorLocation());
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
 			SavedScales.Add(SpawnedProp->GetActorScale3D());
-			SavedActorClasses.Add(Sphereproptest);
+			SavedActorClasses.Add(Niagara2);
 			SavedSpawnTimes.Add(HttpActor->currenTime);
 		}
 	}
 }
+
+void UOSY_PropWidget::SpawnNiagara3()
+{
+	FVector spawnLoc = FVector(200, 200, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara3, spawnLoc, spawnRot);
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(Niagara3);
+			SavedSpawnTimes.Add(HttpActor->currenTime);
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnNiagara4()
+{
+	FVector spawnLoc = FVector(100, 200, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara4, spawnLoc, spawnRot);
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(Niagara4);
+			SavedSpawnTimes.Add(HttpActor->currenTime);
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnNiagara5()
+{
+	FVector spawnLoc = FVector(100, 100, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara5, spawnLoc, spawnRot);
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(Niagara5);
+			SavedSpawnTimes.Add(HttpActor->currenTime);
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnNiagara6()
+{
+		FVector spawnLoc = FVector(100, 100, 0);
+		FRotator spawnRot = FRotator(0, 0, 0);
+
+
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			FActorSpawnParameters param;
+			param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara6, spawnLoc, spawnRot);
+
+			if (SpawnedProp)
+			{
+				SavedLocations.Add(SpawnedProp->GetActorLocation());
+				SavedRotations.Add(SpawnedProp->GetActorRotation());
+				SavedScales.Add(SpawnedProp->GetActorScale3D());
+				SavedActorClasses.Add(Niagara6);
+				SavedSpawnTimes.Add(HttpActor->currenTime);
+			}
+		}
+}
+#pragma endregion 
 
 void UOSY_PropWidget::SaveJsonData()
 {
@@ -172,6 +276,19 @@ void UOSY_PropWidget::SaveJsonData()
 
 	FString SavePath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
 	FFileHelper::SaveStringToFile(JsonString, *SavePath);
+/*
+	// 현재 날짜와 시간을 가져옵니다.
+	FDateTime CurrentDateTime = FDateTime::UtcNow();
+
+	// 파일 이름을 만듭니다. 파일 이름에는 현재 날짜와 시간이 포함됩니다.
+	FString FileName = FString::Printf(TEXT("SavedData_%s.json"), *CurrentDateTime.ToString(TEXT("%Y%m%d%H%M%S")));
+
+	// 파일 경로를 만듭니다.
+	FString SavePath = FPaths::ProjectSavedDir() / FileName;
+
+	// JSON 데이터를 파일에 저장합니다.
+	FFileHelper::SaveStringToFile(JsonString, *SavePath);
+*/
 }
 
 void UOSY_PropWidget::LoadJsonData()
@@ -222,7 +339,7 @@ void UOSY_PropWidget::LoadJsonData()
 			}
 		}
 	}
-	bShouldTick = true;
+	TickPlay();
 }
 
 void UOSY_PropWidget::LevelTravel()
@@ -241,22 +358,9 @@ void UOSY_PropWidget::ReadCSVSingle()
 	}
 }
 
-void UOSY_PropWidget::ReadCSVAll()
+void UOSY_PropWidget::TickPlay()
 {
-	if (levelInfoTable != nullptr)
-	{
-		TArray<FLevelInfoTable*> levelInfoList;
-		levelInfoTable->GetAllRows<FLevelInfoTable>("LevelDataList",levelInfoList);
-
-		if (levelInfoList.Num() > 0)
-		{
-			FString resulText;
-			for (FLevelInfoTable* levelInfo : levelInfoList)
-			{
-
-			}
-		}
-	}
+	bShouldTick= true; 
 }
 
 void UOSY_PropWidget::ReadCSVFile()
