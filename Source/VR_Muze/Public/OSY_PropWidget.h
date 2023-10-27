@@ -26,9 +26,17 @@ public:
 
 public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_BoxSpawn;
+	class UButton* btn_Niagara1;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_SphereSpawn;
+	class UButton* btn_Niagara2;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Niagara3;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Niagara4;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Niagara5;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Niagara6;
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_Save;
@@ -37,21 +45,28 @@ public:
 	class UButton* btn_Exit;
 	
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_CSVSingle;
+	class UButton* btn_LoadJsonData;
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_CSVAll;
+	class UButton* btn_TickPlay;
+	
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_CSVFile;
+	class UButton* btn_GetJson;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_SendCSV;
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_PostCSV;
+	class UButton* btn_PostJson;
 
 	UPROPERTY(EditAnywhere, Category= MySettings)
-	TSubclassOf<class AActor> proptest;
+	TSubclassOf<class AActor> Niagara1;
 	UPROPERTY(EditAnywhere, Category= MySettings)
-	TSubclassOf<class AActor> Sphereproptest;
+	TSubclassOf<class AActor> Niagara2;
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AActor> Niagara3;
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AActor> Niagara4;
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AActor> Niagara5;
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AActor> Niagara6;
 
 	UPROPERTY()
 	FString url ="http://192.168.0.232:8080/map/test/1";
@@ -73,9 +88,18 @@ public:
 	float CurrentTime = 0;
 
 	UFUNCTION()
-	void SpawnBox();
+	void SpawnNiagara1();
 	UFUNCTION()
-	void SpawnSphere();
+	void SpawnNiagara2();
+	UFUNCTION()
+	void SpawnNiagara3();
+	UFUNCTION()
+	void SpawnNiagara4();
+	UFUNCTION()
+	void SpawnNiagara5();
+	UFUNCTION()
+	void SpawnNiagara6();
+	
 
 	UFUNCTION()
 	void SaveJsonData();
@@ -90,7 +114,7 @@ public:
 	void ReadCSVSingle();
 
 	UFUNCTION()
-	void ReadCSVAll();
+	void TickPlay();
 
 	UFUNCTION()
 	void ReadCSVFile();
