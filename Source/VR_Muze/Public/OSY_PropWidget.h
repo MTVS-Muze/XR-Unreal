@@ -153,4 +153,7 @@ public:
 
 	// 시간 통제
 	bool bShouldTick = false;
+
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	class USoundBase* superShy;
 };
