@@ -349,6 +349,7 @@ void UOSY_PropWidget::LoadJsonData()
 void UOSY_PropWidget::StartTick()
 {
 	bShouldTick= true; 
+	UGameplayStatics::PlaySound2D(GetWorld(),superShy);
 }
 
 void UOSY_PropWidget::StopTick()
