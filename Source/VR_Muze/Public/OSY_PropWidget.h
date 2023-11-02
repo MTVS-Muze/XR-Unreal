@@ -14,6 +14,7 @@ struct FActorSpawnInfo
 	UClass* ActorClass;
 	float SpawnTime;
 };
+
 UCLASS()
 class VR_MUZE_API UOSY_PropWidget : public UUserWidget
 {
@@ -104,11 +105,7 @@ public:
 	void SpawnNiagara6();
 	
 
-	UFUNCTION()
-	void SaveJsonData();
-
-	UFUNCTION()
-	void LoadJsonData();
+	
 
 	UFUNCTION()
 	void BackToMain();
@@ -117,11 +114,6 @@ public:
 	UFUNCTION()
 	void ReadCSVSingle();
 
-	UFUNCTION()
-	void StartTick();
-
-	UFUNCTION()
-	void StopTick();
 
 	UFUNCTION()
 	void ReadCSVFile();

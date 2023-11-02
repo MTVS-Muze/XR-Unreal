@@ -27,7 +27,6 @@ void AOSY_TImeActor::Tick(float DeltaTime)
 	{
 		CurrentTime += DeltaTime;
 	}
-	
 
 }
 

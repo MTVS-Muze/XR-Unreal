@@ -6,9 +6,14 @@
 #include "Blueprint/UserWidget.h"
 #include "OSY_SequenceWidget.generated.h"
 
-/**
- * 
- */
+struct FActorSpawnInfo2
+{
+	FVector Location;
+	FRotator Rotation;
+	FVector Scale;
+	UClass* ActorClass;
+	float SpawnTime;
+};
 UCLASS()
 class VR_MUZE_API UOSY_SequenceWidget : public UUserWidget
 {
@@ -74,6 +79,28 @@ public :
 	void SequenceSave();
 #pragma endregion
 
+#pragma region Json
+
+	UFUNCTION()
+	void SaveJsonData();
+	UFUNCTION()
+	void LoadJsonData();
+
+	TArray<FVector> SavedLocations;
+	TArray<FRotator> SavedRotations;
+	TArray<FVector> SavedScales;
+	TArray<float> SavedSpawnTimes;
+	TArray<TSubclassOf<AActor>> SavedActorClasses;
+
+	TArray<FActorSpawnInfo2> PendingSpawns;
+
+	
+	UPROPERTY()
+	class AOSY_HttpRequestActor* HttpActor;
+#pragma endregion
+
+	
+
 #pragma region Cast
 	UPROPERTY(EditAnywhere,Category = MySettings)
 	class UOSY_PropWidget* httpUI;
@@ -83,8 +110,13 @@ public :
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class AOSY_CreativeGameModeBase* gm;
 
+	 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySettings")
+    UAudioComponent* AudioComponent;
+
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class USoundBase* superShy;
+
+	
 #pragma endregion 
 
 

@@ -46,10 +46,14 @@ private:
 	class UOSY_SequenceWidget* SequnceUI;
 
 public:
-	UPROPERTY(EditAnywhere,Category = MySettings)
-	TSubclassOf <class AOSY_TImeActor> TimeActor;
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	class AOSY_TImeActor* TimeManager;
 
-	class AOSY_TImeActor* TimeActorIns;
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	class USoundBase* superShy;
+
+	UFUNCTION()
+	void SetMaxTimeFromSong();
 
 	
 
