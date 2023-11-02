@@ -11,6 +11,7 @@
 #include "OSY_HttpRequestActor.h"
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "OSY_NiagaraSpawner.h"
+#include "OSY_TImeActor.h"
 
 
 
@@ -45,6 +46,9 @@ void UOSY_PropWidget::NativeConstruct()
 
 	factory = Cast<AOSY_NiagaraSpawner>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_NiagaraSpawner::StaticClass()));
 
+	TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
+	
+
 }
 
 
@@ -52,13 +56,14 @@ void UOSY_PropWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
-	if (bShouldTick)
+
+	if (TimeManager->bShouldTick)
 	{
 
-	CurrentTime+=InDeltaTime;
+	CurrentTime=TimeManager->CurrentTime;
+	//UE_LOG(LogTemp,Warning,TEXT("%f"),CurrentTime)
 	}
 	
-	UE_LOG(LogTemp,Warning,TEXT("%f"),CurrentTime)
 
 	for (int32 i = PendingSpawns.Num() - 1; i >= 0; --i)
 	{
@@ -348,14 +353,12 @@ void UOSY_PropWidget::LoadJsonData()
 #pragma region Tick Controll
 void UOSY_PropWidget::StartTick()
 {
-	bShouldTick= true; 
-	UGameplayStatics::PlaySound2D(GetWorld(),superShy);
+	
+	UGameplayStatics::PlaySound2D(GetWorld(), superShy);
 }
 
 void UOSY_PropWidget::StopTick()
 {
-	bShouldTick = false;
-	CurrentTime =0;
 }
 #pragma endregion
 

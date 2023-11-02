@@ -88,7 +88,7 @@ public:
 	FRotator SavedRotation;
 	FVector SavedScale;
 	
-	float CurrentTime = 0;
+	float CurrentTime;
 
 	UFUNCTION()
 	void SpawnNiagara1();
@@ -151,9 +151,14 @@ public:
 	TArray<FActorSpawnInfo> PendingSpawns;
 	
 
-	// 시간 통제
-	bool bShouldTick = false;
+	
+
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class USoundBase* superShy;
+
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	class AOSY_TImeActor* TimeManager;
+
+
 };
