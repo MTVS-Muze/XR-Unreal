@@ -30,6 +30,7 @@ public:
 	AOSY_CreativeGameModeBase();
 	virtual void BeginPlay() override;
 
+
 private:
 	class UDataTable* LevelInfoTable;
 
@@ -39,5 +40,17 @@ private:
 	
 	class UOSY_PropWidget* httpUI;
 
+	UPROPERTY(EditAnywhere,Category = MySettings)
+	TSubclassOf <class UOSY_SequenceWidget> SequenceWidget;
+	
+	class UOSY_SequenceWidget* SequnceUI;
+
+public:
+	UPROPERTY(EditAnywhere,Category = MySettings)
+	TSubclassOf <class AOSY_TImeActor> TimeActor;
+
+	class AOSY_TImeActor* TimeActorIns;
+
+	
 
 };
