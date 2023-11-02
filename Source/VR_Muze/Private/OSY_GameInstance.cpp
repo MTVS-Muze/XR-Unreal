@@ -5,7 +5,8 @@
 #include "OSY_PropWidget.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
-
+#include "IXRTrackingSystem.h"
+#include "HeadMountedDisplayFunctionLibrary.h"
 
 
 UOSY_GameInstance::UOSY_GameInstance()
@@ -20,7 +21,7 @@ UOSY_GameInstance::UOSY_GameInstance()
 
 	mySessionName = TEXT("Muze");
 
-	
+	bIsHMDConnectd = false;
 
 	// Save data
 	//UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetGameInstance());
@@ -49,9 +50,11 @@ void UOSY_GameInstance::Init()
 
 		//세션 이벤트에 함수 바인딩 하기
 		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UOSY_GameInstance::OnCreatedMuzeSession);
-		FTimerHandle createHandler;
-		GetWorld()->GetTimerManager().SetTimer(createHandler, this, &UOSY_GameInstance::CreateMuzeSession, 1, false);
+		/*FTimerHandle createHandler;
+		GetWorld()->GetTimerManager().SetTimer(createHandler, this, &UOSY_GameInstance::CreateMuzeSession, 1, false);*/
 	}
+
+	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UOSY_GameInstance::OnLevelLoaded);
 
 }
 
@@ -78,7 +81,7 @@ void UOSY_GameInstance::CloseSideToolPanel()
 	
 }
 
-void UOSY_GameInstance::CreateMuzeSession()
+void UOSY_GameInstance::CreateMuzeSession(FText roomName, int32 playerCount)
 {
 	FOnlineSessionSettings settings;
 	//LAN 연결인지, DEDICATED연결인지 설정
@@ -96,10 +99,9 @@ void UOSY_GameInstance::CreateMuzeSession()
 	settings.bAllowJoinViaPresence = true;
 
 	//입장 가능 인원을 설정한다.
-	settings.NumPublicConnections = 4;
-
-	bool isSuccess = sessionInterface->CreateSession(0, FName("MyMuze"), settings);
-	UE_LOG(LogTemp, Warning, TEXT("Session Create Result : %s"), isSuccess ? *FString("Success") : *FString("Failed"));
+	settings.NumPublicConnections = playerCount;
+	//bool isSuccess = sessionInterface->CreateSession(0, FText(roomName, ToString()), settings);
+	//UE_LOG(LogTemp, Warning, TEXT("Session Create Result : %s"), isSuccess ? *FString("Success") : *FString("Failed"));
 
 
 }
@@ -112,3 +114,12 @@ void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccess
 	//	UE_LOG(LogTemp, Warning, TEXT("Travel Result : %s"), result ? *FString("Success") : *FString("Failed"));
 	//}
 }
+
+void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
+{
+	if (LoadedWorld->GetMapName() == "5_Box")
+	{
+		UHeadMountedDisplayFunctionLibrary::EnableHMD(true);
+	}
+}
+

@@ -26,11 +26,20 @@ public:
 
 	//미디어모드 가기
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
-	class UButton* btn_Media;
+	class UButton* btn_MediaEnter;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
+	class UCanvasPanel* ErrorUI;
+
+	UPROPERTY(VisibleAnywhere, Transient, meta=(BindWidgetAnim), Category=ModeSelect)
+	class UWidgetAnimation* ErrorAnim;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
+	class UButton* btn_HiddenErrorUI;
 
 	//크리에이트모드 가기
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
-	class UButton* btn_Creative;
+	class UButton* btn_CreativeEnter;
 
 public:
 	//BoxList 캔버스
@@ -79,6 +88,9 @@ public:
 
 	UFUNCTION()
 	void OnClickedButtonCreativeMode();
+
+	UFUNCTION()
+	void OnClickedHiddenErrorUI();
 
 /////////////////////////////////////////
 //UI인덱스 1

@@ -6,15 +6,27 @@
 #include "Components/EditableText.h"
 #include "Components/WidgetSwitcher.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "OSY_GameInstance.h"
+#include "Components/CanvasPanel.h" 
+#include "HeadMountedDisplayFunctionLibrary.h"
+#include "IXRTrackingSystem.h"
 
 void UMainWidget::NativeConstruct()
 {
-	btn_Media->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonMedia);
-	btn_Creative->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreativeMode);
+	Super::NativeConstruct();
+
+	btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonMedia);
+	btn_CreativeEnter->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreativeMode);
 	btn_BackModeSelect->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonBackModeSelect);
 	btn_CreateBox->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreateBox);
 	btn_Create->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreateEnd);
 	btn_BackBoxList->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonBackBoxList);
+	btn_HiddenErrorUI->OnClicked.AddDynamic(this, &UMainWidget::OnClickedHiddenErrorUI);
+
+	if (ErrorUI)
+	{
+		ErrorUI->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 void UMainWidget::SwitchCanvas(int32 index)
@@ -24,21 +36,38 @@ void UMainWidget::SwitchCanvas(int32 index)
 
 void UMainWidget::OnClickedButtonMedia()
 {
-	FName LevelName = "4_ViewMapLobby";
+	
+	if (GEngine->XRSystem.IsValid())
+	{
+		FName LevelName = "5_Box";
 
-	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	}
+
+	else
+	{
+		ErrorUI->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 
 void UMainWidget::OnClickedButtonCreativeMode()
 {
-	SwitchCanvas(1);
+	SwitchCanvas(2);
 
-	
+}
+
+void UMainWidget::OnClickedHiddenErrorUI()
+{
+	if (ErrorUI)
+	{
+		ErrorUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+
 }
 
 void UMainWidget::OnClickedButtonBackModeSelect()
 {
-	SwitchCanvas(0);
+	SwitchCanvas(2);
 }
 
 void UMainWidget::OnClickedButtonCreateBox()
@@ -57,5 +86,5 @@ void UMainWidget::OnClickedButtonCreateEnd()
 
 void UMainWidget::OnClickedButtonBackBoxList()
 {
-	SwitchCanvas(1);
+	SwitchCanvas(2);
 }
