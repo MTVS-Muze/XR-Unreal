@@ -69,7 +69,7 @@ public:	// 세영
 	TSubclassOf<class UOSY_PropWidget> sideToolPanel;
 
 	UPROPERTY()
-	UOSY_PropWidget* sideToolPanelInstance;
+	class UOSY_PropWidget* sideToolPanelInstance;
 
 	// Function
 	UFUNCTION(BlueprintCallable)
@@ -91,7 +91,7 @@ public:
 
 	IOnlineSessionPtr sessionInterface;
 
-	void CreateMuzeSession();
+	void CreateMuzeSession(FText roomName, int32 playerCount);
 
 	void OnCreatedMuzeSession(FName sessionName, bool bWasSuccessful);
 
@@ -100,5 +100,14 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TMap<FString, ECheckBoxState> CheckboxStates;
+
+	//VR 장치 연결 확인
+	//bool IsHMDConnected();
+	UFUNCTION()
+	void OnLevelLoaded(UWorld* LoadedWorld);
+	//VR 장치 연결상태
+private:
+	bool bIsHMDConnectd;
+
 
 };
