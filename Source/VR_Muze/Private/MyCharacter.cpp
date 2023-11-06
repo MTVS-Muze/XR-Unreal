@@ -16,6 +16,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/WidgetInteractionComponent.h"
+#include "Components/WidgetComponent.h"
 
 
 
@@ -68,15 +69,15 @@ AMyCharacter::AMyCharacter()
 	
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
 
-	//3인칭 카메라 세팅
-	Third_CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("FollowCamera"));
-	Third_CameraBoom->SetupAttachment(RootComponent);
-	Third_CameraBoom->TargetArmLength = 10.0f;
-	Third_CameraBoom->bUsePawnControlRotation = true;
-
-	Third_FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Third_FollowCamera"));
-	Third_FollowCamera->SetupAttachment(Third_CameraBoom);
-	Third_FollowCamera->bUsePawnControlRotation = false;
+	////3인칭 카메라 세팅
+	//Third_CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("FollowCamera"));
+	//Third_CameraBoom->SetupAttachment(RootComponent);
+	//Third_CameraBoom->TargetArmLength = 10.0f;
+	//Third_CameraBoom->bUsePawnControlRotation = true;
+	//
+	//Third_FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Third_FollowCamera"));
+	//Third_FollowCamera->SetupAttachment(Third_CameraBoom);
+	//Third_FollowCamera->bUsePawnControlRotation = false;
 
 	//ConstructorHelpers::FObjectFinder<USkeletalMesh>TempThirdMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
 	//if (TempThirdMesh.Succeeded())
@@ -87,6 +88,11 @@ AMyCharacter::AMyCharacter()
 	//위젯 interaction
 	WidgetInteractor = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("Widget_Interactor"));
 	WidgetInteractor->InteractionSource=EWidgetInteractionSource::Mouse;
+
+	PlaylistWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PlayListWidget"));
+	PlaylistWidget->SetupAttachment(RootComponent);
+	ShowHostCodeWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("RoomCodeWidget"));
+
 }
 
 // Called when the game starts or when spawned

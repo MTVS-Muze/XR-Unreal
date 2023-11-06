@@ -34,10 +34,14 @@ void AKJS_BoxSofa::BeginPlay()
 	UOSY_GameInstance* gi = Cast<UOSY_GameInstance>(GetGameInstance());
 	if (gi)
 	{
+		//체크상태 확인
 		ECheckBoxState SingleSit1State = gi->CheckboxStates.FindRef("Check_SingleSit1");
 		ECheckBoxState SingleSit2State = gi->CheckboxStates.FindRef("Check_SingleSit2");
+		ECheckBoxState DoubleSit1State = gi->CheckboxStates.FindRef("Check_DoubleSit1");
+		ECheckBoxState DoubleSit2State = gi->CheckboxStates.FindRef("Check_DoubleSit2");
 		//ECheckBoxState Sit1CheckState = gi->Sit1CheckState;
 		
+		//메쉬 설정
 		if (SingleSit1State == ECheckBoxState::Checked)
 		{
 			if (StaticMeshOptions.IsValidIndex(0))
@@ -52,6 +56,24 @@ void AKJS_BoxSofa::BeginPlay()
 			if (StaticMeshOptions.IsValidIndex(1))
 			{
 				UStaticMesh* StaticMesh = StaticMeshOptions[1];
+				SelectedStaticMesh->SetStaticMesh(StaticMesh);
+			}
+		}
+
+		else if (DoubleSit1State == ECheckBoxState::Checked)
+		{
+			if (StaticMeshOptions.IsValidIndex(2))
+			{
+				UStaticMesh* StaticMesh = StaticMeshOptions[2];
+				SelectedStaticMesh->SetStaticMesh(StaticMesh);
+			}
+		}
+
+		else if (DoubleSit2State == ECheckBoxState::Checked)
+		{
+			if (StaticMeshOptions.IsValidIndex(3))
+			{
+				UStaticMesh* StaticMesh = StaticMeshOptions[3];
 				SelectedStaticMesh->SetStaticMesh(StaticMesh);
 			}
 		}
