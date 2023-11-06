@@ -26,8 +26,8 @@ void UOSY_PropWidget::NativeConstruct()
 	btn_Niagara5->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara5);
 	btn_Niagara6->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara6);
 
-
-	
+	btn_Save->OnClicked.AddDynamic(this, &UOSY_PropWidget::SaveJsonData);
+	btn_LoadJsonData->OnClicked.AddDynamic(this, &UOSY_PropWidget::LoadJsonData);
 	
 	btn_GetJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::GetJSon);
 	btn_PostJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostJSon);
@@ -53,11 +53,8 @@ void UOSY_PropWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 	if (TimeManager->bShouldTick)
 	{
-
 		CurrentTime=TimeManager->CurrentTime;
 	}
-	
-
 
 
 }
@@ -81,7 +78,8 @@ void UOSY_PropWidget::SpawnNiagara1()
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
 			SavedScales.Add(SpawnedProp->GetActorScale3D());
 			SavedActorClasses.Add(Niagara1);
-			SavedSpawnTimes.Add(HttpActor->currenTime);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
 		}
 	}
 }
@@ -90,7 +88,6 @@ void UOSY_PropWidget::SpawnNiagara2()
 {
 	FVector spawnLoc = FVector(200, -200, 0);
 	FRotator spawnRot = FRotator(0, 0, 0);
-
 
 	UWorld* World = GetWorld();
 	if (World)
@@ -105,9 +102,11 @@ void UOSY_PropWidget::SpawnNiagara2()
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
 			SavedScales.Add(SpawnedProp->GetActorScale3D());
 			SavedActorClasses.Add(Niagara2);
-			SavedSpawnTimes.Add(HttpActor->currenTime);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
 		}
 	}
+
 }
 
 void UOSY_PropWidget::SpawnNiagara3()
@@ -129,7 +128,8 @@ void UOSY_PropWidget::SpawnNiagara3()
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
 			SavedScales.Add(SpawnedProp->GetActorScale3D());
 			SavedActorClasses.Add(Niagara3);
-			SavedSpawnTimes.Add(HttpActor->currenTime);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
 		}
 	}
 }
@@ -153,7 +153,8 @@ void UOSY_PropWidget::SpawnNiagara4()
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
 			SavedScales.Add(SpawnedProp->GetActorScale3D());
 			SavedActorClasses.Add(Niagara4);
-			SavedSpawnTimes.Add(HttpActor->currenTime);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
 		}
 	}
 }
@@ -177,7 +178,8 @@ void UOSY_PropWidget::SpawnNiagara5()
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
 			SavedScales.Add(SpawnedProp->GetActorScale3D());
 			SavedActorClasses.Add(Niagara5);
-			SavedSpawnTimes.Add(HttpActor->currenTime);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
 		}
 	}
 }
@@ -201,12 +203,73 @@ void UOSY_PropWidget::SpawnNiagara6()
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
 			SavedScales.Add(SpawnedProp->GetActorScale3D());
 			SavedActorClasses.Add(Niagara6);
-			SavedSpawnTimes.Add(HttpActor->currenTime);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
 		}
 	}
 }
-#pragma endregion 
 
+#pragma endregion 
+void UOSY_PropWidget::SaveJsonData()
+{
+	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+
+	TArray<TSharedPtr<FJsonValue>> LocationsArray;
+	TArray<TSharedPtr<FJsonValue>> RotationsArray;
+	TArray<TSharedPtr<FJsonValue>> ScalesArray;
+	TArray<TSharedPtr<FJsonValue>> ActorClassesArray;
+	TArray<TSharedPtr<FJsonValue>> SpawnTimeArray;
+	TArray<TSharedPtr<FJsonValue>> LifeSpanArray;
+
+
+	for (int i = 0; i < SavedLocations.Num(); i++)
+	{
+		TSharedPtr<FJsonObject> LocationObj = MakeShareable(new FJsonObject);
+		LocationObj->SetNumberField(TEXT("X"), SavedLocations[i].X);
+		LocationObj->SetNumberField(TEXT("Y"), SavedLocations[i].Y);
+		LocationObj->SetNumberField(TEXT("Z"), SavedLocations[i].Z);
+		LocationsArray.Add(MakeShareable(new FJsonValueObject(LocationObj)));
+
+		TSharedPtr<FJsonObject> RotationObj = MakeShareable(new FJsonObject);
+		RotationObj->SetNumberField(TEXT("Pitch"), SavedRotations[i].Pitch);
+		RotationObj->SetNumberField(TEXT("Yaw"), SavedRotations[i].Yaw);
+		RotationObj->SetNumberField(TEXT("Roll"), SavedRotations[i].Roll);
+		RotationsArray.Add(MakeShareable(new FJsonValueObject(RotationObj)));
+
+		TSharedPtr<FJsonObject> ScaleObj = MakeShareable(new FJsonObject);
+		ScaleObj->SetNumberField(TEXT("X"), SavedScales[i].X);
+		ScaleObj->SetNumberField(TEXT("Y"), SavedScales[i].Y);
+		ScaleObj->SetNumberField(TEXT("Z"), SavedScales[i].Z);
+		ScalesArray.Add(MakeShareable(new FJsonValueObject(ScaleObj)));
+
+		ActorClassesArray.Add(MakeShareable(new FJsonValueString(SavedActorClasses[i]->GetName())));
+		SpawnTimeArray.Add(MakeShareable(new FJsonValueNumber(SavedSpawnTimes[i])));
+		LifeSpanArray.Add(MakeShareable(new FJsonValueNumber(SavedLifeSpans[i])));
+
+	}
+
+	JsonObject->SetArrayField(TEXT("Locations"), LocationsArray);
+	JsonObject->SetArrayField(TEXT("Rotations"), RotationsArray);
+	JsonObject->SetArrayField(TEXT("Scales"), ScalesArray);
+	JsonObject->SetArrayField(TEXT("ActorClasses"), ActorClassesArray);
+	JsonObject->SetArrayField(TEXT("SpawnTime"), SpawnTimeArray);
+	JsonObject->SetArrayField(TEXT("LifeSpan"), LifeSpanArray);
+	auto v = JsonObject->GetArrayField(TEXT("LifeSpan"));
+	
+	FString JsonString;
+	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
+	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
+
+	FString SavePath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
+	FFileHelper::SaveStringToFile(JsonString, *SavePath);
+	
+}
+
+
+void UOSY_PropWidget::LoadJsonData()
+{
+	
+}
 
 
 
@@ -230,6 +293,8 @@ void UOSY_PropWidget::PostJSon()
 	
 }
 #pragma endregion
+
+
 
 
 void UOSY_PropWidget::BackToMain()
