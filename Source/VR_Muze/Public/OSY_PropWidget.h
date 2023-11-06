@@ -13,6 +13,9 @@ struct FActorSpawnInfo
 	FVector Scale;
 	UClass* ActorClass;
 	float SpawnTime;
+	float LifeSpan;
+	int text;
+
 };
 
 UCLASS()
@@ -104,8 +107,11 @@ public:
 	UFUNCTION()
 	void SpawnNiagara6();
 	
+	UFUNCTION()
+	void SaveJsonData();
 
-	
+	UFUNCTION()
+	void LoadJsonData();
 
 	UFUNCTION()
 	void BackToMain();
@@ -138,7 +144,9 @@ public:
 	TArray<FRotator> SavedRotations;
 	TArray<FVector> SavedScales;
 	TArray<float> SavedSpawnTimes;
+	TArray<float> SavedLifeSpans;
 	TArray<TSubclassOf<AActor>> SavedActorClasses;
+	TArray<int> Texts;
 
 	TArray<FActorSpawnInfo> PendingSpawns;
 	

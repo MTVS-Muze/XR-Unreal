@@ -29,7 +29,6 @@ void UOSY_SequenceWidget::NativeConstruct()
     btn_Play->OnClicked.AddDynamic(this, &UOSY_SequenceWidget::SequencePlay);
     btn_Pause->OnClicked.AddDynamic(this, &UOSY_SequenceWidget::SequencePause);
     btn_Stop->OnClicked.AddDynamic(this, &UOSY_SequenceWidget::SequenceStop);
-    btn_Save->OnClicked.AddDynamic(this, &UOSY_SequenceWidget::SequenceSave);
 #pragma endregion
 
 
@@ -66,6 +65,12 @@ void UOSY_SequenceWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaT
                 {
                     SpawnedActor->SetActorScale3D(SpawnInfo.Scale);
                     SpawnedActor->SetActorHiddenInGame(false);
+
+                    float DestroyTime = SpawnInfo.SpawnTime + SpawnedActor->GetLifeSpan();
+                    if (TimeManager->CurrentTime >= DestroyTime)
+                    {
+                        SpawnedActor->Destroy();
+                    }
                 }
             }
 
@@ -102,7 +107,7 @@ void UOSY_SequenceWidget::HandleSliderValueChanged(float Value)
 {
     CorrespondingTime = Value * MaxTime;
     tempValue=Value;
-    UE_LOG(LogTemp, Warning, TEXT("Slider value changed: %f, corresponding time: %f"), Value, CorrespondingTime);
+    //UE_LOG(LogTemp, Warning, TEXT("Slider value changed: %f, corresponding time: %f"), Value, CorrespondingTime);
 }
 
 
@@ -141,6 +146,7 @@ void UOSY_SequenceWidget::SequencePause()
     {
         AudioComponent->FadeOut(0.1f, 0.0f);
     }
+    
 }
 
 void UOSY_SequenceWidget::SequenceStop()
@@ -161,54 +167,7 @@ void UOSY_SequenceWidget::SequenceSave()
 
 }
 
-void UOSY_SequenceWidget::SaveJsonData()
-{
-    TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
 
-    TArray<TSharedPtr<FJsonValue>> LocationsArray;
-    TArray<TSharedPtr<FJsonValue>> RotationsArray;
-    TArray<TSharedPtr<FJsonValue>> ScalesArray;
-    TArray<TSharedPtr<FJsonValue>> ActorClassesArray;
-    TArray<TSharedPtr<FJsonValue>> SpawnTimeArray;
-
-    for (int i = 0; i < SavedLocations.Num(); i++)
-    {
-        TSharedPtr<FJsonObject> LocationObj = MakeShareable(new FJsonObject);
-        LocationObj->SetNumberField(TEXT("X"), SavedLocations[i].X);
-        LocationObj->SetNumberField(TEXT("Y"), SavedLocations[i].Y);
-        LocationObj->SetNumberField(TEXT("Z"), SavedLocations[i].Z);
-        LocationsArray.Add(MakeShareable(new FJsonValueObject(LocationObj)));
-
-        TSharedPtr<FJsonObject> RotationObj = MakeShareable(new FJsonObject);
-        RotationObj->SetNumberField(TEXT("Pitch"), SavedRotations[i].Pitch);
-        RotationObj->SetNumberField(TEXT("Yaw"), SavedRotations[i].Yaw);
-        RotationObj->SetNumberField(TEXT("Roll"), SavedRotations[i].Roll);
-        RotationsArray.Add(MakeShareable(new FJsonValueObject(RotationObj)));
-
-        TSharedPtr<FJsonObject> ScaleObj = MakeShareable(new FJsonObject);
-        ScaleObj->SetNumberField(TEXT("X"), SavedScales[i].X);
-        ScaleObj->SetNumberField(TEXT("Y"), SavedScales[i].Y);
-        ScaleObj->SetNumberField(TEXT("Z"), SavedScales[i].Z);
-        ScalesArray.Add(MakeShareable(new FJsonValueObject(ScaleObj)));
-
-        ActorClassesArray.Add(MakeShareable(new FJsonValueString(SavedActorClasses[i]->GetName())));
-        SpawnTimeArray.Add(MakeShareable(new FJsonValueNumber(SavedSpawnTimes[i])));
-
-    }
-
-    JsonObject->SetArrayField(TEXT("Locations"), LocationsArray);
-    JsonObject->SetArrayField(TEXT("Rotations"), RotationsArray);
-    JsonObject->SetArrayField(TEXT("Scales"), ScalesArray);
-    JsonObject->SetArrayField(TEXT("ActorClasses"), ActorClassesArray);
-    JsonObject->SetArrayField(TEXT("SpawnTime"), SpawnTimeArray);
-
-    FString JsonString;
-    TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
-    FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
-
-    FString SavePath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
-    FFileHelper::SaveStringToFile(JsonString, *SavePath);
-}
 
 void UOSY_SequenceWidget::LoadJsonData()
 {
