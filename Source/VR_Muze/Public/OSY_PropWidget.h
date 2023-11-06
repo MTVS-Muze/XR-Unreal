@@ -14,6 +14,7 @@ struct FActorSpawnInfo
 	UClass* ActorClass;
 	float SpawnTime;
 };
+
 UCLASS()
 class VR_MUZE_API UOSY_PropWidget : public UUserWidget
 {
@@ -88,7 +89,7 @@ public:
 	FRotator SavedRotation;
 	FVector SavedScale;
 	
-	float CurrentTime = 0;
+	float CurrentTime;
 
 	UFUNCTION()
 	void SpawnNiagara1();
@@ -104,11 +105,7 @@ public:
 	void SpawnNiagara6();
 	
 
-	UFUNCTION()
-	void SaveJsonData();
-
-	UFUNCTION()
-	void LoadJsonData();
+	
 
 	UFUNCTION()
 	void BackToMain();
@@ -117,11 +114,6 @@ public:
 	UFUNCTION()
 	void ReadCSVSingle();
 
-	UFUNCTION()
-	void StartTick();
-
-	UFUNCTION()
-	void StopTick();
 
 	UFUNCTION()
 	void ReadCSVFile();
@@ -151,9 +143,14 @@ public:
 	TArray<FActorSpawnInfo> PendingSpawns;
 	
 
-	// 시간 통제
-	bool bShouldTick = false;
+	
+
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class USoundBase* superShy;
+
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	class AOSY_TImeActor* TimeManager;
+
+
 };

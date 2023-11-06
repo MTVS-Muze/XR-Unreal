@@ -29,6 +29,9 @@ public:
 	class UButton* btn_MediaEnter;
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
+	class UButton* btn_SwitchCreative;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
 	class UCanvasPanel* ErrorUI;
 
 	UPROPERTY(VisibleAnywhere, Transient, meta=(BindWidgetAnim), Category=ModeSelect)
@@ -85,6 +88,9 @@ public:
 /////////////////////////////////////////
 	UFUNCTION()
 	void OnClickedButtonMedia();
+
+	UFUNCTION()
+	void OnClickedButtonSwitchCreative();
 
 	UFUNCTION()
 	void OnClickedButtonCreativeMode();

@@ -5,6 +5,9 @@
 #include "UObject/ConstructorHelpers.h"
 #include "LevelInfoTable.h"
 #include "OSY_PropWidget.h"
+#include "OSY_SequenceWidget.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "OSY_TImeActor.h"
 
 AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
 {
@@ -13,8 +16,7 @@ AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
     {
         LevelInfoTable = DataTable.Object;
     }
-
-   
+    TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
 
 }
 
@@ -22,11 +24,20 @@ void AOSY_CreativeGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
 
+
     httpUI = CreateWidget<UOSY_PropWidget>(GetWorld(), httpWidget);
     if (httpUI != nullptr)
     {
         httpUI->AddToViewport();
     }
+
+    SequnceUI = CreateWidget<UOSY_SequenceWidget>(GetWorld(),SequenceWidget);
+    if (SequnceUI != nullptr)
+    {
+        SequnceUI->AddToViewport();
+    }
+
+    SetMaxTimeFromSong();
 
     if (LevelInfoTable != nullptr)
     {
@@ -46,6 +57,20 @@ void AOSY_CreativeGameModeBase::BeginPlay()
 
            
         }
+    }
+
+    SequnceUI->CurrentTime = TimeManager->CurrentTime;
+
+    SequnceUI->UpdateProgressBar();
+}
+
+void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
+{
+    USoundWave* Song = LoadObject<USoundWave>(nullptr, TEXT("/Game/DEV/Sounds/SuperShy.SuperShy"), nullptr, LOAD_None, nullptr);
+
+    if (Song)
+    {
+        SequnceUI->MaxTime = Song->Duration;
     }
 }
 

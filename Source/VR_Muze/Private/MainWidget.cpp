@@ -16,6 +16,7 @@ void UMainWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonMedia);
+	btn_SwitchCreative->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonSwitchCreative);
 	btn_CreativeEnter->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreativeMode);
 	btn_BackModeSelect->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonBackModeSelect);
 	btn_CreateBox->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreateBox);
@@ -48,6 +49,11 @@ void UMainWidget::OnClickedButtonMedia()
 	{
 		ErrorUI->SetVisibility(ESlateVisibility::Visible);
 	}
+}
+
+void UMainWidget::OnClickedButtonSwitchCreative()
+{
+	SwitchCanvas(1);
 }
 
 void UMainWidget::OnClickedButtonCreativeMode()

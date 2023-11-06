@@ -30,6 +30,7 @@ public:
 	AOSY_CreativeGameModeBase();
 	virtual void BeginPlay() override;
 
+
 private:
 	class UDataTable* LevelInfoTable;
 
@@ -39,5 +40,21 @@ private:
 	
 	class UOSY_PropWidget* httpUI;
 
+	UPROPERTY(EditAnywhere,Category = MySettings)
+	TSubclassOf <class UOSY_SequenceWidget> SequenceWidget;
+	
+	class UOSY_SequenceWidget* SequnceUI;
+
+public:
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	class AOSY_TImeActor* TimeManager;
+
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	class USoundBase* superShy;
+
+	UFUNCTION()
+	void SetMaxTimeFromSong();
+
+	
 
 };

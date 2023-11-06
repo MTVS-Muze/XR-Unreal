@@ -90,14 +90,27 @@ public:
 	FString mySessionName;
 
 	IOnlineSessionPtr sessionInterface;
+	TSharedPtr<FOnlineSessionSearch> sessionSearch;
 
-	void CreateMuzeSession(FText roomName, int32 playerCount);
+	void CreateMuzeSession(int32 playerCount, FName SessionName);
 
 	void OnCreatedMuzeSession(FName sessionName, bool bWasSuccessful);
+
+	//랜덤코드 생성
+	FString GenerateRandomCode(int32 Length);
+
+	void FindOtherSession();
+
+	void OnFindOtherSession(bool bWasSuccessful);
+
+	//bool GetSearchResultByName(FName SessionName, FOnlineSessionSearchResult& SearchResult);
+
+	//void JoinSession(FOnlineSessionSearchResult SearchResult);
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
    //ECheckBoxState Sit1CheckState;
 
+   //체크상태 저장 변수
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TMap<FString, ECheckBoxState> CheckboxStates;
 
@@ -106,8 +119,11 @@ public:
 	UFUNCTION()
 	void OnLevelLoaded(UWorld* LoadedWorld);
 	//VR 장치 연결상태
+
+	FORCEINLINE FString GetInviteCode() { return invite_code; };
+
 private:
 	bool bIsHMDConnectd;
 
-
+	FString invite_code = "";
 };
