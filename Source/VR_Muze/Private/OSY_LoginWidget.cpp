@@ -25,6 +25,10 @@ void UOSY_LoginWidget::GotoSignUpCanvas()
 
 void UOSY_LoginWidget::Login()
 {
+	
+	FPlatformProcess::LaunchURL(TEXT("https://kauth.kakao.com/oauth/authorize?client_id=36ce23c011d844b5cc982ada079f8034&redirect_uri=http://localhost:8080/oauth2/callback/kakao&response_type=code"),NULL,NULL);
+
+
 	// 아이디랑 비번을 서버에 보낸다
 	// 만약 유요한 아이디 비번이라면 레벨을 바꾼다
 	// 그렇지 않으면 아무 일도 일어나지 않는다 or 잘못된 아이디 비번이라고 알려주는 UI를 띄운다.
