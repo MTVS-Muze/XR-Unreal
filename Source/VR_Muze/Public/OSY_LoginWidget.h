@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "../Plugins/Runtime/WebBrowserWidget/Source/WebBrowserWidget/Public/WebBrowser.h"
 #include "OSY_LoginWidget.generated.h"
 
 /**
@@ -27,9 +28,11 @@ public:
 
 public:
 #pragma region SeverData;
-	UPROPERTY()
-	FString url ="http://192.168.0.232:8080/map/test/1";
+	//UPROPERTY()
+	//FString url ="http://192.168.0.232:8080/map/test/1";
 
+	UPROPERTY()
+	FString url ="http://192.168.0.5:8080/give/token";
 #pragma endregion
 #pragma region LoginCanvas
 
@@ -41,11 +44,20 @@ public:
 	class UButton* btn_GoSignUp;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
 	class UButton* btn_Login;
+	
+
 
 	UFUNCTION()
 	void GotoSignUpCanvas();
 	UFUNCTION()
 	void Login();
+
+	UFUNCTION()
+	void LoginGet();
+
+	UPROPERTY()
+	class AOSY_KakaoHttpRequestActor* KaKaoActor;
+
 
 #pragma endregion
 
@@ -60,6 +72,18 @@ public:
 	class UButton* btn_SignUp;
 
 	UFUNCTION()
-	void SignUp();
+	void HandleUrlChanged(const FText& InText);
+
+	  UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	   UWebBrowser* WebBrowser;
+
+	   FString ExtractTokenFromUrl(const FString& Url);
+
+	   void CompleteLogin(const FString& Token);
+
+	   FString Token2;
+
 #pragma endregion
+
+
 };

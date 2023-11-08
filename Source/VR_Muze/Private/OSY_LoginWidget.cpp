@@ -5,12 +5,21 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "OSY_KakaoHttpRequestActor.h"
+#include "WebBrowser.h"
 
 void UOSY_LoginWidget::NativeConstruct()
 {
 	btn_GoSignUp->OnClicked.AddDynamic(this,&UOSY_LoginWidget::GotoSignUpCanvas);
 	btn_Login->OnClicked.AddDynamic(this, &UOSY_LoginWidget::Login);
-	btn_SignUp->OnClicked.AddDynamic(this, &UOSY_LoginWidget::SignUp);
+	//btn_SignUp->OnClicked.AddDynamic(this, &UOSY_LoginWidget::SignUp);
+	
+	
+	WebBrowser = Cast<UWebBrowser>(GetWidgetFromName(TEXT("WebBrowser")));
+	if (WebBrowser)
+	{
+		WebBrowser->OnUrlChanged.AddDynamic(this, &UOSY_LoginWidget::HandleUrlChanged);
+	}
 }
 
 void UOSY_LoginWidget::SwithLoginCanvas(int32 index)
@@ -26,18 +35,62 @@ void UOSY_LoginWidget::GotoSignUpCanvas()
 void UOSY_LoginWidget::Login()
 {
 	
-	FPlatformProcess::LaunchURL(TEXT("https://kauth.kakao.com/oauth/authorize?client_id=36ce23c011d844b5cc982ada079f8034&redirect_uri=http://localhost:8080/oauth2/callback/kakao&response_type=code"),NULL,NULL);
+	WebBrowser->LoadURL(TEXT("http://192.168.0.5:8080/oauth2/authorize/kakao?redirect_uri=http://192.168.0.99:7777/oauth2/redirect"));
 
-
-	// 아이디랑 비번을 서버에 보낸다
-	// 만약 유요한 아이디 비번이라면 레벨을 바꾼다
-	// 그렇지 않으면 아무 일도 일어나지 않는다 or 잘못된 아이디 비번이라고 알려주는 UI를 띄운다.
 }
 
-void UOSY_LoginWidget::SignUp()
+void UOSY_LoginWidget::LoginGet()
 {
-	// 아이디랑 비번을 서버에 보낸다
-	// 회원가입이 완료되면 완료되었다는 UI를 띄우고
-	// UI에 있는 확인 버튼을 누르면 캔버스를 바꾼다.
+	if (KaKaoActor != nullptr)
+	{
+		KaKaoActor->SendRequest(url);
+	}
+}
+
+
+void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
+{
+	FString Url = InText.ToString();
+
+	// Extract the token from the URL
+	Token2 = ExtractTokenFromUrl(Url);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Token :%s"), *Token);
+
+	// If the token was successfully extracted, complete the login process
+	if (!Token2.IsEmpty())
+	{
+		CompleteLogin(Token2);
+	}
+}
+
+FString UOSY_LoginWidget::ExtractTokenFromUrl(const FString& Url)
+{
+	int32 questionMarkIndex;
+	if (Url.FindChar('?', questionMarkIndex))
+	{
+		FString queryParams = Url.Mid(questionMarkIndex + 1);
+
+		// Extract the token from the query parameters
+		TArray<FString> params;
+		queryParams.ParseIntoArray(params, TEXT("&"));
+		for (const FString& param : params)
+		{
+			TArray<FString> keyValue;
+			param.ParseIntoArray(keyValue, TEXT("="));
+			if (keyValue.Num() == 2 && keyValue[0] == TEXT("token"))
+			{
+				return keyValue[1];  // Return the token
+			}
+		}
+	}
+
+	return TEXT("");  // If the token was not found
 
 }
+
+void UOSY_LoginWidget::CompleteLogin(const FString& Token)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Login completed with token: %s"), *Token);
+}
+

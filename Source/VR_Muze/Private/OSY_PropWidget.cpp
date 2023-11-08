@@ -41,6 +41,7 @@ void UOSY_PropWidget::NativeConstruct()
 	factory = Cast<AOSY_NiagaraSpawner>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_NiagaraSpawner::StaticClass()));
 
 	TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
+	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 	
 
 }
@@ -212,7 +213,7 @@ void UOSY_PropWidget::SpawnNiagara6()
 #pragma endregion 
 void UOSY_PropWidget::SaveJsonData()
 {
-	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+	JsonObject = MakeShareable(new FJsonObject);
 
 	TArray<TSharedPtr<FJsonValue>> LocationsArray;
 	TArray<TSharedPtr<FJsonValue>> RotationsArray;
@@ -256,12 +257,13 @@ void UOSY_PropWidget::SaveJsonData()
 	JsonObject->SetArrayField(TEXT("LifeSpan"), LifeSpanArray);
 	auto v = JsonObject->GetArrayField(TEXT("LifeSpan"));
 	
-	FString JsonString;
+	
 	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
 	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
 
 	FString SavePath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
 	FFileHelper::SaveStringToFile(JsonString, *SavePath);
+	
 	
 }
 
@@ -276,6 +278,8 @@ void UOSY_PropWidget::LoadJsonData()
 #pragma region Json Get&Post
 void UOSY_PropWidget::GetJSon()
 {
+	
+	
 	if (HttpActor != nullptr)
 	{
 		HttpActor->SendRequest(url);
@@ -287,7 +291,7 @@ void UOSY_PropWidget::PostJSon()
 {
 	if (HttpActor != nullptr)
 	{
-		HttpActor->PostRequest(url);
+		HttpActor->LoadJsonData();
 
 	}
 	

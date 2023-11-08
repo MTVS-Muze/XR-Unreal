@@ -56,19 +56,9 @@ void AOSY_KakaoHttpRequestActor::OnReceivedData(FHttpRequestPtr Request, FHttpRe
 		if (ParsedData.IsValid())
 		{
 			// JSON 데이터를 파싱한 후 필요한 값을 추출합니다.
-			int Id = ParsedData->GetIntegerField("id");
-			FString MemberId = ParsedData->GetStringField("memberId");
-			FString Title = ParsedData->GetStringField("title");
-			FString Song = ParsedData->GetStringField("song");
-			FString Data = ParsedData->GetStringField("data");
-			FString CreatedDate = ParsedData->GetStringField("createdDate");
+			FString Token = ParsedData->GetStringField("Token");
 
-			UE_LOG(LogTemp, Warning, TEXT("Id: %d"), Id);
-			UE_LOG(LogTemp, Warning, TEXT("MemberId: %s"), *MemberId);
-			UE_LOG(LogTemp, Warning, TEXT("Title: %s"), *Title);
-			UE_LOG(LogTemp, Warning, TEXT("Song: %s"), *Song);
-			UE_LOG(LogTemp, Warning, TEXT("Data: %s"), *Data);
-			UE_LOG(LogTemp, Warning, TEXT("CreatedDate: %s"), *CreatedDate);
+			UE_LOG(LogTemp, Warning, TEXT("MemberId: %s"), *Token);
 
 			// 나머지 코드...
 		}

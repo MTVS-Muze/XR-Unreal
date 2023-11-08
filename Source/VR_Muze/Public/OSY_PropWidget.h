@@ -76,16 +76,18 @@ public:
 	TSubclassOf<class AActor> Niagara6;
 
 	UPROPERTY()
-	FString url ="http://192.168.0.232:8080/map/test/1";
+	FString url ="http://192.168.0.5:8080/test/mk";
 
 	//UPROPERTY(VisibleAnywhere)
 	//class AKJS_TestSpawnActor* Cube;
 
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category= MySettings)
 	class AOSY_HttpRequestActor* HttpActor;
 
+	TSharedPtr<FJsonObject> JsonObject;
 
+	FString JsonString;
 
 public:
 	FVector SavedLocation;
