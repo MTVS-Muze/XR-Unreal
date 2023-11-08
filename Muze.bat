@@ -1,1 +1,1 @@
-"D:\UE_5.3\Engine\Binaries\Win64\UnrealEditor.exe" "D:\Unreal\XR-Unreal\VR_Muze.uproject" -game -ResX=640 -ResY=480 -WinX=200 -WinY=300 -log
+"D:\UE_5.3\Engine\Binaries\Win64\UnrealEditor.exe" "D:\Unreal\XR-Unreal\VR_Muze.uproject" -game -ResX=1280 -ResY=960 -WinX=200 -WinY=300 -log

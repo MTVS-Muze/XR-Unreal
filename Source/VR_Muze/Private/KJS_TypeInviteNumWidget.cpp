@@ -15,9 +15,6 @@ void UKJS_TypeInviteNumWidget::NativeConstruct()
 
 void UKJS_TypeInviteNumWidget::CreateInviteCode(const FString& InviteCode)
 {
-	UE_LOG(LogTemp,Warning,TEXT("What is Code : %s"),*InviteCode);
-	UMediaLobbyWidget* MediaLobbyWidget = Cast<UMediaLobbyWidget>(GetOuter());
-
-	text_InviteCode->SetText(FText::FromString(InviteCode));
+	//text_InviteCode->SetText(FText::FromString(InviteCode));
 
 }

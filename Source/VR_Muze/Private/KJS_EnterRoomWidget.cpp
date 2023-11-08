@@ -4,6 +4,7 @@
 #include "KJS_EnterRoomWidget.h"
 #include "Runtime/UMG/Public/Components/Button.h"
 #include "Runtime/UMG/Public/Components/EditableText.h"
+#include "OSY_GameInstance.h"
 
 void UKJS_EnterRoomWidget::NativeConstruct()
 {
@@ -20,5 +21,10 @@ void UKJS_EnterRoomWidget::OnEnterClicked()
 	if (edit_EnterRoomCode)
 	{
 		FString RoomCode = edit_EnterRoomCode->GetText().ToString();
+
+		if (gi)
+		{
+			gi->FindOtherSession();
+		}
 	}
 }

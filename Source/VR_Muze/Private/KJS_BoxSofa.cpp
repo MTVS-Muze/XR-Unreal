@@ -14,15 +14,15 @@ AKJS_BoxSofa::AKJS_BoxSofa()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComp"));
-	RootComponent = boxComp;
-
 	SelectedStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	SelectedStaticMesh->SetupAttachment(RootComponent);
-	
+	RootComponent = SelectedStaticMesh;
+	SelectedStaticMesh->SetRelativeScale3D(FVector(3.5f));
 
-	SelectedSkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
-	SelectedSkeletalMesh->SetupAttachment(RootComponent);
+	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComp"));
+	boxComp->SetupAttachment(SelectedStaticMesh);
+	boxComp->SetRelativeScale3D(FVector(0.5,1,1));
+	boxComp->SetRelativeLocation(FVector(0,-15,0));
+
 
 }
 
@@ -80,19 +80,6 @@ void AKJS_BoxSofa::BeginPlay()
 
 	}
 
-	//FString MeshPath1 = TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Props/SM_Chair.SM_Chair'");
-	//UStaticMesh* LoadMesh1 = LoadStaticMesh(MeshPath1);
-	//if (LoadMesh1)
-	//{
-	//	StaticMeshOptions.Add(LoadMesh1);
-	//}
-	//
-	//FString MeshPath2 = TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Props/SM_Couch.SM_Couch'");
-	//UStaticMesh* LoadMesh2 = LoadStaticMesh(MeshPath2);
-	//if (LoadMesh2)
-	//{
-	//	StaticMeshOptions.Add(LoadMesh2);
-	//}
 }
 
 // Called every frame

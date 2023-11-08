@@ -7,6 +7,27 @@
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OSY_GameInstance.generated.h"
 
+ USTRUCT(BlueprintType)
+struct FSessionSlotInfo
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+	FString roomName = TEXT("");
+	FString hostName = TEXT("");
+	FString playerCount = TEXT("");
+	int32 pingSpeed = 0;
+	int32 sessionIndex = 0;
+	
+	FORCEINLINE void Set(FString rName, FString hName, FString pCount, int32 pSpeed, int32 index){ roomName = rName, hostName = hName, playerCount = pCount, pingSpeed = pSpeed, sessionIndex = index;}
+};
+/**
+ * 
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSearchSessionSignature, FSessionSlotInfo, sessionInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSearchFinishSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FUpdateSessionSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCreateSessionCompletedSignature);
 
 USTRUCT(BlueprintType)
 struct FSpawnData
@@ -89,8 +110,21 @@ public:
 	UPROPERTY()
 	FString mySessionName;
 
+	UPROPERTY()
+	FString playerName;
+
+	UPROPERTY()
+	FName currentSessionName;
+
 	IOnlineSessionPtr sessionInterface;
 	TSharedPtr<FOnlineSessionSearch> sessionSearch;
+	TSharedPtr<const FUniqueNetId> playerNetId;
+	class FNamedOnlineSession* currentNamedSession;
+	FSearchSessionSignature OnSearchInfoCompleted;
+	FSearchFinishSignature OnSearchFinish;
+	FUpdateSessionSignature OnUpdateOurSession;
+	FOnCreateSessionCompletedSignature OnCreateSessionCompleted;
+
 
 	void CreateMuzeSession(int32 playerCount, FName SessionName);
 
@@ -103,12 +137,13 @@ public:
 
 	void OnFindOtherSession(bool bWasSuccessful);
 
-	//bool GetSearchResultByName(FName SessionName, FOnlineSessionSearchResult& SearchResult);
+	void JoinSelectedSession(FString RoomCode);
 
-	//void JoinSession(FOnlineSessionSearchResult SearchResult);
+	void OnJoinFindSameSession(FName sessionName, EOnJoinSessionCompleteResult::Type result);
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-   //ECheckBoxState Sit1CheckState;
+	UFUNCTION()
+	void OnUpdateSession(FName sessionName, bool bIsUpdate);
+
 
    //체크상태 저장 변수
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -118,10 +153,10 @@ public:
 	//bool IsHMDConnected();
 	UFUNCTION()
 	void OnLevelLoaded(UWorld* LoadedWorld);
-	//VR 장치 연결상태
 
 	FORCEINLINE FString GetInviteCode() { return invite_code; };
 
+	//VR 장치 연결상태
 private:
 	bool bIsHMDConnectd;
 

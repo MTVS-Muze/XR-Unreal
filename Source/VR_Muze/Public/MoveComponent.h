@@ -27,9 +27,25 @@ public:
 	void SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions);
 
 public:
+	UPROPERTY()
 	class AMyCharacter* player;
+	//UPROPERTY()
+	//class UMediaLobbyWidget* playlist;
+	//UPROPERTY()
+	//class UKJS_TypeInviteNumWidget* HostCodeWidget;
+	//UPROPERTY()
+	//class UKJS_EnterRoomWidget* EnterRoomWidget;
 
 	void Move(const struct FInputActionValue& value);
 	void Rotate(const struct FInputActionValue& value);
+	void VisibiltyPlaylistWidget(const struct FInputActionValue& value);
+	void InputOuputRoomCodeWidget(const struct FInputActionValue& value);
+
+	UFUNCTION()
+	void PressTrigger();
+	UFUNCTION()
+	void ReleaseTrigger();
+	
+
 
 };

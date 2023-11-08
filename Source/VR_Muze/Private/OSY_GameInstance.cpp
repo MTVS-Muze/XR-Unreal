@@ -77,16 +77,10 @@ void UOSY_GameInstance::Init()
 	{
 		sessionInterface = subsys->GetSessionInterface();
 
-		//세션 이름 랜덤 코드로 생성
-		/*FString RoomCode = GenerateRandomCode(5);
-		FName SessionName = FName(*RoomCode);
-
-		CreateMuzeSession(4, SessionName);*/
-
 		//세션 이벤트에 함수 바인딩 하기
 		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UOSY_GameInstance::OnCreatedMuzeSession);
-
 		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UOSY_GameInstance::OnFindOtherSession);
+		sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UOSY_GameInstance::OnJoinFindSameSession);
 	}
 
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UOSY_GameInstance::OnLevelLoaded);
@@ -111,10 +105,10 @@ void UOSY_GameInstance::CreateMuzeSession(int32 playerCount, FName SessionName)
 	settings.bAllowJoinViaPresence = true;
 
 	//입장 가능 인원을 설정한다.
-	settings.NumPublicConnections = playerCount;
+	settings.NumPublicConnections = 4;
 
 	//세션 추가설정 넣기
-	settings.Set(FName("Room_Name"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	settings.Set(FName("Room_Name"),SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 	settings.Set(FName("Host_Name"), mySessionName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 	//세션
@@ -136,6 +130,7 @@ void UOSY_GameInstance::CreateMuzeSession(int32 playerCount, FName SessionName)
 					// 랜덤 코드를 생성하고, 이를 InviteWidget에 표시합니다.
 					FString RoomCode = GenerateRandomCode(5);
 					InviteWidget->CreateInviteCode(RoomCode);
+					
 				}
 			}
 		}
@@ -146,10 +141,8 @@ void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccess
 {
 	if (bWasSuccessful)
 	{
-		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/6_Box?Listen");
+		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Yellow_Multi.Yellow_Multi");
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result : %s"), result ? *FString("Success") : *FString("Failed"));
-
-		//UKJS_TypeInviteNumWidget* InviteWidget = 
 	}
 }
 
@@ -190,15 +183,25 @@ void UOSY_GameInstance::OnFindOtherSession(bool bWasSuccessful)
 	{
 		TArray<FOnlineSessionSearchResult> searchResults = sessionSearch->SearchResults;
 
-		for (FOnlineSessionSearchResult result : searchResults)
+		for (int i = 0; i < searchResults.Num(); i++)
 		{
+			FOnlineSessionSearchResult result = searchResults[i];
 			FString roomName;
-			result.Session.SessionSettings.Get(FName("Room_Name"), roomName);
+			result.Session.SessionSettings.Get(FName("ROOM_NAME"), roomName);
+			//if (!roomName.Contains("Muze_Room")) continue;
 			FString hostName;
-			result.Session.SessionSettings.Get(FName("Room_Name"), hostName);
+			result.Session.SessionSettings.Get(FName("HOST_NAME"), hostName);
 			int32 openNumber = result.Session.NumOpenPublicConnections;
 			int32 maxNumber = result.Session.SessionSettings.NumPublicConnections;
 			int32 pingSpeed = result.PingInMs;
+
+			UE_LOG(LogTemp, Warning, TEXT("RoomName : %s, HostName : %s, Number : %d/%d, PingSpeed : %d"), *roomName, *hostName, openNumber, maxNumber, pingSpeed);
+
+			FSessionSlotInfo slotInfo;
+			slotInfo.Set(roomName, hostName, FString::Printf(TEXT("%d/%d"), openNumber, maxNumber), pingSpeed, i);
+
+			JoinSelectedSession(roomName);
+			OnSearchInfoCompleted.Broadcast(slotInfo);
 		}
 	}
 	else
@@ -208,9 +211,78 @@ void UOSY_GameInstance::OnFindOtherSession(bool bWasSuccessful)
 }
 
 
+void UOSY_GameInstance::JoinSelectedSession(FString RoomCode)
+{
+	if (sessionSearch.IsValid())
+	{
+		for (int i = 0; i < sessionSearch->SearchResults.Num(); i++)
+		{
+			FString sessionName;
+			sessionSearch->SearchResults[i].Session.SessionSettings.Get(FName("Room_Name"), sessionName);
+			if (sessionName == RoomCode)
+			{
+				sessionInterface->JoinSession(0, FName(sessionName), sessionSearch->SearchResults[i]);
+				break;
+			}
+		}
+	}
+}
+
+void UOSY_GameInstance::OnJoinFindSameSession(FName sessionName, EOnJoinSessionCompleteResult::Type result)
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s"), result == EOnJoinSessionCompleteResult::Success ? *FString(TEXT("Success")) : *FString(TEXT("Failed")));
+
+	switch (result)
+	{
+	case EOnJoinSessionCompleteResult::Success:
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Successed : %s"), *sessionName.ToString());
+		currentSessionName = sessionName;
+		currentNamedSession = sessionInterface->GetNamedSession(currentSessionName);
+		APlayerController* playerCon = GetWorld()->GetFirstPlayerController();
+		if (playerCon != nullptr)
+		{
+			FString url;
+			sessionInterface->GetResolvedConnectString(sessionName, url);
+			if (!url.IsEmpty())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Connection URL : %s"), *url);
+				playerCon->ClientTravel(url, ETravelType::TRAVEL_Absolute);
+			}
+		}
+	}
+	break;
+	case EOnJoinSessionCompleteResult::SessionIsFull:
+		UE_LOG(LogTemp, Warning, TEXT("Session Is Full"));
+		break;
+	case EOnJoinSessionCompleteResult::SessionDoesNotExist:
+		UE_LOG(LogTemp, Warning, TEXT("%s"), "Session Does Not Exist");
+		break;
+	case EOnJoinSessionCompleteResult::CouldNotRetrieveAddress:
+		UE_LOG(LogTemp, Warning, TEXT("%s"), "Could Not RetrieveAddress");
+		break;
+	case EOnJoinSessionCompleteResult::AlreadyInSession:
+		UE_LOG(LogTemp, Warning, TEXT("%s"), "Already In Session");
+		break;
+	case EOnJoinSessionCompleteResult::UnknownError:
+		UE_LOG(LogTemp, Warning, TEXT("%s"), "UnknownError");
+		break;
+	default:
+		break;
+	}
+}
+
+void UOSY_GameInstance::OnUpdateSession(FName sessionName, bool bIsUpdate)
+{
+	if (sessionName == currentSessionName)
+	{
+		OnUpdateOurSession.Broadcast();
+	}
+}
+
 void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 {
-	if (LoadedWorld->GetMapName() == "5_Box"|| LoadedWorld->GetMapName() == "6_Box")
+	if (LoadedWorld->GetMapName() == "Yellow_Single"|| LoadedWorld->GetMapName() == "Yellow_Multi")
 	{
 		UHeadMountedDisplayFunctionLibrary::EnableHMD(true);
 	}

@@ -40,7 +40,7 @@ void UMainWidget::OnClickedButtonMedia()
 	
 	if (GEngine->XRSystem.IsValid())
 	{
-		FName LevelName = "5_Box";
+		FName LevelName = "Yellow_Single";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
