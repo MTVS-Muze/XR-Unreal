@@ -63,7 +63,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UWidgetComponent* EnterRoomWidget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UCameraComponent* StartCam;
+
 public:
+	UPROPERTY()
 	class APlayerController* pc;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
@@ -74,6 +78,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inputs")
 	TArray<class UInputAction*> inputActions;
+
+	UFUNCTION()
+	void SwitchVRCamera();
 
 
 };

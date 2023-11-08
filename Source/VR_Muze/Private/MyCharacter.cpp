@@ -32,6 +32,9 @@ AMyCharacter::AMyCharacter()
 	//VR카메라 메쉬
 	hmdMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HMD Mesh"));
 	hmdMesh->SetupAttachment(hmdCam);
+
+	StartCam = CreateDefaultSubobject<UCameraComponent>(TEXT("StartCam"));
+	StartCam->SetupAttachment(RootComponent);
 	
 	//왼쪽 컨트롤러
 	leftMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Left Motion Controller"));
@@ -61,8 +64,8 @@ AMyCharacter::AMyCharacter()
 	}
 	////////////////////////////////////////////////
 	////////////////////////////////////////////////
-	bUseControllerRotationYaw = true;
-	bUseControllerRotationPitch = true;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
 	//
 	//GetCharacterMovement()->bOrientRotationToMovement = false;
 	//GetCharacterMovement()->bUseControllerDesiredRotation = false;
@@ -79,11 +82,11 @@ AMyCharacter::AMyCharacter()
 	//Third_FollowCamera->SetupAttachment(Third_CameraBoom);
 	//Third_FollowCamera->bUsePawnControlRotation = false;
 
-	//ConstructorHelpers::FObjectFinder<USkeletalMesh>TempThirdMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
-	//if (TempThirdMesh.Succeeded())
-	//{
-	//	GetMesh()->SetSkeletalMesh(TempThirdMesh.Object);
-	//}
+	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempThirdMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/DEV/KJS/Character/SitInChair/Mannequin/Character/Mesh/SK_Mannequin.SK_Mannequin'"));
+	if (TempThirdMesh.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(TempThirdMesh.Object);
+	}
 	
 	//위젯 interaction
 	WidgetInteractor = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("Widget_Interactor"));
@@ -92,6 +95,9 @@ AMyCharacter::AMyCharacter()
 	PlaylistWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PlayListWidget"));
 	PlaylistWidget->SetupAttachment(RootComponent);
 	ShowHostCodeWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("RoomCodeWidget"));
+	ShowHostCodeWidget->SetupAttachment(RootComponent);
+	EnterRoomWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("EnterCodeWidget"));
+	EnterRoomWidget->SetupAttachment(RootComponent);
 
 }
 
@@ -120,6 +126,26 @@ void AMyCharacter::BeginPlay()
 			subSys->AddMappingContext(imc_Mapping,0);
 		}
 	}
+
+	FString MapName = GetWorld()->GetMapName();
+	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+
+	if (MapName == "Yellow_Single")
+	{
+		// "Yellow_Single" 맵에서는 StartCam을 활성화합니다.
+		StartCam->Activate();
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMyCharacter::SwitchVRCamera, 3.5f, false);
+	}
+	else
+	{
+		// 그 외의 맵에서는 StartCam을 비활성화합니다.
+		StartCam->Deactivate();
+	}
+
+
+	
+
 }
 
 // Called every frame
@@ -140,5 +166,26 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		moveComp->SetupPlayerInputComponent(enhancedInputComponent, inputActions);
 	}
 
+}
+
+void AMyCharacter::SwitchVRCamera()
+{
+	if (pc)
+	{
+		if (APlayerCameraManager* pcm = pc->PlayerCameraManager)
+		{
+			pcm->StartCameraFade(0.f, 1.f, 1.0f, FColor::Black, false, true);
+
+			FTimerHandle TimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, pcm]()
+				{
+					StartCam->Deactivate();
+					hmdCam->Activate();
+					
+
+					pcm->StartCameraFade(1.0f, 0.0f, 3.0f, FColor::Black, false, true);
+				}, 1.0f, false);
+		}
+	}
 }
 
