@@ -82,5 +82,10 @@ public:
 	UFUNCTION()
 	void SwitchVRCamera();
 
+	UFUNCTION()
+	void PlayLevelSequence(FName SequenceName);
+
+	UFUNCTION()
+	void SetViewToCineCamera();
 
 };

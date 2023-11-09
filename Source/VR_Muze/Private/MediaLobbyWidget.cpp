@@ -13,6 +13,7 @@
 #include "KJS_TypeInviteNumWidget.h"
 #include "MyCharacter.h"
 #include "Components/WidgetComponent.h"
+#include "KJS_Box.h"
 
 
 void UMediaLobbyWidget::NativeConstruct()
@@ -21,6 +22,7 @@ void UMediaLobbyWidget::NativeConstruct()
 
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
+	//MediaBox= Cast<AKJS_Box>(UGameplayStatics::)
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	//Canvas_Original
 	List.Add(btn_SuperShy);
@@ -218,35 +220,39 @@ void UMediaLobbyWidget::OnCheckedSingleSit2(bool bIsChcecked)
 
 void UMediaLobbyWidget::CreateSingleRoom()
 {
-	if (gi)
-	{
-		//gi->Sit1CheckState = CheckState;
-		gi->CheckboxStates.Add("Check_SingleSit1", Check_SingleSit1->GetCheckedState());
-		gi->CheckboxStates.Add("Check_SingleSit2", Check_SingleSit2->GetCheckedState());
-	}
+	FName LevelName = "StreetCar_Play";
+	
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 
-	//ECheckBoxState CheckState = Check_SingleSit1->GetCheckedState();
-	if (Check_SingleSit1->GetCheckedState() != ECheckBoxState::Checked && Check_SingleSit2->GetCheckedState() != ECheckBoxState::Checked)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("At least one checkbox should be checked."));
-		return;
-	}
+	//if (gi)
+	//{
+	//	//gi->Sit1CheckState = CheckState;
+	//	gi->CheckboxStates.Add("Check_SingleSit1", Check_SingleSit1->GetCheckedState());
+	//	gi->CheckboxStates.Add("Check_SingleSit2", Check_SingleSit2->GetCheckedState());
+	//}
 
-	if (Check_SingleSit1->GetCheckedState() == ECheckBoxState::Checked)
-	{
-		FName LevelName = "Yellow_Multi";
-
-		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-
-	}
-
-
-	else if (Check_SingleSit2->GetCheckedState() == ECheckBoxState::Checked)
-	{
-		FName LevelName = "Yellow_Multi";
-
-		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-	}
+	////ECheckBoxState CheckState = Check_SingleSit1->GetCheckedState();
+	//if (Check_SingleSit1->GetCheckedState() != ECheckBoxState::Checked && Check_SingleSit2->GetCheckedState() != ECheckBoxState::Checked)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("At least one checkbox should be checked."));
+	//	return;
+	//}
+	//
+	//if (Check_SingleSit1->GetCheckedState() == ECheckBoxState::Checked)
+	//{
+	//	FName LevelName = "Yellow_Multi";
+	//
+	//	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	//
+	//}
+	//
+	//
+	//else if (Check_SingleSit2->GetCheckedState() == ECheckBoxState::Checked)
+	//{
+	//	FName LevelName = "Yellow_Multi";
+	//
+	//	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	//}
 }
 
 
