@@ -41,7 +41,6 @@ void AOSY_CreativeGameModeBase::BeginPlay()
     if (LoginUI != nullptr)
     {
         LoginUI->AddToViewport();
-       Token= LoginUI->Token2;
 
     }
 

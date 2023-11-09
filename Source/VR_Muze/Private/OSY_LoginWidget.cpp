@@ -8,6 +8,7 @@
 #include "OSY_KakaoHttpRequestActor.h"
 #include "WebBrowser.h"
 #include "OSY_CreativeGameModeBase.h"
+#include "OSY_GameInstance.h"
 
 void UOSY_LoginWidget::NativeConstruct()
 {
@@ -62,7 +63,10 @@ void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
 	// If the token was successfully extracted, complete the login process
 	if (!Token2.IsEmpty())
 	{
-		gm->Token=Token2;
+		if (UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetWorld()->GetGameInstance()))
+		{
+			MyGameInstance->Token=Token2;
+		}
 		CompleteLogin(Token2);
 	}
 }
