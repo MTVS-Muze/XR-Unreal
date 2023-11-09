@@ -24,6 +24,6 @@ void UOSY_OutLinerButton::OnButtonClicked()
 {
     if (TargetActor)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Clicked actor: %s"), *TargetActor->GetName());
+        OnButtonClickedDelegate.Broadcast(TargetActor);
     }
 }

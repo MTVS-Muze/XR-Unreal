@@ -74,7 +74,7 @@ public:
 	TSubclassOf<class UOSY_PropWidget> PropWidget;
 
 	UPROPERTY()
-	FString url2 ="http://192.168.0.5:8080/test/map";
+	FString url2 ="http://192.168.0.6:8080/test/map";
 	
 	TArray<FActorSpawnInfo3> PendingSpawns;
 

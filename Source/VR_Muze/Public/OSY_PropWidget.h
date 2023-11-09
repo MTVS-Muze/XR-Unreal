@@ -76,7 +76,7 @@ public:
 	TSubclassOf<class AActor> Niagara6;
 
 	UPROPERTY()
-	FString url ="http://192.168.0.5:8080/test/mk";
+	FString url ="http://192.168.0.6:8080/test/mk";
 
 	//UPROPERTY(VisibleAnywhere)
 	//class AKJS_TestSpawnActor* Cube;
