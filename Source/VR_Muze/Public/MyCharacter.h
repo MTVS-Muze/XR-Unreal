@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Runtime/UMG/Public/Components/WidgetComponent.h"
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -44,12 +45,6 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class USkeletalMeshComponent* rightHand;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	//class USpringArmComponent* Third_CameraBoom;
-	//
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	//class UCameraComponent* Third_FollowCamera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UWidgetInteractionComponent* WidgetInteractor;
