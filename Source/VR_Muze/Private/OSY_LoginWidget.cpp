@@ -7,6 +7,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "OSY_KakaoHttpRequestActor.h"
 #include "WebBrowser.h"
+#include "OSY_CreativeGameModeBase.h"
 
 void UOSY_LoginWidget::NativeConstruct()
 {
@@ -14,7 +15,8 @@ void UOSY_LoginWidget::NativeConstruct()
 	btn_Login->OnClicked.AddDynamic(this, &UOSY_LoginWidget::Login);
 	//btn_SignUp->OnClicked.AddDynamic(this, &UOSY_LoginWidget::SignUp);
 	
-	
+	gm = Cast<AOSY_CreativeGameModeBase>(UGameplayStatics::GetGameMode(this));
+
 	WebBrowser = Cast<UWebBrowser>(GetWidgetFromName(TEXT("WebBrowser")));
 	if (WebBrowser)
 	{
@@ -60,6 +62,7 @@ void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
 	// If the token was successfully extracted, complete the login process
 	if (!Token2.IsEmpty())
 	{
+		gm->Token=Token2;
 		CompleteLogin(Token2);
 	}
 }
@@ -92,5 +95,7 @@ FString UOSY_LoginWidget::ExtractTokenFromUrl(const FString& Url)
 void UOSY_LoginWidget::CompleteLogin(const FString& Token)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Login completed with token: %s"), *Token);
+
+	
 }
 

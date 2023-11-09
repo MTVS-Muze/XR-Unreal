@@ -42,7 +42,7 @@ void AOSY_HttpRequestActor::Tick(float DeltaTime)
 
 	currenTime+= DeltaTime;
 
-	Token=gm->Token;
+	//Token=gm->Token;
 	
 
 }
@@ -131,13 +131,16 @@ void AOSY_HttpRequestActor::PostRequest(const FString url)
 	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
 	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer);
 
+
+	FString BearerToken = "Bearer " + Token;
+
 	// 요청 설정
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
 	req->SetURL(url2);
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
-	req->SetHeader(TEXT("Authorization"), Token);
+	req->SetHeader(TEXT("Authorization"), BearerToken);
 	req->SetContentAsString(OutputString);
 	req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnPostData);
 	req->ProcessRequest();
