@@ -27,9 +27,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "StaticMeshList")
 	TArray<UStaticMesh*> StaticMeshOptions;
 
-	UPROPERTY(EditAnywhere, Category = "SkeletalMeshList")
-	TArray<USkeletalMesh*> SkeletalMeshOptions;
-
 	UPROPERTY(EditAnywhere, Category = "Base")
 	class UStaticMeshComponent* SelectedStaticMesh;
 

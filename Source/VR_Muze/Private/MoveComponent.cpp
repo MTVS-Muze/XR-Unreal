@@ -4,15 +4,17 @@
 #include "InputAction.h"
 #include "EnhancedInputComponent.h"
 #include "MyCharacter.h"
+#include "Components/WidgetInteractionComponent.h"
+#include "MediaLobbyWidget.h"
+#include "Components/WidgetComponent.h"
+#include "KJS_TypeInviteNumWidget.h"
+#include "KJS_EnterRoomWidget.h"
 
 // Sets default values for this component's properties
 UMoveComponent::UMoveComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
 }
 
 
@@ -21,8 +23,11 @@ void UMoveComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
 	player = GetOwner<AMyCharacter>();
+
+	//playlist = Cast<UMediaLobbyWidget>(player->PlaylistWidget->GetWidget());
+	//HostCodeWidget = Cast<UKJS_TypeInviteNumWidget>(player->ShowHostCodeWidget->GetWidget());
+	//EnterRoomWidget = Cast<UKJS_EnterRoomWidget>(player->EnterRoomWidget->GetWidget());
 }
 
 
@@ -31,7 +36,6 @@ void UMoveComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 
 void UMoveComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions)
@@ -40,23 +44,27 @@ void UMoveComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhanced
 	enhancedInputComponent->BindAction(inputActions[0], ETriggerEvent::Completed, this, &UMoveComponent::Move);
 	enhancedInputComponent->BindAction(inputActions[1], ETriggerEvent::Triggered, this, &UMoveComponent::Rotate);
 	enhancedInputComponent->BindAction(inputActions[1], ETriggerEvent::Completed, this, &UMoveComponent::Rotate);
-
+	enhancedInputComponent->BindAction(inputActions[2], ETriggerEvent::Started, this, &UMoveComponent::PressTrigger);
+	enhancedInputComponent->BindAction(inputActions[2], ETriggerEvent::Started, this, &UMoveComponent::ReleaseTrigger);
+	enhancedInputComponent->BindAction(inputActions[3], ETriggerEvent::Started, this, &UMoveComponent::VisibiltyPlaylistWidget);
+	enhancedInputComponent->BindAction(inputActions[4], ETriggerEvent::Started, this, &UMoveComponent::InputOuputRoomCodeWidget);
+	
 }
 
 void UMoveComponent::Move(const struct FInputActionValue& value)
 {
 	if(player)
 	{
-		FVector2D controllerInput = value.Get<FVector2D>();
-
-		FVector forwardVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::X);
-		FVector rightVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::Y);
-
-		const FRotator Rotation = player->Controller->GetControlRotation();
-		const FRotator YawRotation(0,Rotation.Yaw, 0);
-
-		player->AddMovementInput(forwardVec, controllerInput.Y);
-		player->AddMovementInput(rightVec, controllerInput.X);
+		//FVector2D controllerInput = value.Get<FVector2D>();
+		//
+		//FVector forwardVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::X);
+		//FVector rightVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::Y);
+		//
+		//const FRotator Rotation = player->Controller->GetControlRotation();
+		//const FRotator YawRotation(0,Rotation.Yaw, 0);
+		//
+		//player->AddMovementInput(forwardVec, controllerInput.Y);
+		//player->AddMovementInput(rightVec, controllerInput.X);
 	}
 
 }
@@ -65,18 +73,48 @@ void UMoveComponent::Rotate(const struct FInputActionValue& value)
 {
 	if(player)
 	{
-		FVector2D rightConInput = value.Get<FVector2D>();
-		if (player->pc != nullptr)
-		{
-			player->pc->AddYawInput(rightConInput.X);
-			player->pc->AddPitchInput(rightConInput.Y);
-
-			player->AddControllerYawInput(rightConInput.X);
-			player->AddControllerPitchInput(rightConInput.Y);
-		}
+		//FVector2D rightConInput = value.Get<FVector2D>();
+		//if (player->pc != nullptr)
+		//{
+		//	player->pc->AddYawInput(rightConInput.X);
+		//	player->pc->AddPitchInput(rightConInput.Y);
+		//
+		//	player->AddControllerYawInput(rightConInput.X);
+		//	player->AddControllerPitchInput(rightConInput.Y);
+		//}
 	}
 }
 
+void UMoveComponent::VisibiltyPlaylistWidget(const struct FInputActionValue& value)
+{
+	bool isPlaylistVisible = player->PlaylistWidget->IsVisible();
 
+	player->PlaylistWidget->SetVisibility(!isPlaylistVisible);
+}
+
+void UMoveComponent::InputOuputRoomCodeWidget(const struct FInputActionValue& value)
+{
+	bool isEnterRoomVisible = player->EnterRoomWidget->IsVisible();
+	bool isHostWidgetVisible = player->ShowHostCodeWidget->IsVisible();
+
+	player->EnterRoomWidget->SetVisibility(!isEnterRoomVisible);
+	player->ShowHostCodeWidget->SetVisibility(!isHostWidgetVisible);
+}
+
+void UMoveComponent::PressTrigger()
+{
+	if (player)
+	{
+		player->WidgetInteractor->PressPointerKey(EKeys::LeftMouseButton);
+	}
+}
+
+void UMoveComponent::ReleaseTrigger()
+{
+	if (player)
+	{
+		player->WidgetInteractor->ReleasePointerKey(EKeys::LeftMouseButton);
+	}
+}
 
 

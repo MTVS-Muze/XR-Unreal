@@ -103,9 +103,23 @@ void UMediaLobbyWidget::BackSelectMode()
 {
 	//StartLevel로 돌아가기
 
-	FName LevelName = "2_LobbyMap";
+	FString MapName = GetWorld()->GetMapName();
+	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 
-	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	if(MapName == "Yellow_Single")
+
+	{
+		FName LevelName = "2_LobbyMap";
+
+		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	}
+
+	else if (MapName == "Yellow_Multi")
+	{
+		FName LevelName = "Yellow_Single";
+
+		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	}
 
 	UE_LOG(LogTemp, Warning, TEXT("PleaseGo"));
 
@@ -220,7 +234,7 @@ void UMediaLobbyWidget::CreateSingleRoom()
 
 	if (Check_SingleSit1->GetCheckedState() == ECheckBoxState::Checked)
 	{
-		FName LevelName = "6_Box";
+		FName LevelName = "Yellow_Multi";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 
@@ -229,7 +243,7 @@ void UMediaLobbyWidget::CreateSingleRoom()
 
 	else if (Check_SingleSit2->GetCheckedState() == ECheckBoxState::Checked)
 	{
-		FName LevelName = "6_Box";
+		FName LevelName = "Yellow_Multi";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
@@ -263,7 +277,6 @@ void UMediaLobbyWidget::CreateDoubleRoom()
 		gi->CheckboxStates.Add("Check_DoubleSit1", Check_DoubleSit1->GetCheckedState());
 		gi->CheckboxStates.Add("Check_DoubleSit2", Check_DoubleSit2->GetCheckedState());
 		RoomCode = gi->GenerateRandomCode(5);
-		
 		FName SessionName = FName(*RoomCode);
 		gi->CreateMuzeSession((int32)slider_playerCount->GetValue(), SessionName);
 
@@ -277,7 +290,7 @@ void UMediaLobbyWidget::CreateDoubleRoom()
 
 	if (Check_DoubleSit1->GetCheckedState() == ECheckBoxState::Checked)
 	{
-		FName LevelName = "6_Box";
+		FName LevelName = "Yellow_Multi";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 
@@ -286,7 +299,7 @@ void UMediaLobbyWidget::CreateDoubleRoom()
 
 	else if (Check_DoubleSit2->GetCheckedState() == ECheckBoxState::Checked)
 	{
-		FName LevelName = "6_Box";
+		FName LevelName = "Yellow_Multi";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}

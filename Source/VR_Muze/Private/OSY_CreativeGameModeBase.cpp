@@ -8,6 +8,7 @@
 #include "OSY_SequenceWidget.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "OSY_TImeActor.h"
+#include "OSY_LoginWidget.h"
 
 AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
 {
@@ -36,6 +37,13 @@ void AOSY_CreativeGameModeBase::BeginPlay()
     {
         SequnceUI->AddToViewport();
     }
+    LoginUI = CreateWidget<UOSY_LoginWidget>(GetWorld(), LoginWidget);
+    if (LoginUI != nullptr)
+    {
+        LoginUI->AddToViewport();
+       Token= LoginUI->Token2;
+    }
+
 
     SetMaxTimeFromSong();
 

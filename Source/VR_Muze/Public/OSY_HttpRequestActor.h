@@ -8,6 +8,15 @@
 #include "OSY_JsonParseLibrary.h"
 #include "OSY_HttpRequestActor.generated.h"
 
+
+struct FActorSpawnInfo3
+{
+	FVector Location;
+	FRotator Rotation;
+	FVector Scale;
+	UClass* ActorClass;
+	float SpawnTime;
+};
 UCLASS()
 class VR_MUZE_API AOSY_HttpRequestActor : public AActor
 {
@@ -55,8 +64,20 @@ public:
 	// 파일 세이브하기
 	void SaveJson(const FString jsonData);
 
+	void LoadJsonData();
+
 	void ResetTime();
 
 	float currenTime = 0;
+
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class UOSY_PropWidget> PropWidget;
+
+	UPROPERTY()
+	FString url2 ="http://192.168.0.5:8080/test/map";
+	
+	TArray<FActorSpawnInfo3> PendingSpawns;
+
+	FString Token;
 	
 };
