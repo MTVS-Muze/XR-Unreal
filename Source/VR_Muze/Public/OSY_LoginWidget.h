@@ -86,5 +86,8 @@ public:
 	  class AOSY_CreativeGameModeBase* gm;
 #pragma endregion
 
+	UFUNCTION()
+	void BackToMain();
+
 
 };

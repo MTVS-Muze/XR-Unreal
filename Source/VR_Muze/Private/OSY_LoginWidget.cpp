@@ -12,7 +12,7 @@
 void UOSY_LoginWidget::NativeConstruct()
 {
 	btn_GoSignUp->OnClicked.AddDynamic(this,&UOSY_LoginWidget::GotoSignUpCanvas);
-	btn_Login->OnClicked.AddDynamic(this, &UOSY_LoginWidget::Login);
+	btn_Login->OnClicked.AddDynamic(this, &UOSY_LoginWidget::BackToMain);
 	//btn_SignUp->OnClicked.AddDynamic(this, &UOSY_LoginWidget::SignUp);
 	
 	gm = Cast<AOSY_CreativeGameModeBase>(UGameplayStatics::GetGameMode(this));
@@ -99,3 +99,9 @@ void UOSY_LoginWidget::CompleteLogin(const FString& Token)
 	
 }
 
+void UOSY_LoginWidget::BackToMain()
+{
+	FName LevelName = "2_LobbyMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+}
