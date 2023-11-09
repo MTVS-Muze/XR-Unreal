@@ -141,7 +141,7 @@ void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccess
 {
 	if (bWasSuccessful)
 	{
-		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Yellow_Multi.Yellow_Multi");
+		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Yellow_Multi");
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result : %s"), result ? *FString("Success") : *FString("Failed"));
 	}
 }
@@ -282,7 +282,7 @@ void UOSY_GameInstance::OnUpdateSession(FName sessionName, bool bIsUpdate)
 
 void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 {
-	if (LoadedWorld->GetMapName() == "Yellow_Single"|| LoadedWorld->GetMapName() == "Yellow_Multi")
+	if (LoadedWorld->GetMapName() == "Yellow_Single"|| LoadedWorld->GetMapName() == "Yellow_Multi" || LoadedWorld->GetMapName() == "StreetCar_Play")
 	{
 		UHeadMountedDisplayFunctionLibrary::EnableHMD(true);
 	}

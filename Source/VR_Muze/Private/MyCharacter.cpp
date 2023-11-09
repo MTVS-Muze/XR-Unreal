@@ -17,6 +17,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/WidgetInteractionComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
+#include "Runtime/CinematicCamera/Public/CineCameraActor.h"
 
 
 
@@ -44,6 +46,7 @@ AMyCharacter::AMyCharacter()
 	leftHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Left Hand Mesh"));
 	leftHand->SetupAttachment(leftMotionController);
 
+
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempLeft(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_left.SKM_MannyXR_left'"));
 	if (TempLeft.Succeeded())
 	{
@@ -53,6 +56,7 @@ AMyCharacter::AMyCharacter()
 	//오른쪽 컨트롤러
 	rightMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Right Motion Controller"));
 	rightMotionController->SetupAttachment(RootComponent);
+	rightMotionController->SetTrackingMotionSource(FName("Right"));
 	
 	rightHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Right Hand Mesh"));
 	rightHand->SetupAttachment(rightMotionController);
@@ -64,23 +68,12 @@ AMyCharacter::AMyCharacter()
 	}
 	////////////////////////////////////////////////
 	////////////////////////////////////////////////
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationPitch = false;
-	//
-	//GetCharacterMovement()->bOrientRotationToMovement = false;
-	//GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	bUseControllerRotationYaw = true;
+	bUseControllerRotationPitch = true;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
-
-	////3인칭 카메라 세팅
-	//Third_CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("FollowCamera"));
-	//Third_CameraBoom->SetupAttachment(RootComponent);
-	//Third_CameraBoom->TargetArmLength = 10.0f;
-	//Third_CameraBoom->bUsePawnControlRotation = true;
-	//
-	//Third_FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Third_FollowCamera"));
-	//Third_FollowCamera->SetupAttachment(Third_CameraBoom);
-	//Third_FollowCamera->bUsePawnControlRotation = false;
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempThirdMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/DEV/KJS/Character/SitInChair/Mannequin/Character/Mesh/SK_Mannequin.SK_Mannequin'"));
 	if (TempThirdMesh.Succeeded())
@@ -91,6 +84,7 @@ AMyCharacter::AMyCharacter()
 	//위젯 interaction
 	WidgetInteractor = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("Widget_Interactor"));
 	WidgetInteractor->InteractionSource=EWidgetInteractionSource::Mouse;
+	WidgetInteractor->SetupAttachment(rightHand);
 
 	PlaylistWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PlayListWidget"));
 	PlaylistWidget->SetupAttachment(RootComponent);
@@ -98,6 +92,7 @@ AMyCharacter::AMyCharacter()
 	ShowHostCodeWidget->SetupAttachment(RootComponent);
 	EnterRoomWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("EnterCodeWidget"));
 	EnterRoomWidget->SetupAttachment(RootComponent);
+
 
 }
 
@@ -143,6 +138,16 @@ void AMyCharacter::BeginPlay()
 		StartCam->Deactivate();
 	}
 
+	FString SequenceMapName = GetWorld()->GetMapName();
+	SequenceMapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+
+	if (SequenceMapName == "StreetCar_Play")
+	{
+		PlayLevelSequence("Streetcar");
+
+		GetMesh()->SetVisibility(false);
+	}
+	
 
 	
 
@@ -185,6 +190,29 @@ void AMyCharacter::SwitchVRCamera()
 
 					pcm->StartCameraFade(1.0f, 0.0f, 3.0f, FColor::Black, false, true);
 				}, 1.0f, false);
+		}
+	}
+}
+
+void AMyCharacter::PlayLevelSequence(FName SequenceName)
+{
+	SetViewToCineCamera();
+
+
+	if (ALevelSequenceActor* SequenceActor = Cast<ALevelSequenceActor>(StaticFindObject(ALevelSequenceActor::StaticClass(), GetWorld(), *SequenceName.ToString())))
+	{
+		SequenceActor->SequencePlayer->Play();
+	}
+}
+
+void AMyCharacter::SetViewToCineCamera()
+{
+	pc = GetWorld()->GetFirstPlayerController();
+	if (ACineCameraActor* CineCamera = Cast<ACineCameraActor>(StaticFindObject(ACineCameraActor::StaticClass(), GetWorld(), TEXT("CineCameraActor"))))
+	{
+		if (pc)
+		{
+			pc->SetViewTargetWithBlend(CineCamera, 0.5f);
 		}
 	}
 }
