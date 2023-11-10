@@ -16,6 +16,11 @@
 #include "OSY_PropBaseActor.h"
 #include "Runtime/UMG/Public/Components/ExpandableArea.h"
 #include "Runtime/UMG/Public/Components/VerticalBox.h"
+#include "Runtime/Engine/Classes/Components/LightComponent.h"
+#include "Math/Color.h"
+#include "Runtime/Engine/Classes/Components/DirectionalLightComponent.h"
+#include "Runtime/Engine/Classes/Components/PointLightComponent.h"
+#include "Runtime/Engine/Classes/Components/SpotLightComponent.h"
 
 
 void UOSY_OutLinerWidget::NativeConstruct()
@@ -113,6 +118,8 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
         // 액터의 이름과 위치를 가져와서 텍스트 블록에 설정합니다.
         tb_NameTextBlock->SetText(FText::FromString(Actor->GetName()));
 
+        #pragma region Location
+
         edit_LocationX->SetText(FText::AsNumber(Actor->GetActorLocation().X));
         edit_LocationY->SetText(FText::AsNumber(Actor->GetActorLocation().Y));
         edit_LocationZ->SetText(FText::AsNumber(Actor->GetActorLocation().Z));
@@ -120,7 +127,8 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
         edit_LocationX->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLocationXChanged);
         edit_LocationY->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLocationYChanged);
         edit_LocationZ->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLocationZChanged);
-
+#pragma endregion
+        #pragma region Rotation
         edit_RotationRoll->SetText(FText::AsNumber(Actor->GetActorRotation().Roll));
         edit_RotationPitch->SetText(FText::AsNumber(Actor->GetActorRotation().Pitch));
         edit_RotationYaw->SetText(FText::AsNumber(Actor->GetActorRotation().Yaw));
@@ -128,21 +136,73 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
         edit_RotationRoll->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnRotaionRollChanged);
         edit_RotationPitch->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnRotaionPitchChanged);
         edit_RotationYaw->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnRotationYawChanged);
+#pragma endregion
 
+        #pragma region Scale
         edit_ScaleX->SetText(FText::AsNumber(Actor->GetActorScale().X));
         edit_ScaleY->SetText(FText::AsNumber(Actor->GetActorScale().Y));
         edit_ScaleZ->SetText(FText::AsNumber(Actor->GetActorScale().Z));
 
-        edit_ScaleX->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLScaleXChanged);
+        edit_ScaleX->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnScaleXChanged);
         edit_ScaleY->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnScaleYChanged);
         edit_ScaleZ->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnScaleZChanged);
+#pragma endregion     
+        #pragma region LightColor
+        // 만약 라이트를 갖고 있다면
+        
+        if(Actor->GetComponentByClass(UDirectionalLightComponent::StaticClass()))
+        {
+            UDirectionalLightComponent* LightComponent = Cast<UDirectionalLightComponent>(Actor->GetComponentByClass(UDirectionalLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+
+				edit_LightR->SetText(FText::AsNumber(LightComponent->LightColor.R));
+                edit_LightG->SetText(FText::AsNumber(LightComponent->LightColor.G));
+                edit_LightB->SetText(FText::AsNumber(LightComponent->LightColor.B));
+
+				edit_LightR->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLightRChanged);
+				edit_LightG->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLightGChanged);
+				edit_LightB->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLightBChanged);
+            }
+        }
+        else if (Actor->GetComponentByClass(UPointLightComponent::StaticClass()))
+        {
+            UPointLightComponent* LightComponent = Cast<UPointLightComponent>(Actor->GetComponentByClass(UPointLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+
+                edit_LightR->SetText(FText::AsNumber(LightComponent->LightColor.R));
+                edit_LightG->SetText(FText::AsNumber(LightComponent->LightColor.G));
+                edit_LightB->SetText(FText::AsNumber(LightComponent->LightColor.B));
+
+                edit_LightR->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLightRChanged);
+                edit_LightG->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLightGChanged);
+                edit_LightB->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLightBChanged);
+            }
+        }
+        else if (Actor->GetComponentByClass(USpotLightComponent::StaticClass()))
+        {
+            USpotLightComponent* LightComponent = Cast<USpotLightComponent>(Actor->GetComponentByClass(USpotLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+
+                edit_LightR->SetText(FText::AsNumber(LightComponent->LightColor.R));
+                edit_LightG->SetText(FText::AsNumber(LightComponent->LightColor.G));
+                edit_LightB->SetText(FText::AsNumber(LightComponent->LightColor.B));
+
+                edit_LightR->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLightRChanged);
+                edit_LightG->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLightGChanged);
+                edit_LightB->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLightBChanged);
+            }
+        }
+        #pragma endregion
     }
     else if (Actor->IsA(AOSY_PropBaseActor::StaticClass()))
     {
         CurrentActor = Actor;
         // 액터의 이름과 위치를 가져와서 텍스트 블록에 설정합니다.
         tb_NameTextBlock->SetText(FText::FromString(Actor->GetName()));
-
+        #pragma region Location
         edit_LocationX->SetText(FText::AsNumber(Actor->GetActorLocation().X));
         edit_LocationY->SetText(FText::AsNumber(Actor->GetActorLocation().Y));
         edit_LocationZ->SetText(FText::AsNumber(Actor->GetActorLocation().Z));
@@ -150,7 +210,9 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
         edit_LocationX->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLocationXChanged);
         edit_LocationY->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLocationYChanged);
         edit_LocationZ->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLocationZChanged);
+        #pragma endregion
 
+        #pragma region Rotation
         edit_RotationRoll->SetText(FText::AsNumber(Actor->GetActorRotation().Roll));
         edit_RotationPitch->SetText(FText::AsNumber(Actor->GetActorRotation().Pitch));
         edit_RotationYaw->SetText(FText::AsNumber(Actor->GetActorRotation().Yaw));
@@ -158,16 +220,20 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
         edit_RotationRoll->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnRotaionRollChanged);
         edit_RotationPitch->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnRotaionPitchChanged);
         edit_RotationYaw->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnRotationYawChanged);
+         
+        #pragma endregion
 
+        #pragma region Scale
         edit_ScaleX->SetText(FText::AsNumber(Actor->GetActorScale().X));
         edit_ScaleY->SetText(FText::AsNumber(Actor->GetActorScale().Y));
         edit_ScaleZ->SetText(FText::AsNumber(Actor->GetActorScale().Z));
 
-        edit_ScaleX->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnLScaleXChanged);
+        edit_ScaleX->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnScaleXChanged);
         edit_ScaleY->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnScaleYChanged);
         edit_ScaleZ->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnScaleZChanged);
-    }
+        #pragma endregion
 
+    }
 }
 
 #pragma region Location
@@ -236,7 +302,7 @@ void UOSY_OutLinerWidget::OnRotationYawChanged(const FText& NewText, ETextCommit
 #pragma endregion
 
 #pragma region Scale
-void UOSY_OutLinerWidget::OnLScaleXChanged(const FText& NewText, ETextCommit::Type CommitType)
+void UOSY_OutLinerWidget::OnScaleXChanged(const FText& NewText, ETextCommit::Type CommitType)
 {
     if (CurrentActor) 
     {
@@ -265,7 +331,131 @@ void UOSY_OutLinerWidget::OnScaleZChanged(const FText& NewText, ETextCommit::Typ
         CurrentActor->SetActorScale3D(NewScale);
     }
 }
+#pragma endregion
 
+#pragma region LightColor
+void UOSY_OutLinerWidget::OnLightRChanged(const FText& NewText, ETextCommit::Type CommitType)
+{
+	if (CurrentActor)
+	{
+        if (CurrentActor->GetComponentByClass(UDirectionalLightComponent::StaticClass()))
+        {
+            UDirectionalLightComponent* LightComponent = Cast<UDirectionalLightComponent>(CurrentActor->GetComponentByClass(UDirectionalLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+                FLinearColor LightColor = LightComponent->LightColor;
+                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                LightColor.R = NewRValue; // R값 변경
+                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+            }
+        }
+
+        else if (CurrentActor->GetComponentByClass(UPointLightComponent::StaticClass()))
+        {
+            UPointLightComponent* LightComponent = Cast<UPointLightComponent>(CurrentActor->GetComponentByClass(UPointLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+                FLinearColor LightColor = LightComponent->LightColor;
+                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                LightColor.R = NewRValue; // R값 변경
+                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+            }
+        }
+        else if (CurrentActor->GetComponentByClass(USpotLightComponent::StaticClass()))
+        {
+            USpotLightComponent* LightComponent = Cast<USpotLightComponent>(CurrentActor->GetComponentByClass(USpotLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+                FLinearColor LightColor = LightComponent->LightColor;
+                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                LightColor.R = NewRValue; // R값 변경
+                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+            }
+        }
+	}
+}
+
+void UOSY_OutLinerWidget::OnLightGChanged(const FText& NewText, ETextCommit::Type CommitType)
+{
+    if (CurrentActor)
+    {
+        if (CurrentActor->GetComponentByClass(UDirectionalLightComponent::StaticClass()))
+        {
+            UDirectionalLightComponent* LightComponent = Cast<UDirectionalLightComponent>(CurrentActor->GetComponentByClass(UDirectionalLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+                FLinearColor LightColor = LightComponent->LightColor;
+                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                LightColor.G = NewRValue; // R값 변경
+                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+            }
+        }
+
+        else if (CurrentActor->GetComponentByClass(UPointLightComponent::StaticClass()))
+        {
+            UPointLightComponent* LightComponent = Cast<UPointLightComponent>(CurrentActor->GetComponentByClass(UPointLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+                FLinearColor LightColor = LightComponent->LightColor;
+                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                LightColor.G = NewRValue; // R값 변경
+                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+            }
+        }
+        else if (CurrentActor->GetComponentByClass(USpotLightComponent::StaticClass()))
+        {
+            USpotLightComponent* LightComponent = Cast<USpotLightComponent>(CurrentActor->GetComponentByClass(USpotLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+                FLinearColor LightColor = LightComponent->LightColor;
+                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                LightColor.G = NewRValue; // R값 변경
+                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+            }
+        }
+    }
+}
+
+void UOSY_OutLinerWidget::OnLightBChanged(const FText& NewText, ETextCommit::Type CommitType)
+{
+    if (CurrentActor)
+    {
+        if (CurrentActor->GetComponentByClass(UDirectionalLightComponent::StaticClass()))
+        {
+            UDirectionalLightComponent* LightComponent = Cast<UDirectionalLightComponent>(CurrentActor->GetComponentByClass(UDirectionalLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+                FLinearColor LightColor = LightComponent->LightColor;
+                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                LightColor.B = NewRValue; // R값 변경
+                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+            }
+        }
+
+        else if (CurrentActor->GetComponentByClass(UPointLightComponent::StaticClass()))
+        {
+            UPointLightComponent* LightComponent = Cast<UPointLightComponent>(CurrentActor->GetComponentByClass(UPointLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+                FLinearColor LightColor = LightComponent->LightColor;
+                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                LightColor.B = NewRValue; 
+                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+            }
+        }
+        else if (CurrentActor->GetComponentByClass(USpotLightComponent::StaticClass()))
+        {
+            USpotLightComponent* LightComponent = Cast<USpotLightComponent>(CurrentActor->GetComponentByClass(USpotLightComponent::StaticClass()));
+            if (LightComponent)
+            {
+                FLinearColor LightColor = LightComponent->LightColor;
+                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                LightColor.B = NewRValue; 
+                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+            }
+        }
+    }
+}
 
 #pragma endregion
 

@@ -54,7 +54,7 @@ public:
      UPROPERTY()
     AActor* CurrentActor; 
 
-   
+#pragma region OutLineUI
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
     class UExpandableArea* ea_Category1;
 
@@ -67,6 +67,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UVerticalBox* vb_Category2;
 
+#pragma endregion 
 
 
 #pragma region Location
@@ -125,13 +126,35 @@ public:
     class UEditableText* edit_ScaleZ;
 
     UFUNCTION()
-    void OnLScaleXChanged(const FText& NewText, ETextCommit::Type CommitType);
+    void OnScaleXChanged(const FText& NewText, ETextCommit::Type CommitType);
 
     UFUNCTION()
     void OnScaleYChanged(const FText& NewText, ETextCommit::Type CommitType);
 
      UFUNCTION()
     void OnScaleZChanged(const FText& NewText, ETextCommit::Type CommitType);
+#pragma endregion
+
+#pragma region LightColor
+
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    class UEditableText* edit_LightR;
+
+     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    class UEditableText* edit_LightG;
+
+     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    class UEditableText* edit_LightB;
+
+      UFUNCTION()
+    void OnLightRChanged(const FText& NewText, ETextCommit::Type CommitType);
+
+    UFUNCTION()
+    void OnLightGChanged(const FText& NewText, ETextCommit::Type CommitType);
+
+     UFUNCTION()
+    void OnLightBChanged(const FText& NewText, ETextCommit::Type CommitType);
 #pragma endregion
   
 };
