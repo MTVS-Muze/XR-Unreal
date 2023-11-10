@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Runtime/UMG/Public/Components/WidgetComponent.h"
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -45,12 +46,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class USkeletalMeshComponent* rightHand;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	//class USpringArmComponent* Third_CameraBoom;
-	//
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	//class UCameraComponent* Third_FollowCamera;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UWidgetInteractionComponent* WidgetInteractor;
 
@@ -66,6 +61,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UCameraComponent* StartCam;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UStaticMeshComponent* StarthmdMesh;
+
 public:
 	UPROPERTY()
 	class APlayerController* pc;
@@ -79,8 +77,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inputs")
 	TArray<class UInputAction*> inputActions;
 
+	UPROPERTY()
+	class ULevelSequencePlayer* SequencePlayer;
+
+	// Sequence Assets
+	UPROPERTY(EditAnywhere)
+	class ULevelSequence* SequenceAsset;
+
 	UFUNCTION()
 	void SwitchVRCamera();
 
+	UFUNCTION()
+	void PlayLevelSequence();
+
+	UFUNCTION()
+	void SetViewToCineCamera();
 
 };

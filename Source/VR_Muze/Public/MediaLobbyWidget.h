@@ -36,6 +36,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ViewMain)
 	class UButton* btn_Multi;
+
+	UPROPERTY()
+	class AKJS_Box* MediaBox;
 ////////////////////////////////////////////////
 //Canvas Original
 public:

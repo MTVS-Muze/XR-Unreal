@@ -157,6 +157,18 @@ public:
 	FORCEINLINE FString GetInviteCode() { return invite_code; };
 
 	//VR 장치 연결상태
+
+#pragma region SeYoung
+
+	FString Token;
+
+	UPROPERTY(EditAnywhere,Category = MySettings)
+	TSubclassOf <class UOSY_LoginWidget>LoginWidget;
+	
+	
+	class UOSY_LoginWidget* LoginUI;
+
+#pragma endregion
 private:
 	bool bIsHMDConnectd;
 

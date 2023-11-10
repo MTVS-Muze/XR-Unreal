@@ -9,6 +9,7 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "KJS_TypeInviteNumWidget.h"
 #include "MyCharacter.h"
+#include "OSY_LoginWidget.h"
 
 
 
@@ -25,20 +26,6 @@ UOSY_GameInstance::UOSY_GameInstance()
 
 	bIsHMDConnectd = false;
 
-	// Save data
-	//UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetGameInstance());
-	//if (MyGameInstance)
-	//{
-    //	MyGameInstance->HttpRecieveData = "YourDataHere";
-	//}
-
-	// Load data
-	//UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetGameInstance());
-	//if (MyGameInstance)
-	//{
-	//	FString LoadedData = HttpRecieveData->MyDataToStore;
-    // LoadedData에 데이터가 저장됩니다.
-	//}
 }
 
 
@@ -84,6 +71,13 @@ void UOSY_GameInstance::Init()
 	}
 
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UOSY_GameInstance::OnLevelLoaded);
+
+#pragma region Seyoung
+
+	
+
+
+#pragma endregion
 
 }
 
@@ -141,7 +135,7 @@ void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccess
 {
 	if (bWasSuccessful)
 	{
-		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Yellow_Multi.Yellow_Multi");
+		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Yellow_Multi");
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result : %s"), result ? *FString("Success") : *FString("Failed"));
 	}
 }
@@ -282,7 +276,7 @@ void UOSY_GameInstance::OnUpdateSession(FName sessionName, bool bIsUpdate)
 
 void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 {
-	if (LoadedWorld->GetMapName() == "Yellow_Single"|| LoadedWorld->GetMapName() == "Yellow_Multi")
+	if (LoadedWorld->GetMapName() == "Yellow_Single"|| LoadedWorld->GetMapName() == "Yellow_Multi" || LoadedWorld->GetMapName() == "StreetCar_Play")
 	{
 		UHeadMountedDisplayFunctionLibrary::EnableHMD(true);
 	}

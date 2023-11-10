@@ -7,14 +7,17 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "OSY_KakaoHttpRequestActor.h"
 #include "WebBrowser.h"
+#include "OSY_CreativeGameModeBase.h"
+#include "OSY_GameInstance.h"
 
 void UOSY_LoginWidget::NativeConstruct()
 {
 	btn_GoSignUp->OnClicked.AddDynamic(this,&UOSY_LoginWidget::GotoSignUpCanvas);
-	btn_Login->OnClicked.AddDynamic(this, &UOSY_LoginWidget::Login);
+	btn_Login->OnClicked.AddDynamic(this, &UOSY_LoginWidget::BackToMain);
 	//btn_SignUp->OnClicked.AddDynamic(this, &UOSY_LoginWidget::SignUp);
 	
-	
+	gm = Cast<AOSY_CreativeGameModeBase>(UGameplayStatics::GetGameMode(this));
+
 	WebBrowser = Cast<UWebBrowser>(GetWidgetFromName(TEXT("WebBrowser")));
 	if (WebBrowser)
 	{
@@ -60,6 +63,10 @@ void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
 	// If the token was successfully extracted, complete the login process
 	if (!Token2.IsEmpty())
 	{
+		if (UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetWorld()->GetGameInstance()))
+		{
+			MyGameInstance->Token=Token2;
+		}
 		CompleteLogin(Token2);
 	}
 }
@@ -92,5 +99,13 @@ FString UOSY_LoginWidget::ExtractTokenFromUrl(const FString& Url)
 void UOSY_LoginWidget::CompleteLogin(const FString& Token)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Login completed with token: %s"), *Token);
+
+	
 }
 
+void UOSY_LoginWidget::BackToMain()
+{
+	FName LevelName = "2_LobbyMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+}

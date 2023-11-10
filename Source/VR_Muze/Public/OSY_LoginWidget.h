@@ -32,7 +32,7 @@ public:
 	//FString url ="http://192.168.0.232:8080/map/test/1";
 
 	UPROPERTY()
-	FString url ="http://192.168.0.5:8080/give/token";
+	FString url ="http://192.168.0.6:8080/give/token";
 #pragma endregion
 #pragma region LoginCanvas
 
@@ -82,8 +82,12 @@ public:
 	   void CompleteLogin(const FString& Token);
 
 	   FString Token2;
-
+	  UPROPERTY(BlueprintReadOnly)
+	  class AOSY_CreativeGameModeBase* gm;
 #pragma endregion
+
+	UFUNCTION()
+	void BackToMain();
 
 
 };

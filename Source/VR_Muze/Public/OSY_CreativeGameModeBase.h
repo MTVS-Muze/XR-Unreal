@@ -56,7 +56,6 @@ public:
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class USoundBase* superShy;
 
-	FString Token;
 
 	UFUNCTION()
 	void SetMaxTimeFromSong();
