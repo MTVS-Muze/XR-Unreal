@@ -37,6 +37,10 @@ AMyCharacter::AMyCharacter()
 
 	StartCam = CreateDefaultSubobject<UCameraComponent>(TEXT("StartCam"));
 	StartCam->SetupAttachment(RootComponent);
+	StarthmdMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StarthmdMesh"));
+	StarthmdMesh->SetupAttachment(StartCam);
+	StartCam->bAutoActivate = true;
+
 	
 	//왼쪽 컨트롤러
 	leftMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Left Motion Controller"));
@@ -83,7 +87,7 @@ AMyCharacter::AMyCharacter()
 	
 	//위젯 interaction
 	WidgetInteractor = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("Widget_Interactor"));
-	WidgetInteractor->InteractionSource=EWidgetInteractionSource::Mouse;
+	WidgetInteractor->InteractionSource=EWidgetInteractionSource::World;
 	WidgetInteractor->SetupAttachment(rightHand);
 
 	PlaylistWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PlayListWidget"));
@@ -130,7 +134,7 @@ void AMyCharacter::BeginPlay()
 		// "Yellow_Single" 맵에서는 StartCam을 활성화합니다.
 		StartCam->Activate();
 		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMyCharacter::SwitchVRCamera, 3.5f, false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMyCharacter::SwitchVRCamera, 5.0f, false);
 	}
 	else
 	{
@@ -138,19 +142,7 @@ void AMyCharacter::BeginPlay()
 		StartCam->Deactivate();
 	}
 
-	FString SequenceMapName = GetWorld()->GetMapName();
-	SequenceMapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
-
-	if (SequenceMapName == "StreetCar_Play")
-	{
-		PlayLevelSequence("Streetcar");
-
-		GetMesh()->SetVisibility(false);
-	}
-	
-
-	
-
+	PlayLevelSequence();
 }
 
 // Called every frame
@@ -179,30 +171,24 @@ void AMyCharacter::SwitchVRCamera()
 	{
 		if (APlayerCameraManager* pcm = pc->PlayerCameraManager)
 		{
-			pcm->StartCameraFade(0.f, 1.f, 1.0f, FColor::Black, false, true);
+			pcm->StartCameraFade(0.f, 1.f, 3.0f, FColor::Black, false, true);
 
 			FTimerHandle TimerHandle;
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, pcm]()
 				{
 					StartCam->Deactivate();
 					hmdCam->Activate();
-					
 
 					pcm->StartCameraFade(1.0f, 0.0f, 3.0f, FColor::Black, false, true);
-				}, 1.0f, false);
+				}, 3.0f, false);
 		}
 	}
 }
 
-void AMyCharacter::PlayLevelSequence(FName SequenceName)
+void AMyCharacter::PlayLevelSequence()
 {
 	SetViewToCineCamera();
-
-
-	if (ALevelSequenceActor* SequenceActor = Cast<ALevelSequenceActor>(StaticFindObject(ALevelSequenceActor::StaticClass(), GetWorld(), *SequenceName.ToString())))
-	{
-		SequenceActor->SequencePlayer->Play();
-	}
+	
 }
 
 void AMyCharacter::SetViewToCineCamera()

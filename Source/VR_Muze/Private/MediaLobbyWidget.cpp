@@ -14,6 +14,9 @@
 #include "MyCharacter.h"
 #include "Components/WidgetComponent.h"
 #include "KJS_Box.h"
+#include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
+#include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
+#include "EngineUtils.h"
 
 
 void UMediaLobbyWidget::NativeConstruct()
@@ -223,6 +226,7 @@ void UMediaLobbyWidget::CreateSingleRoom()
 	FName LevelName = "StreetCar_Play";
 	
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+
 
 	//if (gi)
 	//{
