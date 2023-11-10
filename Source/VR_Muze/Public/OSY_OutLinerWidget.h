@@ -28,6 +28,8 @@ public:
     UFUNCTION()
     void DisplayActorInfo();
 
+    UFUNCTION()
+    void AddButton(AActor* Actor, UExpandableArea* Expandable,UVerticalBox* Vertical);
     //UFUNCTION()
     //void OnButtonClicked();
 
@@ -51,6 +53,21 @@ public:
 
      UPROPERTY()
     AActor* CurrentActor; 
+
+   
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+    class UExpandableArea* ea_Category1;
+
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+    class UExpandableArea* ea_Category2;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UVerticalBox* vb_Category1;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UVerticalBox* vb_Category2;
+
+
 
 #pragma region Location
 
