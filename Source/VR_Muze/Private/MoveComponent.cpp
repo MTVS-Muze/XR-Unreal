@@ -25,9 +25,6 @@ void UMoveComponent::BeginPlay()
 
 	player = GetOwner<AMyCharacter>();
 
-	//playlist = Cast<UMediaLobbyWidget>(player->PlaylistWidget->GetWidget());
-	//HostCodeWidget = Cast<UKJS_TypeInviteNumWidget>(player->ShowHostCodeWidget->GetWidget());
-	//EnterRoomWidget = Cast<UKJS_EnterRoomWidget>(player->EnterRoomWidget->GetWidget());
 }
 
 
@@ -90,6 +87,8 @@ void UMoveComponent::VisibiltyPlaylistWidget(const struct FInputActionValue& val
 	bool isPlaylistVisible = player->PlaylistWidget->IsVisible();
 
 	player->PlaylistWidget->SetVisibility(!isPlaylistVisible);
+
+	UE_LOG(LogTemp, Warning, TEXT("Visible Playlist!!!"));
 }
 
 void UMoveComponent::InputOuputRoomCodeWidget(const struct FInputActionValue& value)
@@ -99,22 +98,21 @@ void UMoveComponent::InputOuputRoomCodeWidget(const struct FInputActionValue& va
 
 	player->EnterRoomWidget->SetVisibility(!isEnterRoomVisible);
 	player->ShowHostCodeWidget->SetVisibility(!isHostWidgetVisible);
+
+	UE_LOG(LogTemp, Warning, TEXT("Visible RoomCodeWidget!!!"));
 }
 
 void UMoveComponent::PressTrigger()
 {
-	if (player)
-	{
-		player->WidgetInteractor->PressPointerKey(EKeys::LeftMouseButton);
-	}
+	player->WidgetInteractor->PressPointerKey(EKeys::LeftMouseButton);
+	UE_LOG(LogTemp, Warning, TEXT("Press Pointer!!!"));
+
 }
 
 void UMoveComponent::ReleaseTrigger()
 {
-	if (player)
-	{
 		player->WidgetInteractor->ReleasePointerKey(EKeys::LeftMouseButton);
-	}
+		UE_LOG(LogTemp, Warning, TEXT("Release Pointer!!!"));
 }
 
 

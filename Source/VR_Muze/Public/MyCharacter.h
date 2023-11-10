@@ -61,6 +61,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UCameraComponent* StartCam;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UStaticMeshComponent* StarthmdMesh;
+
 public:
 	UPROPERTY()
 	class APlayerController* pc;
@@ -74,11 +77,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inputs")
 	TArray<class UInputAction*> inputActions;
 
+	UPROPERTY()
+	class ULevelSequencePlayer* SequencePlayer;
+
+	// Sequence Assets
+	UPROPERTY(EditAnywhere)
+	class ULevelSequence* SequenceAsset;
+
 	UFUNCTION()
 	void SwitchVRCamera();
 
 	UFUNCTION()
-	void PlayLevelSequence(FName SequenceName);
+	void PlayLevelSequence();
 
 	UFUNCTION()
 	void SetViewToCineCamera();
