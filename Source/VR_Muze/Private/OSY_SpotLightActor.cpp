@@ -23,3 +23,8 @@ void AOSY_SpotLightActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
+void AOSY_SpotLightActor::ActiveLight(const FVector& FactoryLoc, bool isActivation)
+{
+
+}

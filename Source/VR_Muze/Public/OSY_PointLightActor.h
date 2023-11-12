@@ -28,6 +28,8 @@ public:
 
 	UPROPERTY(EditAnywhere,Category= MySettings)
 	class UPointLightComponent* compPointLight;
+
+	void ActiveLight(const FVector& FactoryLoc, bool isActivation);
 	
 	
 };

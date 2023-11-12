@@ -143,6 +143,8 @@ void AMyCharacter::BeginPlay()
 	}
 
 	PlayLevelSequence();
+
+	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &AMyCharacter::ChangeFOV);
 }
 
 // Called every frame
@@ -199,6 +201,30 @@ void AMyCharacter::SetViewToCineCamera()
 		if (pc)
 		{
 			pc->SetViewTargetWithBlend(CineCamera, 0.5f);
+		}
+	}
+}
+
+void AMyCharacter::ChangeFOV(UWorld* LoadedWorld)
+{
+	
+	// Get the current level name
+	FString CurrentLevel = LoadedWorld->GetMapName();
+	CurrentLevel.RemoveFromStart(LoadedWorld->StreamingLevelsPrefix);
+
+
+	// Check if the camera component is valid
+	if (hmdCam)
+	{
+		if (CurrentLevel == "StreetCar_Play")
+		{
+			// Set the camera's FOV to 35 when entering 'MyLevel'
+			hmdCam->SetFieldOfView(35.0f);
+		}
+		else
+		{
+			// Reset the camera's FOV when leaving 'MyLevel'
+			hmdCam->SetFieldOfView(90.0f);  // Change this to your default FOV value
 		}
 	}
 }

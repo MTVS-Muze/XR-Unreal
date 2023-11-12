@@ -25,3 +25,27 @@ void AOSY_DirectionalLightActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
+void AOSY_DirectionalLightActor::ActiveLight(const FVector& FactoryLoc, bool isActivation)
+{
+	/*if (isActivation)
+	{
+		// 스네어 노드의 위치 설정 및 표시
+		StartLocation = FactoryLoc;
+		SetActorLocation(StartLocation);
+		compMesh->SetVisibility(true);
+		compBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		compMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		CurrentLerpTime = 0;
+		////UE_LOG(LogTemp, Warning, TEXT("make ----------------- %s"), *GetName());
+		isHidden = false;
+	}
+	else
+	{
+		compMesh->SetVisibility(false);
+		compBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		compMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		isHidden = true;
+	}
+	*/
+}

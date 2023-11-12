@@ -29,4 +29,6 @@ public:
 	UPROPERTY(EditAnywhere,Category= MySettings)
 	class UDirectionalLightComponent* compDirectionLight;
 	
+
+	void ActiveLight(const FVector& FactoryLoc, bool isActivation);
 };

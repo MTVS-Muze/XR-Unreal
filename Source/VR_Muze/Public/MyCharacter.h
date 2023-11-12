@@ -93,4 +93,7 @@ public:
 	UFUNCTION()
 	void SetViewToCineCamera();
 
+	UFUNCTION()
+	void ChangeFOV(UWorld* LoadedWorld);
+
 };
