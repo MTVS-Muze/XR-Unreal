@@ -72,7 +72,6 @@ void UOSY_OutLinerWidget::AddButton(AActor* Actor, UExpandableArea* Expandable, 
     ActorName = Actor->GetName();
     ActorType = Actor->GetClass()->GetName();
 
-
     Button = NewObject<UOSY_OutLinerButton>(this);
     if (Button)
     {

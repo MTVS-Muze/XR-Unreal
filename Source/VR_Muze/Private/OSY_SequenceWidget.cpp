@@ -90,7 +90,6 @@ void UOSY_SequenceWidget::UpdateProgressBar() const
     {
         sl_TimeStaff->SetMaxValue(MaxTime);
         sl_TimeStaff->SetValue(CurrentTime);
-        //->SetValue(Progress);
     }
 
 
@@ -100,27 +99,22 @@ void UOSY_SequenceWidget::HandleSliderValueChanged(float Value)
 {
     CorrespondingTime = Value * MaxTime;
     tempValue=Value;
-    //UE_LOG(LogTemp, Warning, TEXT("Slider value changed: %f, corresponding time: %f"), Value, CorrespondingTime);
 }
 
 
 void UOSY_SequenceWidget::HandleSliderMouseCaptureBegin()
 {
-  // TimeManager->bShouldTick = false;
 
 }
 
 void UOSY_SequenceWidget::HandleSliderMouseCaptureEnd()
 {
    TimeManager->CurrentTime = tempValue;
-    //TimeManager->bShouldTick = true;
 }
 
 void UOSY_SequenceWidget::SequencePlay()
 {
-    UE_LOG(LogTemp, Warning, TEXT("SequencePlay"));
     TimeManager->bShouldTick = true;
-    UE_LOG(LogTemp, Warning, TEXT("SequencePlayCurrent :%f"),TimeManager->CurrentTime);
 
     if (AudioComponent != nullptr)
     {
@@ -153,14 +147,6 @@ void UOSY_SequenceWidget::SequenceStop()
         AudioComponent->Stop();
     }
 }
-
-void UOSY_SequenceWidget::SequenceSave()
-{
-    UE_LOG(LogTemp, Warning, TEXT("SequenceSave"));
-
-}
-
-
 
 void UOSY_SequenceWidget::LoadJsonData()
 {
@@ -197,7 +183,6 @@ void UOSY_SequenceWidget::LoadJsonData()
 
                     float SavedTime = SpawnTimeArray[i]->AsNumber();
 
-                    // 액터 생성 정보를 구조체에 저장하고, 이를 리스트에 추가합니다.
                     FActorSpawnInfo2 SpawnInfo;
                     SpawnInfo.Location = LoadedLocation;
                     SpawnInfo.Rotation = LoadedRotation;

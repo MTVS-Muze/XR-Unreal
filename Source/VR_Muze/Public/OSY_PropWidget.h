@@ -30,6 +30,8 @@ public:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 public:
+
+#pragma region Naigara
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_Niagara1;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
@@ -43,26 +45,6 @@ public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_Niagara6;
 
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_Save;
-
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_Exit;
-	
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_LoadJsonData;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
-	class UButton* btn_StartTick;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
-	class UButton* btn_GetLevel;
-	
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_GetJson;
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_PostJson;
-
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> Niagara1;
 	UPROPERTY(EditAnywhere, Category= MySettings)
@@ -75,16 +57,33 @@ public:
 	TSubclassOf<class AActor> Niagara5;
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> Niagara6;
+#pragma endregion
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Save;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Exit;
+	
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_LoadJsonData;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
+	class UButton* btn_GetLevel;
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
+	class UButton* btn_GetJson;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_PostJson;
+
 
 	UPROPERTY()
-	FString url ="http://192.168.0.189:8080/map/create";
+	FString url;
+	UPROPERTY()
+	FString geturl;
+	UPROPERTY()
+	FString getlevelurl;
 
-	UPROPERTY()
-	FString geturl ="http://192.168.0.189:8080/member/info";
-	UPROPERTY()
-	FString getlevelurl ="http://192.168.0.189:8080/map/1";
-	//UPROPERTY(VisibleAnywhere)
-	//class AKJS_TestSpawnActor* Cube;
 
 
 	UPROPERTY(EditAnywhere, Category= MySettings)
@@ -101,6 +100,7 @@ public:
 	
 	float CurrentTime;
 
+#pragma region Niagara
 	UFUNCTION()
 	void SpawnNiagara1();
 	UFUNCTION()
@@ -113,20 +113,13 @@ public:
 	void SpawnNiagara5();
 	UFUNCTION()
 	void SpawnNiagara6();
-	
-	UFUNCTION()
-	void SaveJsonData();
-
-	UFUNCTION()
-	void LoadJsonData();
+#pragma endregion
 
 	UFUNCTION()
 	void BackToMain();
 
-
 	UFUNCTION()
-	void ReadCSVSingle();
-
+	void SaveJsonData();
 
 	UFUNCTION()
 	void GetLevel();
@@ -141,8 +134,7 @@ public:
 	UPROPERTY(EditAnywhere,Category=MySettings)
 	class UDataTable* levelInfoTable;
 
-	UPROPERTY(EditAnywhere,Category=MySettings)
-	class AOSY_NiagaraSpawner* factory;
+	
 
 public:
 	//JSON
@@ -156,10 +148,6 @@ public:
 	TArray<int> Texts;
 
 	TArray<FActorSpawnInfo> PendingSpawns;
-	
-
-	
-
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class USoundBase* superShy;
@@ -169,6 +157,9 @@ public:
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class AOSY_CreativeGameModeBase* gm;
+
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	FString JsonStringPost;

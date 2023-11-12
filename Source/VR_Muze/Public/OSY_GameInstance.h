@@ -158,6 +158,12 @@ public:
 
 	//VR 장치 연결상태
 
+private:
+	bool bIsHMDConnectd;
+
+	FString invite_code = "";
+
+public:
 #pragma region SeYoung
 
 	FString Token;
@@ -168,9 +174,13 @@ public:
 	
 	class UOSY_LoginWidget* LoginUI;
 
-#pragma endregion
-private:
-	bool bIsHMDConnectd;
+	UPROPERTY()
+	FString syurl ="http://192.168.0.189:8080/map/create";
 
-	FString invite_code = "";
+	UPROPERTY()
+	FString sygeturl ="http://192.168.0.189:8080/member/info";
+	UPROPERTY()
+	FString sygetlevelurl ="http://192.168.0.189:8080/map/1";
+
+#pragma endregion
 };

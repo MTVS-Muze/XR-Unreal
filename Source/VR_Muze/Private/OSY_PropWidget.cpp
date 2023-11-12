@@ -13,42 +13,49 @@
 #include "OSY_NiagaraSpawner.h"
 #include "OSY_TImeActor.h"
 #include "OSY_CreativeGameModeBase.h"
+#include "OSY_GameInstance.h"
 
 
 
 void UOSY_PropWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
+
+#pragma region Cast
+
+	gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
+
+	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	if (gi != nullptr)
+	{
+		url = gi->syurl;
+		geturl = gi->sygeturl;
+		getlevelurl = gi->sygetlevelurl;
+	}
+
+	TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
+	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
+#pragma endregion
+
+#pragma region Niagara
 	btn_Niagara1->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara1);
 	btn_Niagara2->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara2);
 	btn_Niagara3->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara3);
 	btn_Niagara4->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara4);
 	btn_Niagara5->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara5);
 	btn_Niagara6->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara6);
+#pragma endregion
 
-	btn_Save->OnClicked.AddDynamic(this, &UOSY_PropWidget::SaveJsonData);
-	btn_LoadJsonData->OnClicked.AddDynamic(this, &UOSY_PropWidget::LoadJsonData);
-	
-	btn_GetJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::GetJSon);
-	btn_PostJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostJSon);
-	
-
+// back to main
 	btn_Exit->OnClicked.AddDynamic(this, &UOSY_PropWidget::BackToMain);
-	
+// Local Save
+	btn_Save->OnClicked.AddDynamic(this, &UOSY_PropWidget::SaveJsonData);
+// sever get(????)
+	btn_GetJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::GetJSon);
+// sever post
+	btn_PostJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostJSon);
+// sever get(????)
 	btn_GetLevel->OnClicked.AddDynamic(this, &UOSY_PropWidget::GetLevel);
-
-	
-
-	
-
-	factory = Cast<AOSY_NiagaraSpawner>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_NiagaraSpawner::StaticClass()));
-
-	TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
-	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
-
-	gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
-	
 
 }
 
@@ -57,12 +64,10 @@ void UOSY_PropWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
-
 	if (TimeManager->bShouldTick)
 	{
 		CurrentTime=TimeManager->CurrentTime;
 	}
-
 
 }
 
@@ -217,6 +222,14 @@ void UOSY_PropWidget::SpawnNiagara6()
 }
 
 #pragma endregion 
+
+void UOSY_PropWidget::BackToMain()
+{
+	FName LevelName = "2_LobbyMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(),LevelName,true);
+}
+
 void UOSY_PropWidget::SaveJsonData()
 {
 	JsonObject = MakeShareable(new FJsonObject);
@@ -267,75 +280,42 @@ void UOSY_PropWidget::SaveJsonData()
 	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
 
 	JsonStringPost=JsonString;
+
 	FString SavePath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
 	FFileHelper::SaveStringToFile(JsonString, *SavePath);
 	
-	
 }
-
-
-void UOSY_PropWidget::LoadJsonData()
-{
-	
-}
-
-
 
 #pragma region Json Get&Post
+
 void UOSY_PropWidget::GetJSon()
 {
-	
-	
 	if (HttpActor != nullptr)
 	{
 		HttpActor->SendRequest(geturl);
-
 	}
 }
 
+// 업로드 하는 함수
 void UOSY_PropWidget::PostJSon()
 {
-
 	if (HttpActor != nullptr)
 	{
-		
 		HttpActor->PostRequest(url,JsonStringPost);
-
-	}
-	
-}
-#pragma endregion
-
-
-
-
-void UOSY_PropWidget::BackToMain()
-{
-	FName LevelName = "2_LobbyMap";
-
-	UGameplayStatics::OpenLevel(GetWorld(),LevelName,true);
-}
-
-
-// 특정라인의 데이터를 읽는 함수
-void UOSY_PropWidget::ReadCSVSingle()
-{
-	if (levelInfoTable != nullptr)
-	{
-		
 	}
 }
 
+
+// 레벨데이터를 받아내는 함수
 void UOSY_PropWidget::GetLevel()
 {
 	if (HttpActor != nullptr)
 	{
 		HttpActor->SendRequest(getlevelurl);
-
 	}
-
 }
 
+#pragma endregion
 
 
 

@@ -49,8 +49,7 @@ public :
 	class UButton* btn_Stop;
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UButton* btn_Pause;
-    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	class UButton* btn_Save;
+  
 
 	
 
@@ -72,8 +71,7 @@ public :
 	void SequencePause();
 	UFUNCTION()
 	void SequenceStop();
-	UFUNCTION()
-	void SequenceSave();
+
 #pragma endregion
 
 #pragma region Json
