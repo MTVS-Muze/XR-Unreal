@@ -27,12 +27,11 @@ void UOSY_OutLinerWidget::NativeConstruct()
 {
     Super::NativeConstruct();
 
-    // 액터 정보를 UI에 표시
     DisplayActorInfo();
 
     UExpandableArea* ExpandableArea = Cast<UExpandableArea>(GetWidgetFromName(TEXT("YourExpandableAreaName")));
 
-    
+    btn_test->OnClicked.AddDynamic(this,&UOSY_OutLinerWidget::testFunc);
    
 
 }
@@ -51,7 +50,6 @@ void UOSY_OutLinerWidget::DisplayActorInfo()
 {
     TArray<AActor*> ActorList = GetAllActorsInWorld();
 
-    // ScrollBox를 클리어합니다.
     if (sb_OutLiner)
     {
         sb_OutLiner->ClearChildren();
@@ -61,45 +59,36 @@ void UOSY_OutLinerWidget::DisplayActorInfo()
     {
         if (Actor->IsA(AOSY_LightBaseActor::StaticClass()))
         {
-            // AOSY_LightBaseActor 클래스의 액터는 vb_Category1에 버튼을 추가합니다.
             AddButton(Actor, ea_Category1, vb_Category1);
         }
         else if (Actor->IsA(AOSY_PropBaseActor::StaticClass()))
         {
             AddButton(Actor,ea_Category2,vb_Category2);
         }
-        // 필요한 경우 다른 클래스에 대한 처리를 추가합니다.
     }
 }
 
 void UOSY_OutLinerWidget::AddButton(AActor* Actor, UExpandableArea* Expandable, UVerticalBox* Vertical)
 {
-    // 액터의 이름과 타입을 가져옵니다.
     ActorName = Actor->GetName();
     ActorType = Actor->GetClass()->GetName();
 
 
-    // 새로운 버튼을 생성합니다.
     Button = NewObject<UOSY_OutLinerButton>(this);
     if (Button)
     {
-        // 버튼의 클릭 이벤트를 추가합니다.
         Button->SetTargetActor(Actor);
         UE_LOG(LogTemp, Warning, TEXT("Actor:%s"), *ActorName);
 
-        // 버튼과 액터를 맵에 추가합니다.
         ButtonToActorMap.Add(Button, Actor);
 
-        // 버튼에 텍스트 블록을 추가합니다.
         UTextBlock* TextBlock = NewObject<UTextBlock>(this);
         if (TextBlock)
         {
-            // 텍스트 블록의 텍스트를 설정합니다.
 
             TextBlock->SetJustification(ETextJustify::Left);
             TextBlock->SetText(FText::FromString(ActorName + ": " + ActorType));
 
-            // 텍스트 블록을 버튼의 자식으로 추가합니다.
             Button->AddChild(TextBlock);
         }
         Vertical->AddChild(Button);
@@ -115,7 +104,6 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
     if (Actor->IsA(AOSY_LightBaseActor::StaticClass()))
     {
         CurrentActor = Actor;
-        // 액터의 이름과 위치를 가져와서 텍스트 블록에 설정합니다.
         tb_NameTextBlock->SetText(FText::FromString(Actor->GetName()));
 
         #pragma region Location
@@ -137,7 +125,6 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
         edit_RotationPitch->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnRotaionPitchChanged);
         edit_RotationYaw->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnRotationYawChanged);
 #pragma endregion
-
         #pragma region Scale
         edit_ScaleX->SetText(FText::AsNumber(Actor->GetActorScale().X));
         edit_ScaleY->SetText(FText::AsNumber(Actor->GetActorScale().Y));
@@ -148,7 +135,6 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
         edit_ScaleZ->OnTextCommitted.AddDynamic(this, &UOSY_OutLinerWidget::OnScaleZChanged);
 #pragma endregion     
         #pragma region LightColor
-        // 만약 라이트를 갖고 있다면
         
         if(Actor->GetComponentByClass(UDirectionalLightComponent::StaticClass()))
         {
@@ -200,7 +186,6 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
     else if (Actor->IsA(AOSY_PropBaseActor::StaticClass()))
     {
         CurrentActor = Actor;
-        // 액터의 이름과 위치를 가져와서 텍스트 블록에 설정합니다.
         tb_NameTextBlock->SetText(FText::FromString(Actor->GetName()));
         #pragma region Location
         edit_LocationX->SetText(FText::AsNumber(Actor->GetActorLocation().X));
@@ -239,30 +224,30 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
 #pragma region Location
 void UOSY_OutLinerWidget::OnLocationXChanged(const FText& NewText, ETextCommit::Type CommitType)
 {
-    if (CurrentActor) // CurrentActor는 현재 선택된 액터를 가리키는 멤버 변수입니다.
+    if (CurrentActor) 
     {
         FVector NewLocation = CurrentActor->GetActorLocation();
-        NewLocation.X = FCString::Atof(*NewText.ToString()); // 새로운 X 좌표를 파싱하여 설정
+        NewLocation.X = FCString::Atof(*NewText.ToString()); 
         CurrentActor->SetActorLocation(NewLocation);
     }
 }
 
 void UOSY_OutLinerWidget::OnLocationYChanged(const FText& NewText, ETextCommit::Type CommitType)
 {
-    if (CurrentActor) // CurrentActor는 현재 선택된 액터를 가리키는 멤버 변수입니다.
+    if (CurrentActor) 
     {
         FVector NewLocation = CurrentActor->GetActorLocation();
-        NewLocation.Y = FCString::Atof(*NewText.ToString()); // 새로운 X 좌표를 파싱하여 설정
+        NewLocation.Y = FCString::Atof(*NewText.ToString()); 
         CurrentActor->SetActorLocation(NewLocation);
     }
 }
 
 void UOSY_OutLinerWidget::OnLocationZChanged(const FText& NewText, ETextCommit::Type CommitType)
 {
-    if (CurrentActor) // CurrentActor는 현재 선택된 액터를 가리키는 멤버 변수입니다.
+    if (CurrentActor) 
     {
         FVector NewLocation = CurrentActor->GetActorLocation();
-        NewLocation.Z = FCString::Atof(*NewText.ToString()); // 새로운 X 좌표를 파싱하여 설정
+        NewLocation.Z = FCString::Atof(*NewText.ToString()); 
         CurrentActor->SetActorLocation(NewLocation);
     }
 }
@@ -344,9 +329,9 @@ void UOSY_OutLinerWidget::OnLightRChanged(const FText& NewText, ETextCommit::Typ
             if (LightComponent)
             {
                 FLinearColor LightColor = LightComponent->LightColor;
-                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
-                LightColor.R = NewRValue; // R값 변경
-                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+                float NewRValue = FCString::Atof(*NewText.ToString()); 
+                LightColor.R = NewRValue;
+                LightComponent->SetLightColor(LightColor); 
             }
         }
 
@@ -356,9 +341,9 @@ void UOSY_OutLinerWidget::OnLightRChanged(const FText& NewText, ETextCommit::Typ
             if (LightComponent)
             {
                 FLinearColor LightColor = LightComponent->LightColor;
-                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
-                LightColor.R = NewRValue; // R값 변경
-                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+                float NewRValue = FCString::Atof(*NewText.ToString()); 
+                LightColor.R = NewRValue; 
+                LightComponent->SetLightColor(LightColor); 
             }
         }
         else if (CurrentActor->GetComponentByClass(USpotLightComponent::StaticClass()))
@@ -367,9 +352,9 @@ void UOSY_OutLinerWidget::OnLightRChanged(const FText& NewText, ETextCommit::Typ
             if (LightComponent)
             {
                 FLinearColor LightColor = LightComponent->LightColor;
-                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
-                LightColor.R = NewRValue; // R값 변경
-                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+                float NewRValue = FCString::Atof(*NewText.ToString()); 
+                LightColor.R = NewRValue; 
+                LightComponent->SetLightColor(LightColor);
             }
         }
 	}
@@ -385,9 +370,9 @@ void UOSY_OutLinerWidget::OnLightGChanged(const FText& NewText, ETextCommit::Typ
             if (LightComponent)
             {
                 FLinearColor LightColor = LightComponent->LightColor;
-                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
-                LightColor.G = NewRValue; // R값 변경
-                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+                float NewRValue = FCString::Atof(*NewText.ToString()); 
+                LightColor.G = NewRValue; 
+                LightComponent->SetLightColor(LightColor); 
             }
         }
 
@@ -397,9 +382,9 @@ void UOSY_OutLinerWidget::OnLightGChanged(const FText& NewText, ETextCommit::Typ
             if (LightComponent)
             {
                 FLinearColor LightColor = LightComponent->LightColor;
-                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
-                LightColor.G = NewRValue; // R값 변경
-                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+                float NewRValue = FCString::Atof(*NewText.ToString()); 
+                LightColor.G = NewRValue; 
+                LightComponent->SetLightColor(LightColor);
             }
         }
         else if (CurrentActor->GetComponentByClass(USpotLightComponent::StaticClass()))
@@ -408,9 +393,9 @@ void UOSY_OutLinerWidget::OnLightGChanged(const FText& NewText, ETextCommit::Typ
             if (LightComponent)
             {
                 FLinearColor LightColor = LightComponent->LightColor;
-                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
-                LightColor.G = NewRValue; // R값 변경
-                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+                float NewRValue = FCString::Atof(*NewText.ToString()); 
+                LightColor.G = NewRValue;
+                LightComponent->SetLightColor(LightColor); 
             }
         }
     }
@@ -426,9 +411,9 @@ void UOSY_OutLinerWidget::OnLightBChanged(const FText& NewText, ETextCommit::Typ
             if (LightComponent)
             {
                 FLinearColor LightColor = LightComponent->LightColor;
-                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
-                LightColor.B = NewRValue; // R값 변경
-                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+                float NewRValue = FCString::Atof(*NewText.ToString()); 
+                LightColor.B = NewRValue; 
+                LightComponent->SetLightColor(LightColor); 
             }
         }
 
@@ -438,9 +423,9 @@ void UOSY_OutLinerWidget::OnLightBChanged(const FText& NewText, ETextCommit::Typ
             if (LightComponent)
             {
                 FLinearColor LightColor = LightComponent->LightColor;
-                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                float NewRValue = FCString::Atof(*NewText.ToString()); 
                 LightColor.B = NewRValue; 
-                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+                LightComponent->SetLightColor(LightColor);
             }
         }
         else if (CurrentActor->GetComponentByClass(USpotLightComponent::StaticClass()))
@@ -449,13 +434,20 @@ void UOSY_OutLinerWidget::OnLightBChanged(const FText& NewText, ETextCommit::Typ
             if (LightComponent)
             {
                 FLinearColor LightColor = LightComponent->LightColor;
-                float NewRValue = FCString::Atof(*NewText.ToString()); // 텍스트에서 새로운 R 값 파싱
+                float NewRValue = FCString::Atof(*NewText.ToString()); 
                 LightColor.B = NewRValue; 
-                LightComponent->SetLightColor(LightColor); // 라이트 컬러 적용
+                LightComponent->SetLightColor(LightColor); 
             }
         }
     }
 }
 
+
 #pragma endregion
 
+void UOSY_OutLinerWidget::testFunc()
+{
+    FName LevelName = "net";
+
+    UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+}

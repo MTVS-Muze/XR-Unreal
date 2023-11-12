@@ -7,16 +7,16 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "OSY_KakaoHttpRequestActor.h"
 #include "WebBrowser.h"
-#include "OSY_CreativeGameModeBase.h"
 #include "OSY_GameInstance.h"
+#include "OSY_LoginGameMode.h"
 
 void UOSY_LoginWidget::NativeConstruct()
 {
-	btn_GoSignUp->OnClicked.AddDynamic(this,&UOSY_LoginWidget::GotoSignUpCanvas);
-	btn_Login->OnClicked.AddDynamic(this, &UOSY_LoginWidget::BackToMain);
-	//btn_SignUp->OnClicked.AddDynamic(this, &UOSY_LoginWidget::SignUp);
+	btn_Start->OnClicked.AddDynamic(this, &UOSY_LoginWidget::GotoLoginCanvas);
+
 	
-	gm = Cast<AOSY_CreativeGameModeBase>(UGameplayStatics::GetGameMode(this));
+	
+	loginGM = Cast<AOSY_LoginGameMode>(UGameplayStatics::GetGameMode(this));
 
 	WebBrowser = Cast<UWebBrowser>(GetWidgetFromName(TEXT("WebBrowser")));
 	if (WebBrowser)
@@ -25,15 +25,26 @@ void UOSY_LoginWidget::NativeConstruct()
 	}
 }
 
+
+#pragma region SwitchCanvas
 void UOSY_LoginWidget::SwithLoginCanvas(int32 index)
 {
 	ws_LoginSwitcher->SetActiveWidgetIndex(index);
 }
 
-void UOSY_LoginWidget::GotoSignUpCanvas()
+void UOSY_LoginWidget::GotoLoginCanvas()
 {
 	SwithLoginCanvas(1);
 }
+
+void UOSY_LoginWidget::GotoLobbyMap()
+{
+	FName LevelName = "2_LobbyMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+}
+
+#pragma endregion 
 
 void UOSY_LoginWidget::Login()
 {
@@ -42,32 +53,25 @@ void UOSY_LoginWidget::Login()
 
 }
 
-void UOSY_LoginWidget::LoginGet()
-{
-	if (KaKaoActor != nullptr)
-	{
-		KaKaoActor->SendRequest(url);
-	}
-}
-
 
 void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
 {
 	FString Url = InText.ToString();
 
-	// Extract the token from the URL
 	Token2 = ExtractTokenFromUrl(Url);
 
-	//UE_LOG(LogTemp, Warning, TEXT("Token :%s"), *Token);
-
-	// If the token was successfully extracted, complete the login process
 	if (!Token2.IsEmpty())
 	{
-		if (UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetWorld()->GetGameInstance()))
+		UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetWorld()->GetGameInstance());
+		if (MyGameInstance != nullptr)
 		{
 			MyGameInstance->Token=Token2;
+			if (!MyGameInstance->Token.IsEmpty())
+			{
+				CompleteLogin(Token2);
+				GotoLobbyMap();
+			}
 		}
-		CompleteLogin(Token2);
 	}
 }
 
@@ -78,7 +82,6 @@ FString UOSY_LoginWidget::ExtractTokenFromUrl(const FString& Url)
 	{
 		FString queryParams = Url.Mid(questionMarkIndex + 1);
 
-		// Extract the token from the query parameters
 		TArray<FString> params;
 		queryParams.ParseIntoArray(params, TEXT("&"));
 		for (const FString& param : params)
@@ -87,12 +90,12 @@ FString UOSY_LoginWidget::ExtractTokenFromUrl(const FString& Url)
 			param.ParseIntoArray(keyValue, TEXT("="));
 			if (keyValue.Num() == 2 && keyValue[0] == TEXT("token"))
 			{
-				return keyValue[1];  // Return the token
+				return keyValue[1];
 			}
 		}
 	}
 
-	return TEXT("");  // If the token was not found
+	return TEXT(""); 
 
 }
 

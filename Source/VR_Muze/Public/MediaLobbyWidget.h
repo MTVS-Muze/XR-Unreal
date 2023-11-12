@@ -272,4 +272,8 @@ public:
 private:
 	UPROPERTY()
 	class AMyCharacter* player;
+
+
+
+
 };

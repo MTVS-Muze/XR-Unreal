@@ -17,6 +17,7 @@
 #include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
 #include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
 #include "EngineUtils.h"
+#include "KJS_GameModeBase.h"
 
 
 void UMediaLobbyWidget::NativeConstruct()
@@ -223,10 +224,17 @@ void UMediaLobbyWidget::OnCheckedSingleSit2(bool bIsChcecked)
 
 void UMediaLobbyWidget::CreateSingleRoom()
 {
+
+// 	AKJS_GameModeBase* GameMode = Cast<AKJS_GameModeBase>(GetWorld()->GetAuthGameMode());
+// 	if (GameMode != nullptr)
+// 	{
+// 		GameMode->PlaySequence();
+// 	}
+
 	FName LevelName = "StreetCar_Play";
 	
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-
+	
 
 	//if (gi)
 	//{

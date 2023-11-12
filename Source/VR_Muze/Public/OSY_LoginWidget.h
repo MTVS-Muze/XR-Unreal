@@ -26,6 +26,9 @@ public:
 	UFUNCTION()
 	void SwithLoginCanvas(int32 index);
 
+	UPROPERTY(BlueprintReadOnly)
+	class AOSY_LoginGameMode* loginGM;
+
 public:
 #pragma region SeverData;
 	//UPROPERTY()
@@ -34,42 +37,41 @@ public:
 	UPROPERTY()
 	FString url ="http://192.168.0.6:8080/give/token";
 #pragma endregion
-#pragma region LoginCanvas
+
+#pragma region StartCanvas
+
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
-	class UEditableText* edit_LoginID;
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
-	class UEditableText* edit_LoginPW;
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
-	class UButton* btn_GoSignUp;
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
-	class UButton* btn_Login;
-	
-
+	class UButton* btn_Start;
 
 	UFUNCTION()
-	void GotoSignUpCanvas();
+	void GotoLoginCanvas();
+
+#pragma endregion
+
+#pragma region LoginCanvas
+
+	UFUNCTION()
+	void GotoLobbyMap();
+	
 	UFUNCTION()
 	void Login();
 
 	UFUNCTION()
-	void LoginGet();
+	void BackToMain();
 
 	UPROPERTY()
 	class AOSY_KakaoHttpRequestActor* KaKaoActor;
 
 
+	
+
+
+
+	
 #pragma endregion
 
-#pragma region ApplyCanvas
-
-
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
-	class UEditableText* edit_SignUpID;
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
-	class UEditableText* edit_SignUpPW;
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
-	class UButton* btn_SignUp;
+#pragma region GetToken
 
 	UFUNCTION()
 	void HandleUrlChanged(const FText& InText);
@@ -82,12 +84,8 @@ public:
 	   void CompleteLogin(const FString& Token);
 
 	   FString Token2;
-	  UPROPERTY(BlueprintReadOnly)
-	  class AOSY_CreativeGameModeBase* gm;
 #pragma endregion
 
-	UFUNCTION()
-	void BackToMain();
 
 
 };

@@ -35,6 +35,7 @@ private:
 	class UDataTable* LevelInfoTable;
 
 
+public:
 	UPROPERTY(EditAnywhere,Category = MySettings)
 	TSubclassOf <class UOSY_PropWidget> httpWidget;
 	
@@ -45,11 +46,8 @@ private:
 	
 	class UOSY_SequenceWidget* SequnceUI;
 
-	UPROPERTY(EditAnywhere,Category = MySettings)
-	TSubclassOf <class UOSY_LoginWidget>LoginWidget;
-	class UOSY_LoginWidget* LoginUI;
+	
 
-public:
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class AOSY_TImeActor* TimeManager;
 

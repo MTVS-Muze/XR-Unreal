@@ -4,24 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "ModeSelectGameModeBase.generated.h"
+#include "OSY_LoginGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class VR_MUZE_API AModeSelectGameModeBase : public AGameModeBase
+class VR_MUZE_API AOSY_LoginGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
 public:
-	AModeSelectGameModeBase();
+	AOSY_LoginGameMode();
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere,Category = MySettings)
-	TSubclassOf <class UMainWidget>ModeSelectWidget;
-
-	class UMainWidget* ModeSelectUI;
+	TSubclassOf <class UOSY_LoginWidget>LoginWidget;
+	class UOSY_LoginWidget* LoginUI;
 
 private:
 	

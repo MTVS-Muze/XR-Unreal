@@ -157,6 +157,11 @@ public:
     void OnLightBChanged(const FText& NewText, ETextCommit::Type CommitType);
 #pragma endregion
   
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    class UButton* btn_test;
+
+    UFUNCTION()
+    void testFunc();
 };
 	
 

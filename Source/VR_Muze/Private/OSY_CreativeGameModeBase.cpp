@@ -25,25 +25,17 @@ void AOSY_CreativeGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
 
-
     httpUI = CreateWidget<UOSY_PropWidget>(GetWorld(), httpWidget);
     if (httpUI != nullptr)
     {
         httpUI->AddToViewport();
     }
 
-    SequnceUI = CreateWidget<UOSY_SequenceWidget>(GetWorld(),SequenceWidget);
+    SequnceUI = CreateWidget<UOSY_SequenceWidget>(GetWorld(), SequenceWidget);
     if (SequnceUI != nullptr)
     {
         SequnceUI->AddToViewport();
     }
-    LoginUI = CreateWidget<UOSY_LoginWidget>(GetWorld(), LoginWidget);
-    if (LoginUI != nullptr)
-    {
-        LoginUI->AddToViewport();
-
-    }
-
 
     SetMaxTimeFromSong();
 
@@ -51,8 +43,7 @@ void AOSY_CreativeGameModeBase::BeginPlay()
     {
         for (int32 i = 1; i <= LevelInfoTable->GetRowNames().Num(); i++)
         {
-            FLevelInfoTable* LevelInfo = LevelInfoTable->FindRow<FLevelInfoTable>(FName(*(FString::FormatAsNumber(i))),FString(""));
-        
+            FLevelInfoTable* LevelInfo = LevelInfoTable->FindRow<FLevelInfoTable>(FName(*(FString::FormatAsNumber(i))), FString(""));
 
             UE_LOG(LogTemp, Warning, TEXT("name : %s"), *LevelInfo->name);
             UE_LOG(LogTemp, Warning, TEXT("spawnTime : %f"), LevelInfo->spawnTime);
@@ -62,14 +53,25 @@ void AOSY_CreativeGameModeBase::BeginPlay()
             UE_LOG(LogTemp, Warning, TEXT("locationZ : %f"), LevelInfo->locationZ);
             UE_LOG(LogTemp, Warning, TEXT("scale : %f"), LevelInfo->scale);
             UE_LOG(LogTemp, Warning, TEXT("texture : %d"), LevelInfo->texture);
-
-           
         }
     }
 
-    SequnceUI->CurrentTime = TimeManager->CurrentTime;
-
-    SequnceUI->UpdateProgressBar();
+    if (SequnceUI != nullptr && TimeManager != nullptr)
+    {
+        SequnceUI->CurrentTime = TimeManager->CurrentTime;
+        SequnceUI->UpdateProgressBar();
+    }
+    else
+    {
+        if (SequnceUI == nullptr)
+        {
+            UE_LOG(LogTemp, Error, TEXT("SequnceUI is null."));
+        }
+        if (TimeManager == nullptr)
+        {
+            UE_LOG(LogTemp, Error, TEXT("TimeManager is null."));
+        }
+    }
 }
 
 void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()

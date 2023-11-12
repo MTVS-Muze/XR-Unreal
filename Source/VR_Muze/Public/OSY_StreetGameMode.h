@@ -4,22 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "KJS_GameModeBase.generated.h"
+#include "OSY_StreetGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class VR_MUZE_API AKJS_GameModeBase : public AGameModeBase
+class VR_MUZE_API AOSY_StreetGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
-	
-	
-	UFUNCTION()
-	void SetVRMode();
+	AOSY_StreetGameMode();
+	virtual void BeginPlay();
+
 public:
 	UFUNCTION()
 	void PlaySequence();
-
+	
 };
