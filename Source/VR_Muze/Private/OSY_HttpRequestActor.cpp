@@ -30,8 +30,10 @@ void AOSY_HttpRequestActor::BeginPlay()
 	gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
 
 	
+	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
-
+	Token = gi->Token;
+	BearerToken = "Bearer " + Token;
 	
 }
 
@@ -42,7 +44,6 @@ void AOSY_HttpRequestActor::Tick(float DeltaTime)
 
 	currenTime+= DeltaTime;
 
-	//Token=gm->Token;
 	
 
 }
@@ -58,8 +59,11 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 	req->SetURL(url);
 	req->SetVerb(TEXT("GET"));
 	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+	req->SetHeader(TEXT("Authorization"), BearerToken);
 	req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedData);
 	req->ProcessRequest();
+
+
 
 }
 
@@ -106,8 +110,17 @@ void AOSY_HttpRequestActor::OnReceivedData(FHttpRequestPtr Request, FHttpRespons
 	}
 }
 
-void AOSY_HttpRequestActor::PostRequest(const FString url)
+void AOSY_HttpRequestActor::PostRequest(const FString url, const FString& JsonString)
 {
+	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+
+	JsonObject->SetStringField("title", title);
+	JsonObject->SetStringField("song", song);
+	JsonObject->SetStringField("singer", singer);
+	JsonObject->SetStringField("info", info);
+	JsonObject->SetStringField("data", JsonString);
+
+	/*
 	TArray<TSharedPtr<FJsonValue>> SpawnInfosArray;
 
 	for (const FActorSpawnInfo3& SpawnInfo : PendingSpawns)
@@ -123,21 +136,23 @@ void AOSY_HttpRequestActor::PostRequest(const FString url)
 		TSharedRef<FJsonValueObject> SpawnInfoValue = MakeShared<FJsonValueObject>(SpawnInfoObj);
 		SpawnInfosArray.Add(SpawnInfoValue);
 	}
+	FString SpawnInfosArrayString;
+	TSharedRef<TJsonWriter<>> ArrayWriter = TJsonWriterFactory<>::Create(&SpawnInfosArrayString);
+	FJsonSerializer::Serialize(SpawnInfosArray, ArrayWriter);
 
-	TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
-	JsonObject->SetArrayField("SpawnInfos", SpawnInfosArray);
+	JsonObject->SetStringField("data", SpawnInfosArrayString); // Add the SpawnInfos array to the JsonObject with the key "data"
 
+	*/
 	FString OutputString;
-	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
-	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer);
+	TSharedRef<TJsonWriter<>> ObjectWriter = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), ObjectWriter);
 
-
-	FString BearerToken = "Bearer " + Token;
+	UE_LOG(LogTemp, Warning, TEXT("BearerToken: %s"), *BearerToken);
 
 	// 요청 설정
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
-	req->SetURL(url2);
+	req->SetURL(url);
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 	req->SetHeader(TEXT("Authorization"), BearerToken);
@@ -150,8 +165,8 @@ void AOSY_HttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TShared
 {
 	if (bConnectedSuccessfully)
 	{
-		FString receivedData = Response->GetContentAsString();
-		FString SavePath = FPaths::ProjectContentDir() + TEXT("SavedData.csv");
+// 		FString receivedData = Response->GetContentAsString();
+// 		FString SavePath = FPaths::ProjectContentDir() + TEXT("SavedData.csv");
 
 
 		UE_LOG(LogTemp,Warning,TEXT("Success"));
@@ -254,7 +269,7 @@ void AOSY_HttpRequestActor::LoadJsonData()
 		}
 	}
 
-	PostRequest(url2);
+	//PostRequest(url2);
 }
 
 void AOSY_HttpRequestActor::ResetTime()

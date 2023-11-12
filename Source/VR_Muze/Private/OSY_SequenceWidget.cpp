@@ -93,14 +93,7 @@ void UOSY_SequenceWidget::UpdateProgressBar() const
         //->SetValue(Progress);
     }
 
-    if (TimeTextBlock)
-    {
-        const int32 Minutes = FMath::FloorToInt(CurrentTime / 60.0f);
-        const int32 Seconds = FMath::FloorToInt(FMath::Fmod(CurrentTime, 60.0f));
 
-        FString TimeString = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
-        TimeTextBlock->SetText(FText::FromString(TimeString));
-    }
 }
 
 void UOSY_SequenceWidget::HandleSliderValueChanged(float Value)

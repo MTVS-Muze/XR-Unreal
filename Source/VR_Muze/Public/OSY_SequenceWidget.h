@@ -44,9 +44,6 @@ public :
 	class USlider* sl_TimeStaff;
 
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-    class UTextBlock* TimeTextBlock;
-
-    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UButton* btn_Play;
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UButton* btn_Stop;

@@ -12,14 +12,13 @@ struct FActorTransformInfo
     GENERATED_BODY()
 
 public:
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FVector Location;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FRotator Rotation;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FVector Scale;
+	FVector Location;
+	FRotator Rotation;
+	FVector Scale;
+	UClass* ActorClass;
+	float SpawnTime;
+	float LifeSpan;
+	int text;
 };
 UCLASS()
 class VR_MUZE_API AOSY_CreativeGameModeBase : public AGameModeBase
@@ -29,6 +28,8 @@ class VR_MUZE_API AOSY_CreativeGameModeBase : public AGameModeBase
 public:
 	AOSY_CreativeGameModeBase();
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime)override;
 
 
 private:
@@ -57,6 +58,9 @@ public:
 
 	UFUNCTION()
 	void SetMaxTimeFromSong();
+
+	
+	TArray<FActorTransformInfo> postData;
 
 	
 

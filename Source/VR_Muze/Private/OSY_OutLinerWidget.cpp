@@ -31,7 +31,6 @@ void UOSY_OutLinerWidget::NativeConstruct()
 
     UExpandableArea* ExpandableArea = Cast<UExpandableArea>(GetWidgetFromName(TEXT("YourExpandableAreaName")));
 
-    btn_test->OnClicked.AddDynamic(this,&UOSY_OutLinerWidget::testFunc);
    
 
 }
@@ -104,7 +103,7 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
     if (Actor->IsA(AOSY_LightBaseActor::StaticClass()))
     {
         CurrentActor = Actor;
-        tb_NameTextBlock->SetText(FText::FromString(Actor->GetName()));
+        
 
         #pragma region Location
 
@@ -186,7 +185,7 @@ void UOSY_OutLinerWidget::OnButtonClicked(AActor* Actor)
     else if (Actor->IsA(AOSY_PropBaseActor::StaticClass()))
     {
         CurrentActor = Actor;
-        tb_NameTextBlock->SetText(FText::FromString(Actor->GetName()));
+        
         #pragma region Location
         edit_LocationX->SetText(FText::AsNumber(Actor->GetActorLocation().X));
         edit_LocationY->SetText(FText::AsNumber(Actor->GetActorLocation().Y));
@@ -445,9 +444,3 @@ void UOSY_OutLinerWidget::OnLightBChanged(const FText& NewText, ETextCommit::Typ
 
 #pragma endregion
 
-void UOSY_OutLinerWidget::testFunc()
-{
-    FName LevelName = "net";
-
-    UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-}

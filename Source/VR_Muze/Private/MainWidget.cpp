@@ -78,7 +78,11 @@ void UMainWidget::OnClickedButtonBackModeSelect()
 
 void UMainWidget::OnClickedButtonCreateBox()
 {
-	SwitchCanvas(2);
+	//SwitchCanvas(2);
+
+	FName LevelName = "OSY_TMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }
 
 void UMainWidget::OnClickedButtonCreateEnd()

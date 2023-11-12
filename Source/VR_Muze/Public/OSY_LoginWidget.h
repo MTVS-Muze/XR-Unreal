@@ -35,7 +35,7 @@ public:
 	//FString url ="http://192.168.0.232:8080/map/test/1";
 
 	UPROPERTY()
-	FString url ="http://192.168.0.6:8080/give/token";
+	FString url ="http://192.168.0.189:8080/give/token";
 #pragma endregion
 
 #pragma region StartCanvas

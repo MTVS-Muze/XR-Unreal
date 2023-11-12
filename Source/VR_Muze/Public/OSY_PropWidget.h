@@ -8,6 +8,7 @@
 
 struct FActorSpawnInfo
 {
+public:
 	FVector Location;
 	FRotator Rotation;
 	FVector Scale;
@@ -55,7 +56,7 @@ public:
 	class UButton* btn_StartTick;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
-	class UButton* btn_StopTick;
+	class UButton* btn_GetLevel;
 	
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_GetJson;
@@ -76,8 +77,12 @@ public:
 	TSubclassOf<class AActor> Niagara6;
 
 	UPROPERTY()
-	FString url ="http://192.168.0.6:8080/test/mk";
+	FString url ="http://192.168.0.189:8080/map/create";
 
+	UPROPERTY()
+	FString geturl ="http://192.168.0.189:8080/member/info";
+	UPROPERTY()
+	FString getlevelurl ="http://192.168.0.189:8080/map/1";
 	//UPROPERTY(VisibleAnywhere)
 	//class AKJS_TestSpawnActor* Cube;
 
@@ -124,7 +129,7 @@ public:
 
 
 	UFUNCTION()
-	void ReadCSVFile();
+	void GetLevel();
 
 	UFUNCTION()
 	void GetJSon();
@@ -162,5 +167,11 @@ public:
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class AOSY_TImeActor* TimeManager;
 
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	class AOSY_CreativeGameModeBase* gm;
 
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	FString JsonStringPost;
+
+	
 };

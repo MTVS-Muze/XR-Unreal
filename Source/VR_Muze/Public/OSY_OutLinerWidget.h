@@ -48,8 +48,7 @@ public:
     UFUNCTION()
     void OnButtonClicked(AActor* Actor);
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-    class UTextBlock* tb_NameTextBlock;
+	
 
      UPROPERTY()
     AActor* CurrentActor; 
@@ -157,11 +156,7 @@ public:
     void OnLightBChanged(const FText& NewText, ETextCommit::Type CommitType);
 #pragma endregion
   
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-    class UButton* btn_test;
-
-    UFUNCTION()
-    void testFunc();
+ 
 };
 	
 

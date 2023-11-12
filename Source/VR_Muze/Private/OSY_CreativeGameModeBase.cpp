@@ -74,6 +74,11 @@ void AOSY_CreativeGameModeBase::BeginPlay()
     }
 }
 
+void AOSY_CreativeGameModeBase::Tick(float DeltaTime)
+{
+    
+}
+
 void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
 {
     USoundWave* Song = LoadObject<USoundWave>(nullptr, TEXT("/Game/DEV/Sounds/SuperShy.SuperShy"), nullptr, LOAD_None, nullptr);
@@ -83,4 +88,6 @@ void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
         SequnceUI->MaxTime = Song->Duration;
     }
 }
+
+
 

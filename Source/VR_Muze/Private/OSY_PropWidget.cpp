@@ -12,6 +12,7 @@
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "OSY_NiagaraSpawner.h"
 #include "OSY_TImeActor.h"
+#include "OSY_CreativeGameModeBase.h"
 
 
 
@@ -35,6 +36,9 @@ void UOSY_PropWidget::NativeConstruct()
 
 	btn_Exit->OnClicked.AddDynamic(this, &UOSY_PropWidget::BackToMain);
 	
+	btn_GetLevel->OnClicked.AddDynamic(this, &UOSY_PropWidget::GetLevel);
+
+	
 
 	
 
@@ -42,6 +46,8 @@ void UOSY_PropWidget::NativeConstruct()
 
 	TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
+
+	gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
 	
 
 }
@@ -255,12 +261,12 @@ void UOSY_PropWidget::SaveJsonData()
 	JsonObject->SetArrayField(TEXT("ActorClasses"), ActorClassesArray);
 	JsonObject->SetArrayField(TEXT("SpawnTime"), SpawnTimeArray);
 	JsonObject->SetArrayField(TEXT("LifeSpan"), LifeSpanArray);
-	auto v = JsonObject->GetArrayField(TEXT("LifeSpan"));
-	
-	
+
+
 	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
 	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
 
+	JsonStringPost=JsonString;
 	FString SavePath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
 	FFileHelper::SaveStringToFile(JsonString, *SavePath);
 	
@@ -282,16 +288,18 @@ void UOSY_PropWidget::GetJSon()
 	
 	if (HttpActor != nullptr)
 	{
-		HttpActor->SendRequest(url);
+		HttpActor->SendRequest(geturl);
 
 	}
 }
 
 void UOSY_PropWidget::PostJSon()
 {
+
 	if (HttpActor != nullptr)
 	{
-		HttpActor->LoadJsonData();
+		
+		HttpActor->PostRequest(url,JsonStringPost);
 
 	}
 	
@@ -318,12 +326,12 @@ void UOSY_PropWidget::ReadCSVSingle()
 	}
 }
 
-void UOSY_PropWidget::ReadCSVFile()
+void UOSY_PropWidget::GetLevel()
 {
-	if (factory != nullptr)
+	if (HttpActor != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ReadCSVFile Success"));
-		factory->spawnStart();
+		HttpActor->SendRequest(getlevelurl);
+
 	}
 
 }

@@ -47,7 +47,7 @@ public:
 	void OnReceivedData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	UFUNCTION()
-	void PostRequest(const FString url);
+	void PostRequest(const FString url, const FString& JsonString);
 
 	void OnPostData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully);
 
@@ -74,10 +74,22 @@ public:
 	TSubclassOf<class UOSY_PropWidget> PropWidget;
 
 	UPROPERTY()
-	FString url2 ="http://192.168.0.6:8080/test/map";
+	FString url2 ="http://192.168.0.189:8080/map/create";
 	
 	TArray<FActorSpawnInfo3> PendingSpawns;
 
 	FString Token;
 	
+	FString title;
+	FString song;
+	FString singer;
+	FString info;
+	FString data;
+	
+
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
+
+	UPROPERTY()
+	FString BearerToken;
 };
