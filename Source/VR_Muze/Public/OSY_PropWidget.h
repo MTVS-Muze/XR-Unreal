@@ -78,9 +78,9 @@ public:
 
 
 	UPROPERTY()
-	FString url;
+	FString posturl;
 	UPROPERTY()
-	FString geturl;
+	FString playergeturl;
 	UPROPERTY()
 	FString getlevelurl;
 

@@ -10,13 +10,30 @@
 #include "Components/CanvasPanel.h" 
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "IXRTrackingSystem.h"
+#include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
+#include "Runtime/MovieScene/Public/MovieSceneSequencePlaybackSettings.h"
+#include "Engine/World.h"
+#include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
+#include "EngineUtils.h"
+#include "LevelSequenceActor.h" 
+#include "Runtime/Core/Public/Misc/Timespan.h"
+#include "Runtime/MovieScene/Public/MovieSceneSequencePlayer.h"
+
+
 
 void UMainWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+	
 
+	btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::mediaPlay);
+	btn_SwitchCreative->OnClicked.AddDynamic(this, &UMainWidget::createPlay);
+
+	//JSCode
+	/*
 	btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonMedia);
 	btn_SwitchCreative->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonSwitchCreative);
+	*/
 	btn_CreativeEnter->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreativeMode);
 	btn_BackModeSelect->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonBackModeSelect);
 	btn_CreateBox->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreateBox);
@@ -28,6 +45,61 @@ void UMainWidget::NativeConstruct()
 	{
 		ErrorUI->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+
+//-----------------------------
+	// 월드에 배치된 레벨 시퀀스 찾기
+	for (TActorIterator<ALevelSequenceActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		LevelSequenceActor = *ActorItr;
+		break;
+	}
+
+	// 레벨 시퀀스가 제대로 찾아졌는지 확인
+	if (LevelSequenceActor)
+	{
+		// 레벨 시퀀스의 플레이어 가져오기
+		UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
+
+		if (LevelSequenceActor)
+		{
+			//UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
+
+			// 레벨 시퀀스의 OnFinished 이벤트에 바인딩
+			Player->OnFinished.AddDynamic(this, &UMainWidget::OnStop);
+
+			// 레벨 시퀀스의 재생 시작 위치를 1초로 설정
+			FMovieSceneSequencePlaybackParams Params;
+			Params.Frame = FFrameTime(1 * 30); // assuming 30fps
+			Player->SetPlaybackPosition(Params);
+
+			// 레벨 시퀀스 재생
+			Player->Play();
+		}
+	}
+}
+
+void UMainWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry,InDeltaTime);
+/*
+	if (LevelSequenceActor)
+	{
+		UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
+
+		// 재생 위치를 초 단위로 변환
+		CurrentTime = Player->GetCurrentTime().AsSeconds();
+
+		// 재생 위치가 6초를 넘었는지 확인
+		if (CurrentTime >= 4.8f && CurrentTime<6)
+		{
+			// 재생 중지
+			Player->Stop();
+			OnStop();
+			CurrentTime=0;
+		}
+	}
+	*/
 }
 
 void UMainWidget::SwitchCanvas(int32 index)
@@ -49,10 +121,12 @@ void UMainWidget::OnClickedButtonMedia()
 	{
 		ErrorUI->SetVisibility(ESlateVisibility::Visible);
 	}
+	
 }
 
 void UMainWidget::OnClickedButtonSwitchCreative()
 {
+
 	SwitchCanvas(1);
 }
 
@@ -97,4 +171,57 @@ void UMainWidget::OnClickedButtonCreateEnd()
 void UMainWidget::OnClickedButtonBackBoxList()
 {
 	SwitchCanvas(2);
+}
+
+void UMainWidget::mediaPlay()
+{
+	
+
+	FMovieSceneSequencePlaybackParams param;
+	param.bHasJumped=true;
+	param.Frame= FFrameTime(2 * 30);
+	
+
+	if (LevelSequenceActor)
+	{
+		// 버튼 A가 눌리면 11초로 이동
+		LevelSequenceActor->GetSequencePlayer()->SetPlaybackPosition(param); // assuming 30fps
+	}
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainWidget::OnClickedButtonMedia, 3.0f, false);
+}
+
+void UMainWidget::createPlay()
+{
+	FMovieSceneSequencePlaybackParams param;
+	param.bHasJumped = true;
+	param.Frame = FFrameTime(12 * 30);
+
+
+	if (LevelSequenceActor)
+	{
+		// 버튼 A가 눌리면 11초로 이동
+		LevelSequenceActor->GetSequencePlayer()->SetPlaybackPosition(param); // assuming 30fps
+	}
+
+	// 이함수가 실행된지 3초가 흘렀다면 래밸을 바꾸고 싶다
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainWidget::OnClickedButtonSwitchCreative, 3.0f, false);
+}
+
+void UMainWidget::OnStop()
+{
+	if (LevelSequenceActor)
+	{
+		UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
+
+		// 재생 위치를 1초로 되돌림
+		FMovieSceneSequencePlaybackParams Params;
+		Params.Frame = FFrameTime(1 * 30); // assuming 30fps
+		Player->SetPlaybackPosition(Params);
+
+		// 다시 재생
+		Player->Play();
+	}
 }

@@ -44,7 +44,9 @@ public:
 	UFUNCTION()
 	void SendRequest(const FString url);
 
-	void OnReceivedData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+	void OnReceivedPlayerData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
+	void OnReceivedlevelData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	UFUNCTION()
 	void PostRequest(const FString url, const FString& JsonString);
@@ -92,4 +94,9 @@ public:
 
 	UPROPERTY()
 	FString BearerToken;
+
+	FString RequestedURL;
+
+	void ParseDataForURL1(const FString& ResponseData);
+	void ParseDataForURL2(const FString& ResponseData);
 };

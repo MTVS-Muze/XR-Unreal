@@ -9,9 +9,45 @@
 #include "WebBrowser.h"
 #include "OSY_GameInstance.h"
 #include "OSY_LoginGameMode.h"
+#include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
+#include "Runtime/MovieScene/Public/MovieSceneSequencePlayer.h"
+#include "Runtime/Engine/Public/EngineUtils.h"
 
 void UOSY_LoginWidget::NativeConstruct()
 {
+
+
+	for (TActorIterator<ALevelSequenceActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		LevelSequenceActor = *ActorItr;
+		break;
+	}
+
+	// 레벨 시퀀스가 제대로 찾아졌는지 확인
+	if (LevelSequenceActor)
+	{
+		// 레벨 시퀀스의 플레이어 가져오기
+		UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
+
+		
+		if (LevelSequenceActor)
+		{
+			//UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
+
+			// 레벨 시퀀스의 OnFinished 이벤트에 바인딩
+			Player->OnFinished.AddDynamic(this, &UOSY_LoginWidget::OnStop);
+
+			// 레벨 시퀀스의 재생 시작 위치를 1초로 설정
+			FMovieSceneSequencePlaybackParams Params;
+			Params.Frame = FFrameTime(1 * 30); // assuming 30fps
+			Player->SetPlaybackPosition(Params);
+
+			// 레벨 시퀀스 재생
+			Player->Play();
+		}
+	}
+
+
 	btn_Start->OnClicked.AddDynamic(this, &UOSY_LoginWidget::GotoLoginCanvas);
 
 	
@@ -39,7 +75,7 @@ void UOSY_LoginWidget::GotoLoginCanvas()
 
 void UOSY_LoginWidget::GotoLobbyMap()
 {
-	FName LevelName = "2_LobbyMap";
+	FName LevelName = "Lobby2";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }
@@ -104,6 +140,22 @@ void UOSY_LoginWidget::CompleteLogin(const FString& Token)
 	UE_LOG(LogTemp, Warning, TEXT("Login completed with token: %s"), *Token);
 
 	
+}
+
+void UOSY_LoginWidget::OnStop()
+{
+	if (LevelSequenceActor)
+	{
+		UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
+
+		// 재생 위치를 1초로 되돌림
+		FMovieSceneSequencePlaybackParams Params;
+		Params.Frame = FFrameTime(1 * 30); // assuming 30fps
+		Player->SetPlaybackPosition(Params);
+
+		// 다시 재생
+		Player->Play();
+	}
 }
 
 void UOSY_LoginWidget::BackToMain()

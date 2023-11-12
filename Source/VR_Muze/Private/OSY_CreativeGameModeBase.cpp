@@ -9,6 +9,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "OSY_TImeActor.h"
 #include "OSY_LoginWidget.h"
+#include "OSY_OutLinerWidget.h"
 
 AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
 {
@@ -35,6 +36,12 @@ void AOSY_CreativeGameModeBase::BeginPlay()
     if (SequnceUI != nullptr)
     {
         SequnceUI->AddToViewport();
+    }
+
+    OutLinerUI = CreateWidget<UOSY_OutLinerWidget>(GetWorld(), OutLinerWidget);
+    if (OutLinerUI != nullptr)
+    {
+        OutLinerUI->AddToViewport();
     }
 
     SetMaxTimeFromSong();

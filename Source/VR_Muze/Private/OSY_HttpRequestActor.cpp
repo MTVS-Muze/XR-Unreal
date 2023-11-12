@@ -55,58 +55,64 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedPtr<IHttpRequest> req = httpModule.CreateRequest();
 
+	RequestedURL = url;
+
 	// 요청하기 위한 정보를 설정한다.
 	req->SetURL(url);
 	req->SetVerb(TEXT("GET"));
 	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 	req->SetHeader(TEXT("Authorization"), BearerToken);
-	req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedData);
+	if (url == gi->Playergeturl)
+	{
+		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedPlayerData);
+	}
+	else if (url == gi->getlevelurl)
+	{
+		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedlevelData);
+	}
 	req->ProcessRequest();
-
-
 
 }
 
-void AOSY_HttpRequestActor::OnReceivedData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+void AOSY_HttpRequestActor::OnReceivedPlayerData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Received Data!"));
+
 	if (bConnectedSuccessfully)
 	{
-		
 		FString res = Response->GetContentAsString();
-		UE_LOG(LogTemp,Warning,TEXT("Getres : %s"),*res);
-		/*
-		 UOSY_JsonParseLibrary JsonParser; // 클래스 인스턴스를 직접 생성
+		FString parsedData = UOSY_JsonParseLibrary::PlayerJsonParse(res);
 
-		TSharedPtr<FJsonObject> ParsedData = JsonParser.ParseJSON(res);
-
-		if (ParsedData.IsValid())
+		if (gi != nullptr)
 		{
-			// JSON 데이터를 파싱한 후 필요한 값을 추출합니다.
-			int Id = ParsedData->GetIntegerField("id");
-			FString MemberId = ParsedData->GetStringField("memberId");
-			FString Title = ParsedData->GetStringField("title");
-			FString Song = ParsedData->GetStringField("song");
-			FString Data = ParsedData->GetStringField("data");
-			FString CreatedDate = ParsedData->GetStringField("createdDate");
-
-			UE_LOG(LogTemp, Warning, TEXT("Id: %d"), Id);
-			UE_LOG(LogTemp, Warning, TEXT("MemberId: %s"), *MemberId);
-			UE_LOG(LogTemp, Warning, TEXT("Title: %s"), *Title);
-			UE_LOG(LogTemp, Warning, TEXT("Song: %s"), *Song);
-			UE_LOG(LogTemp, Warning, TEXT("Data: %s"), *Data);
-			UE_LOG(LogTemp, Warning, TEXT("CreatedDate: %s"), *CreatedDate);
-
-			// 나머지 코드...
+			gi->parsePlayerData = parsedData;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Successed.."));
-		UE_LOG(LogTemp, Warning, TEXT("% s"), *res);
-		*/
 	}
-
 	else
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed"));
+		
+	}
+}
 
-		UE_LOG(LogTemp, Warning, TEXT("Failed.."));
+void AOSY_HttpRequestActor::OnReceivedlevelData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Received Data!"));
+
+	if (bConnectedSuccessfully)
+	{
+		FString res = Response->GetContentAsString();
+		FString parsedData = UOSY_JsonParseLibrary::LevelJsonParse(res);
+
+		if (gi != nullptr)
+		{
+			gi->parseLevelData = parsedData;
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed"));
+
 	}
 }
 
@@ -275,5 +281,15 @@ void AOSY_HttpRequestActor::LoadJsonData()
 void AOSY_HttpRequestActor::ResetTime()
 {
 	currenTime = 0;
+}
+
+void AOSY_HttpRequestActor::ParseDataForURL1(const FString& ResponseData)
+{
+
+}
+
+void AOSY_HttpRequestActor::ParseDataForURL2(const FString& ResponseData)
+{
+
 }
 

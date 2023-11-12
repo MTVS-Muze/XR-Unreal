@@ -86,6 +86,12 @@ public:
 	   FString Token2;
 #pragma endregion
 
+UPROPERTY()
+	class ALevelSequenceActor* LevelSequenceActor= nullptr; // 멤버 변수로 선언
+
+	UFUNCTION()
+	void OnStop();
+
 
 
 };

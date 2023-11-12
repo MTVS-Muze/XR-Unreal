@@ -15,7 +15,9 @@ class VR_MUZE_API UMainWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	
 	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 	
 public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
@@ -118,5 +120,23 @@ public:
 
 	UFUNCTION()
 	void OnClickedButtonBackBoxList();
+
+
+
+
+
+	
+
+	UFUNCTION()
+	void mediaPlay();
+	UFUNCTION()
+	void createPlay();
+	UFUNCTION()
+	void OnStop();
+	UPROPERTY()
+	float CurrentTime;
+	
+	UPROPERTY()
+	class ALevelSequenceActor* LevelSequenceActor= nullptr; // 멤버 변수로 선언
 
 };

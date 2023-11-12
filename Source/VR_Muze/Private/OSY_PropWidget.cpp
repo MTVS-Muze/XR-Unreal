@@ -28,9 +28,9 @@ void UOSY_PropWidget::NativeConstruct()
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 	if (gi != nullptr)
 	{
-		url = gi->syurl;
-		geturl = gi->sygeturl;
-		getlevelurl = gi->sygetlevelurl;
+		posturl = gi->Posturl;
+		playergeturl = gi->Playergeturl;
+		getlevelurl = gi->getlevelurl;
 	}
 
 	TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
@@ -292,7 +292,7 @@ void UOSY_PropWidget::GetJSon()
 {
 	if (HttpActor != nullptr)
 	{
-		HttpActor->SendRequest(geturl);
+		HttpActor->SendRequest(playergeturl);
 	}
 }
 
@@ -301,7 +301,7 @@ void UOSY_PropWidget::PostJSon()
 {
 	if (HttpActor != nullptr)
 	{
-		HttpActor->PostRequest(url,JsonStringPost);
+		HttpActor->PostRequest(posturl,JsonStringPost);
 	}
 }
 
@@ -311,7 +311,7 @@ void UOSY_PropWidget::GetLevel()
 {
 	if (HttpActor != nullptr)
 	{
-		HttpActor->SendRequest(getlevelurl);
+		HttpActor->SendRequest(playergeturl);
 	}
 }
 

@@ -47,6 +47,11 @@ public:
 	
 	class UOSY_SequenceWidget* SequnceUI;
 
+	UPROPERTY(EditAnywhere,Category = MySettings)
+	TSubclassOf <class UOSY_OutLinerWidget> OutLinerWidget;
+	
+	class UOSY_OutLinerWidget* OutLinerUI;
+
 	
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")

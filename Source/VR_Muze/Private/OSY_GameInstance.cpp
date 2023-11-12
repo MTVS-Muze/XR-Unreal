@@ -282,3 +282,18 @@ void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 	}
 }
 
+void UOSY_GameInstance::ParsePlayerData()
+{
+	parsePlayerData.ParseIntoArray(DataArray, TEXT(":"), true);
+
+	id = FCString::Atoi(*DataArray[0]);
+	name = DataArray[1];
+	sub = DataArray[2];
+	profileImage = DataArray[3];
+	platform = DataArray[4];
+	role = DataArray[5];
+	email = DataArray[6];
+}
+
+
+

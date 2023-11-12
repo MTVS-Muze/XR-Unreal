@@ -175,12 +175,28 @@ public:
 	class UOSY_LoginWidget* LoginUI;
 
 	UPROPERTY()
-	FString syurl ="http://192.168.0.189:8080/map/create";
+	FString Posturl ="http://192.168.0.189:8080/map/create";
 
 	UPROPERTY()
-	FString sygeturl ="http://192.168.0.189:8080/member/info";
+	FString Playergeturl ="http://192.168.0.189:8080/member/info";
 	UPROPERTY()
-	FString sygetlevelurl ="http://192.168.0.189:8080/map/1";
+	FString getlevelurl ="http://192.168.0.189:8080/map/1";
+
+	UPROPERTY()
+	FString parsePlayerData;
+
+	UPROPERTY()
+	FString parseLevelData;
+
+	int id;
+	FString name, sub, profileImage, platform, role, email;
+
+	UFUNCTION()
+	void ParsePlayerData();
+
+	UPROPERTY()
+	TArray<FString> DataArray;
+
 
 #pragma endregion
 };
