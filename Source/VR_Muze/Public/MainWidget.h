@@ -133,6 +133,8 @@ public:
 	void createPlay();
 	UFUNCTION()
 	void GotoCreativeLevel();
+	UFUNCTION()
+	void GotoViewLevel();
 
 
 	UFUNCTION()

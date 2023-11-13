@@ -25,10 +25,20 @@ void UMainWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
-
-	btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::mediaPlay);
-
 	LevelName2 = UGameplayStatics::GetCurrentLevelName(this);
+
+	if (LevelName2 == "ViewLevel")
+	{
+		btn_MediaEnter->OnClicked.Clear(); // 기존에 설정된 클릭 이벤트를 제거합니다.
+		btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::mediaPlay); // 새로운 클릭 이벤트를 추가합니다.
+	}
+	// 그렇지 않고 B라는 이름이면 버튼에 함수를 GotoCreativeLeve2로해
+	else if (LevelName2 == "CreativeLevel")
+	{
+		btn_MediaEnter->OnClicked.Clear(); // 기존에 설정된 클릭 이벤트를 제거합니다.
+		btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::GotoViewLevel);
+	}
+
 
 	// 만약 A라는 이름의 레벨이면 버튼에 함수를 GotoCreativeLevel로해
 	if(LevelName2 == "ViewLevel")
@@ -189,6 +199,14 @@ void UMainWidget::createPlay()
 void UMainWidget::GotoCreativeLevel()
 {
 	FName LevelName = "CreativeLevel";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+
+}
+
+void UMainWidget::GotoViewLevel()
+{
+	FName LevelName = "ViewLevel";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 
