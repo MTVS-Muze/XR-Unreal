@@ -75,7 +75,7 @@ void UOSY_LoginWidget::GotoLoginCanvas()
 
 void UOSY_LoginWidget::GotoLobbyMap()
 {
-	FName LevelName = "Lobby2";
+	FName LevelName = "ViewLevel";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }

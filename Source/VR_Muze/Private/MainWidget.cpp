@@ -27,7 +27,22 @@ void UMainWidget::NativeConstruct()
 	
 
 	btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::mediaPlay);
-	btn_SwitchCreative->OnClicked.AddDynamic(this, &UMainWidget::createPlay);
+
+	LevelName2 = UGameplayStatics::GetCurrentLevelName(this);
+
+	// 만약 A라는 이름의 레벨이면 버튼에 함수를 GotoCreativeLevel로해
+	if(LevelName2 == "ViewLevel")
+	{
+		btn_SwitchCreative->OnClicked.Clear(); // 기존에 설정된 클릭 이벤트를 제거합니다.
+		btn_SwitchCreative->OnClicked.AddDynamic(this, &UMainWidget::GotoCreativeLevel); // 새로운 클릭 이벤트를 추가합니다.
+	}
+	// 그렇지 않고 B라는 이름이면 버튼에 함수를 GotoCreativeLeve2로해
+	else if(LevelName2 == "CreativeLevel")
+	{
+		btn_SwitchCreative->OnClicked.Clear(); // 기존에 설정된 클릭 이벤트를 제거합니다.
+		btn_SwitchCreative->OnClicked.AddDynamic(this, &UMainWidget::createPlay);
+	}
+
 
 	//JSCode
 	/*
@@ -61,6 +76,7 @@ void UMainWidget::NativeConstruct()
 		// 레벨 시퀀스의 플레이어 가져오기
 		UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
 
+
 		if (LevelSequenceActor)
 		{
 			//UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
@@ -82,24 +98,7 @@ void UMainWidget::NativeConstruct()
 void UMainWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry,InDeltaTime);
-/*
-	if (LevelSequenceActor)
-	{
-		UMovieSceneSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
 
-		// 재생 위치를 초 단위로 변환
-		CurrentTime = Player->GetCurrentTime().AsSeconds();
-
-		// 재생 위치가 6초를 넘었는지 확인
-		if (CurrentTime >= 4.8f && CurrentTime<6)
-		{
-			// 재생 중지
-			Player->Stop();
-			OnStop();
-			CurrentTime=0;
-		}
-	}
-	*/
 }
 
 void UMainWidget::SwitchCanvas(int32 index)
@@ -175,39 +174,24 @@ void UMainWidget::OnClickedButtonBackBoxList()
 
 void UMainWidget::mediaPlay()
 {
-	
-
-	FMovieSceneSequencePlaybackParams param;
-	param.bHasJumped=true;
-	param.Frame= FFrameTime(2 * 30);
-	
-
-	if (LevelSequenceActor)
-	{
-		// 버튼 A가 눌리면 11초로 이동
-		LevelSequenceActor->GetSequencePlayer()->SetPlaybackPosition(param); // assuming 30fps
-	}
-
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainWidget::OnClickedButtonMedia, 3.0f, false);
+
 }
 
 void UMainWidget::createPlay()
 {
-	FMovieSceneSequencePlaybackParams param;
-	param.bHasJumped = true;
-	param.Frame = FFrameTime(12 * 30);
-
-
-	if (LevelSequenceActor)
-	{
-		// 버튼 A가 눌리면 11초로 이동
-		LevelSequenceActor->GetSequencePlayer()->SetPlaybackPosition(param); // assuming 30fps
-	}
-
 	// 이함수가 실행된지 3초가 흘렀다면 래밸을 바꾸고 싶다
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainWidget::OnClickedButtonSwitchCreative, 3.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainWidget::OnClickedButtonCreativeMode, 3.0f, false);
+}
+
+void UMainWidget::GotoCreativeLevel()
+{
+	FName LevelName = "CreativeLevel";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+
 }
 
 void UMainWidget::OnStop()
