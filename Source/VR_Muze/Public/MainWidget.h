@@ -132,11 +132,17 @@ public:
 	UFUNCTION()
 	void createPlay();
 	UFUNCTION()
+	void GotoCreativeLevel();
+
+
+	UFUNCTION()
 	void OnStop();
 	UPROPERTY()
 	float CurrentTime;
 	
 	UPROPERTY()
 	class ALevelSequenceActor* LevelSequenceActor= nullptr; // 멤버 변수로 선언
+
+	FString LevelName2;
 
 };
