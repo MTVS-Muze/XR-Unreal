@@ -19,6 +19,7 @@
 #include "Components/WidgetComponent.h"
 #include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
 #include "Runtime/CinematicCamera/Public/CineCameraActor.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 
 
@@ -97,13 +98,15 @@ AMyCharacter::AMyCharacter()
 	EnterRoomWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("EnterCodeWidget"));
 	EnterRoomWidget->SetupAttachment(RootComponent);
 
-
+	ConstructorHelpers::FObjectFinder<USoundBase>TempSound(TEXT("/Script/Engine.SoundWave'/Game/DEV/KJS/PC_Widget/WidgetSound/Netflix-Intro_cut.Netflix-Intro_cut'"));
 }
 
 // Called when the game starts or when spawned
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -131,7 +134,11 @@ void AMyCharacter::BeginPlay()
 
 	if (MapName == "Yellow_Single")
 	{
+		UGameplayStatics::PlaySound2D(this,enterSound);
 		// "Yellow_Single" 맵에서는 StartCam을 활성화합니다.
+		rightHand->SetVisibility(false);
+		leftHand->SetVisibility(false);
+		hmdMesh->SetVisibility(false);
 		StartCam->Activate();
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMyCharacter::SwitchVRCamera, 5.0f, false);
@@ -180,6 +187,11 @@ void AMyCharacter::SwitchVRCamera()
 				{
 					StartCam->Deactivate();
 					hmdCam->Activate();
+					rightHand->SetVisibility(true);
+					leftHand->SetVisibility(true);
+					hmdMesh->SetVisibility(true);
+
+					GetMesh()->SetVisibility(false);
 
 					pcm->StartCameraFade(1.0f, 0.0f, 3.0f, FColor::Black, false, true);
 				}, 3.0f, false);

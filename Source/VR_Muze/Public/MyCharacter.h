@@ -84,6 +84,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	class ULevelSequence* SequenceAsset;
 
+	UPROPERTY(EditAnywhere)
+	class USoundBase* enterSound;
+
 	UFUNCTION()
 	void SwitchVRCamera();
 
