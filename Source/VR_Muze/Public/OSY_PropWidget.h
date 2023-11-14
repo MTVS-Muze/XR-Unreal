@@ -59,6 +59,22 @@ public:
 	TSubclassOf<class AActor> Niagara6;
 #pragma endregion
 
+#pragma region Light
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Directional;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Point;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Spot;
+
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AOSY_LightBaseActor> Directional;
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AOSY_LightBaseActor> Point;
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AOSY_LightBaseActor> Spot;
+#pragma endregion
+
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_Save;
 
@@ -115,6 +131,13 @@ public:
 	void SpawnNiagara6();
 #pragma endregion
 
+
+	UFUNCTION()
+	void SpawnDirectional();
+	UFUNCTION()
+	void SpawnPoint();
+	UFUNCTION()
+	void SpawnSpot();
 	UFUNCTION()
 	void BackToMain();
 
@@ -163,6 +186,12 @@ public:
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	FString JsonStringPost;
+
+	
+	
+	UPROPERTY()
+   class UOSY_OutLinerWidget* OutlinerWidgetInstance;
+    
 
 	
 };

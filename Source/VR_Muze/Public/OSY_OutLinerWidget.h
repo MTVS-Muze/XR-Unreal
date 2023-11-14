@@ -17,7 +17,7 @@ class VR_MUZE_API UOSY_OutLinerWidget : public UUserWidget
 
 public:
     virtual void NativeConstruct() override;
-
+    
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
     class UScrollBox* sb_OutLiner;
 
@@ -60,6 +60,7 @@ public:
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
     class UExpandableArea* ea_Category2;
 
+ 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UVerticalBox* vb_Category1;
 

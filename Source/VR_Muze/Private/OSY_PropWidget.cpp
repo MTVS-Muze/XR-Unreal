@@ -14,6 +14,8 @@
 #include "OSY_TImeActor.h"
 #include "OSY_CreativeGameModeBase.h"
 #include "OSY_GameInstance.h"
+#include "OSY_OutLinerWidget.h"
+#include "OSY_LightBaseActor.h"
 
 
 
@@ -44,6 +46,12 @@ void UOSY_PropWidget::NativeConstruct()
 	btn_Niagara4->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara4);
 	btn_Niagara5->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara5);
 	btn_Niagara6->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara6);
+#pragma endregion
+
+#pragma region Light
+	btn_Directional->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnDirectional);
+	btn_Point->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnPoint);
+	btn_Spot->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnSpot);
 #pragma endregion
 
 // back to main
@@ -84,6 +92,12 @@ void UOSY_PropWidget::SpawnNiagara1()
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara1, spawnLoc, spawnRot);
 
+		if (gm->OutLinerUI!= nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+
 		if (SpawnedProp)
 		{
 			SavedLocations.Add(SpawnedProp->GetActorLocation());
@@ -107,6 +121,11 @@ void UOSY_PropWidget::SpawnNiagara2()
 		FActorSpawnParameters param;
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara2, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
 
 		if (SpawnedProp)
 		{
@@ -134,6 +153,11 @@ void UOSY_PropWidget::SpawnNiagara3()
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara3, spawnLoc, spawnRot);
 
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
 		if (SpawnedProp)
 		{
 			SavedLocations.Add(SpawnedProp->GetActorLocation());
@@ -158,6 +182,11 @@ void UOSY_PropWidget::SpawnNiagara4()
 		FActorSpawnParameters param;
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara4, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
 
 		if (SpawnedProp)
 		{
@@ -184,6 +213,11 @@ void UOSY_PropWidget::SpawnNiagara5()
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara5, spawnLoc, spawnRot);
 
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
 		if (SpawnedProp)
 		{
 			SavedLocations.Add(SpawnedProp->GetActorLocation());
@@ -209,6 +243,11 @@ void UOSY_PropWidget::SpawnNiagara6()
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara6, spawnLoc, spawnRot);
 
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
 		if (SpawnedProp)
 		{
 			SavedLocations.Add(SpawnedProp->GetActorLocation());
@@ -223,9 +262,99 @@ void UOSY_PropWidget::SpawnNiagara6()
 
 #pragma endregion 
 
+void UOSY_PropWidget::SpawnDirectional()
+{
+	FVector spawnLoc = FVector(200, 0, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AOSY_LightBaseActor* SpawnedProp = World->SpawnActor<AOSY_LightBaseActor>(Directional, spawnLoc, spawnRot,param);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+
+		if (SpawnedProp)
+		{
+			//SavedLocations.Add(SpawnedProp->GetActorLocation());
+			//SavedRotations.Add(SpawnedProp->GetActorRotation());
+			//SavedScales.Add(SpawnedProp->GetActorScale3D());
+			//SavedActorClasses.Add(Niagara1);
+			//SavedSpawnTimes.Add(CurrentTime);
+			//SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnPoint()
+{
+	FVector spawnLoc = FVector(200, 0, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AOSY_LightBaseActor* SpawnedProp = World->SpawnActor<AOSY_LightBaseActor>(Point, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+
+		if (SpawnedProp)
+		{
+			//SavedLocations.Add(SpawnedProp->GetActorLocation());
+			//SavedRotations.Add(SpawnedProp->GetActorRotation());
+			//SavedScales.Add(SpawnedProp->GetActorScale3D());
+			//SavedActorClasses.Add(Niagara1);
+			//SavedSpawnTimes.Add(CurrentTime);
+			//SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnSpot()
+{
+	FVector spawnLoc = FVector(200, 0, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AOSY_LightBaseActor* SpawnedProp = World->SpawnActor<AOSY_LightBaseActor>(Spot, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+
+		if (SpawnedProp)
+		{
+			//SavedLocations.Add(SpawnedProp->GetActorLocation());
+			//SavedRotations.Add(SpawnedProp->GetActorRotation());
+			//SavedScales.Add(SpawnedProp->GetActorScale3D());
+			//SavedActorClasses.Add(Niagara1);
+			//SavedSpawnTimes.Add(CurrentTime);
+			//SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
+		}
+	}
+}
+
 void UOSY_PropWidget::BackToMain()
 {
-	FName LevelName = "2_LobbyMap";
+	FName LevelName = "ViewLevel";
 
 	UGameplayStatics::OpenLevel(GetWorld(),LevelName,true);
 }

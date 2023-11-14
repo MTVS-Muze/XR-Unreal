@@ -163,7 +163,7 @@ void UMainWidget::OnClickedButtonCreateBox()
 {
 	//SwitchCanvas(2);
 
-	FName LevelName = "OSY_TMap";
+	FName LevelName = "NewWorld";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }
@@ -172,7 +172,7 @@ void UMainWidget::OnClickedButtonCreateEnd()
 {
 	//SwitchCanvas(2);
 
-	FName LevelName = "3_CreativeMap";
+	FName LevelName = "NewWorld";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }

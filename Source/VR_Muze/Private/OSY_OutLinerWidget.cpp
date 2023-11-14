@@ -18,6 +18,7 @@
 #include "Runtime/UMG/Public/Components/VerticalBox.h"
 #include "Runtime/Engine/Classes/Components/LightComponent.h"
 #include "Math/Color.h"
+#include "OSY_Niagara.h"
 #include "Runtime/Engine/Classes/Components/DirectionalLightComponent.h"
 #include "Runtime/Engine/Classes/Components/PointLightComponent.h"
 #include "Runtime/Engine/Classes/Components/SpotLightComponent.h"
@@ -35,6 +36,7 @@ void UOSY_OutLinerWidget::NativeConstruct()
 
 }
 
+
 TArray<AActor*> UOSY_OutLinerWidget::GetAllActorsInWorld()
 {
     TArray<AActor*> AllActors;
@@ -43,6 +45,12 @@ TArray<AActor*> UOSY_OutLinerWidget::GetAllActorsInWorld()
         AllActors.Add(*ActorItr);
     }
     return AllActors;
+//     TArray<AActor*> AllActors;
+//     for (TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+//     {
+//         AllActors.Add(*ActorItr);
+//     }
+//     return AllActors;
 }
 
 void UOSY_OutLinerWidget::DisplayActorInfo()
@@ -51,7 +59,8 @@ void UOSY_OutLinerWidget::DisplayActorInfo()
 
     if (sb_OutLiner)
     {
-        sb_OutLiner->ClearChildren();
+        vb_Category1->ClearChildren();
+        vb_Category2->ClearChildren();
     }
 
     for (AActor* Actor : ActorList)
@@ -63,6 +72,11 @@ void UOSY_OutLinerWidget::DisplayActorInfo()
         else if (Actor->IsA(AOSY_PropBaseActor::StaticClass()))
         {
             AddButton(Actor,ea_Category2,vb_Category2);
+        }
+        else if (Actor->IsA(AOSY_Niagara::StaticClass()))
+        {
+            AddButton(Actor,ea_Category2,vb_Category2);
+
         }
     }
 }
