@@ -18,6 +18,7 @@
 #include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
 #include "EngineUtils.h"
 #include "KJS_GameModeBase.h"
+#include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
 
 
 void UMediaLobbyWidget::NativeConstruct()
@@ -41,8 +42,8 @@ void UMediaLobbyWidget::NativeConstruct()
 	List.Add(btn_Song10);
 
 	btn_BackMain->OnClicked.AddDynamic(this, &UMediaLobbyWidget::BackSelectMode);
-	btn_Multi->OnClicked.AddDynamic(this, &UMediaLobbyWidget::CreateRoom);
 	btn_Single->OnClicked.AddDynamic(this, &UMediaLobbyWidget::CreateSingleRoom);
+	btn_Multi->OnClicked.AddDynamic(this, &UMediaLobbyWidget::CreateRoom);
 	btn_LeftOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Left);
 	btn_RightOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Right);
 	btn_UpOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_UpOriginal);
@@ -66,13 +67,13 @@ void UMediaLobbyWidget::NativeConstruct()
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
-	slider_playerCount->OnValueChanged.AddDynamic(this, &UMediaLobbyWidget::OnSliderMoved);
-	btn_Next->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickNextButton);
-	btn_Back->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickBackButton);
-	btn_BackSingle->OnClicked.AddDynamic(this, &UMediaLobbyWidget::BackMakingRoom);
-	btn_CreateSingle->OnClicked.AddDynamic(this, &UMediaLobbyWidget::CreateSingleRoom);
-	Check_SingleSit1->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedSignleSit1);
-	Check_SingleSit2->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedSingleSit2);
+	btn_JoinSession->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_JoinSession);
+	btn_CreateSession->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_CreateSession);
+	btn_Back1->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Back1);
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	btn_Count2->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Count2);
+	btn_Back2->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Back2);
 	
 	Check_DoubleSit1->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedDoubleSit1);
 	Check_DoubleSit2->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedDoubleSit2);
@@ -84,15 +85,6 @@ void UMediaLobbyWidget::NativeConstruct()
 
 	player = Cast<AMyCharacter>(GetOwningPlayerPawn());
 
-	UKJS_TypeInviteNumWidget* inviteWidget = Cast<UKJS_TypeInviteNumWidget>(player->ShowHostCodeWidget->GetWidget());
-
-	UE_LOG(LogTemp, Warning, TEXT("GI value: %s"), *gi->GetInviteCode());
-
-	if (inviteWidget != nullptr && gi->GetInviteCode() != "")
-	{
-		inviteWidget->text_InviteCode->SetText(FText::FromString(gi->GetInviteCode()));
-		UE_LOG(LogTemp, Warning, TEXT("Widget post value: %s"), *inviteWidget->text_InviteCode->GetText().ToString());
-	}
 }
 
 void UMediaLobbyWidget::SwitchCanvas(int32 index)
@@ -112,7 +104,7 @@ void UMediaLobbyWidget::BackSelectMode()
 	FString MapName = GetWorld()->GetMapName();
 	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 
-	if(MapName == "Yellow_Single")
+	if(MapName == "Box_indoor_Single")
 
 	{
 		FName LevelName = "2_LobbyMap";
@@ -120,21 +112,12 @@ void UMediaLobbyWidget::BackSelectMode()
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
 
-	else if (MapName == "Yellow_Multi")
+	else if (MapName == "Box_indoor_Multi")
 	{
-		FName LevelName = "Yellow_Single";
+		FName LevelName = "Box_indoor_Single";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("PleaseGo"));
-
-}
-
-void UMediaLobbyWidget::JoinRoom()
-{
-	//방입장하기
-
 }
 
 void UMediaLobbyWidget::CreateRoom()
@@ -173,98 +156,42 @@ void UMediaLobbyWidget::OnClickedbtn_DownSocial()
 	SwitchCanvasCategory(2);
 }
 
-void UMediaLobbyWidget::OnSliderMoved(float value)
-{
-	text_sliderCount->SetText(FText::AsNumber((int32)value));
-}
-
-void UMediaLobbyWidget::OnClickNextButton()
-{
-	int32 sliderValue = FMath::TruncToInt(slider_playerCount->GetValue());
-
-	if (sliderValue == 1)
-	{
-		SwitchCanvas(2);
-	}
-	else if (sliderValue == 2)
-	{
-		SwitchCanvas(3);
-	}
-}
-
-void UMediaLobbyWidget::OnClickBackButton()
+void UMediaLobbyWidget::OnClickedbtn_Back1()
 {
 	SwitchCanvas(0);
 }
 
-void UMediaLobbyWidget::BackMakingRoom()
+void UMediaLobbyWidget::OnClickedbtn_JoinSession()
+{
+	if (gi)
+	{
+		gi->FindOtherSession();
+	}
+}
+
+void UMediaLobbyWidget::OnClickedbtn_CreateSession()
+{
+	SwitchCanvas(2);
+}
+
+
+void UMediaLobbyWidget::OnClickedbtn_Count2()
+{
+	SwitchCanvas(3);
+}
+
+
+void UMediaLobbyWidget::OnClickedbtn_Back2()
 {
 	SwitchCanvas(1);
 }
 
-void UMediaLobbyWidget::OnCheckedSignleSit1(bool bIsChcecked)
-{
-	bIsChcecked = (Check_SingleSit1->GetCheckedState() == ECheckBoxState::Checked);
-
-	if (bIsChcecked)
-	{
-		Check_SingleSit2->SetIsChecked(false);
-	}
-}
-
-void UMediaLobbyWidget::OnCheckedSingleSit2(bool bIsChcecked)
-{
-	bIsChcecked = (Check_SingleSit2->GetCheckedState() == ECheckBoxState::Checked);
-
-	if (bIsChcecked)
-	{
-		Check_SingleSit1->SetIsChecked(false);
-	}
-}
 
 void UMediaLobbyWidget::CreateSingleRoom()
 {
-
-// 	AKJS_GameModeBase* GameMode = Cast<AKJS_GameModeBase>(GetWorld()->GetAuthGameMode());
-// 	if (GameMode != nullptr)
-// 	{
-// 		GameMode->PlaySequence();
-// 	}
-
 	FName LevelName = "StreetCar_Play";
 	
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-	
-
-	//if (gi)
-	//{
-	//	//gi->Sit1CheckState = CheckState;
-	//	gi->CheckboxStates.Add("Check_SingleSit1", Check_SingleSit1->GetCheckedState());
-	//	gi->CheckboxStates.Add("Check_SingleSit2", Check_SingleSit2->GetCheckedState());
-	//}
-
-	////ECheckBoxState CheckState = Check_SingleSit1->GetCheckedState();
-	//if (Check_SingleSit1->GetCheckedState() != ECheckBoxState::Checked && Check_SingleSit2->GetCheckedState() != ECheckBoxState::Checked)
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("At least one checkbox should be checked."));
-	//	return;
-	//}
-	//
-	//if (Check_SingleSit1->GetCheckedState() == ECheckBoxState::Checked)
-	//{
-	//	FName LevelName = "Yellow_Multi";
-	//
-	//	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-	//
-	//}
-	//
-	//
-	//else if (Check_SingleSit2->GetCheckedState() == ECheckBoxState::Checked)
-	//{
-	//	FName LevelName = "Yellow_Multi";
-	//
-	//	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-	//}
 }
 
 
@@ -294,10 +221,7 @@ void UMediaLobbyWidget::CreateDoubleRoom()
 	{
 		gi->CheckboxStates.Add("Check_DoubleSit1", Check_DoubleSit1->GetCheckedState());
 		gi->CheckboxStates.Add("Check_DoubleSit2", Check_DoubleSit2->GetCheckedState());
-		RoomCode = gi->GenerateRandomCode(5);
-		FName SessionName = FName(*RoomCode);
-		gi->CreateMuzeSession((int32)slider_playerCount->GetValue(), SessionName);
-
+		gi->CreateMuzeSession(4);
 	}
 
 	if (Check_DoubleSit1->GetCheckedState() != ECheckBoxState::Checked && Check_DoubleSit2->GetCheckedState() != ECheckBoxState::Checked)
@@ -308,17 +232,17 @@ void UMediaLobbyWidget::CreateDoubleRoom()
 
 	if (Check_DoubleSit1->GetCheckedState() == ECheckBoxState::Checked)
 	{
-		FName LevelName = "Yellow_Multi";
-
+		FName LevelName = "Box_indoor_Multi";
+		// 레벨 로드 후 호출될 함수를 바인딩
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 
 	}
-
 
 	else if (Check_DoubleSit2->GetCheckedState() == ECheckBoxState::Checked)
 	{
-		FName LevelName = "Yellow_Multi";
-
+		FName LevelName = "Box_indoor_Multi";
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
 }
+
+

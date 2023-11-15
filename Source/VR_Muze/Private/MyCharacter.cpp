@@ -93,10 +93,10 @@ AMyCharacter::AMyCharacter()
 
 	PlaylistWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PlayListWidget"));
 	PlaylistWidget->SetupAttachment(RootComponent);
-	ShowHostCodeWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("RoomCodeWidget"));
-	ShowHostCodeWidget->SetupAttachment(RootComponent);
-	EnterRoomWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("EnterCodeWidget"));
-	EnterRoomWidget->SetupAttachment(RootComponent);
+	//ShowHostCodeWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("RoomCodeWidget"));
+	//ShowHostCodeWidget->SetupAttachment(RootComponent);
+	//EnterRoomWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("EnterCodeWidget"));
+	//EnterRoomWidget->SetupAttachment(RootComponent);
 
 	ConstructorHelpers::FObjectFinder<USoundBase>TempSound(TEXT("/Script/Engine.SoundWave'/Game/DEV/KJS/PC_Widget/WidgetSound/Netflix-Intro_cut.Netflix-Intro_cut'"));
 }
@@ -106,11 +106,8 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
-
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
-
 		if (PlayerController != nullptr)
 		{
 			PlayerController->bShowMouseCursor = true;
@@ -132,10 +129,10 @@ void AMyCharacter::BeginPlay()
 	FString MapName = GetWorld()->GetMapName();
 	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 
-	if (MapName == "Yellow_Single")
+	if (MapName == "Box_indoor_Single")
 	{
 		UGameplayStatics::PlaySound2D(this,enterSound);
-		// "Yellow_Single" 맵에서는 StartCam을 활성화합니다.
+		// "Box_indoor_Single" 맵에서는 StartCam을 활성화합니다.
 		rightHand->SetVisibility(false);
 		leftHand->SetVisibility(false);
 		hmdMesh->SetVisibility(false);

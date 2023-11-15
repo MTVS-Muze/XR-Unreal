@@ -71,7 +71,6 @@ void UOSY_GameInstance::Init()
 	}
 
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UOSY_GameInstance::OnLevelLoaded);
-
 #pragma region Seyoung
 
 	
@@ -81,8 +80,9 @@ void UOSY_GameInstance::Init()
 
 }
 
-void UOSY_GameInstance::CreateMuzeSession(int32 playerCount, FName SessionName)
+void UOSY_GameInstance::CreateMuzeSession(int32 playerCount)
 {
+	FName SessionName = mySessionName;
 	FOnlineSessionSettings settings;
 	//LAN 연결인지, DEDICATED연결인지 설정
 	settings.bIsDedicated = false;
@@ -102,8 +102,11 @@ void UOSY_GameInstance::CreateMuzeSession(int32 playerCount, FName SessionName)
 	settings.NumPublicConnections = 4;
 
 	//세션 추가설정 넣기
-	settings.Set(FName("Room_Name"),SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-	settings.Set(FName("Host_Name"), mySessionName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	//settings.Set(FName("Room_Name"),SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	//settings.Set(FName("Host_Name"), mySessionName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
+	settings.Set(FName("Room_Name"), SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	settings.Set(FName("Host_Name"), mySessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 	//세션
 	bool isSuccess = sessionInterface->CreateSession(0, SessionName, settings);
@@ -111,23 +114,25 @@ void UOSY_GameInstance::CreateMuzeSession(int32 playerCount, FName SessionName)
 
 	if (isSuccess)
 	{
-		// 세션 생성에 성공하면, 생성된 세션의 이름을 KJS_TypeInviteNumWidget에 표시
 		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-		if (PlayerController)
-		{
-			AMyCharacter* muzeCharacter = Cast<AMyCharacter>(PlayerController->GetCharacter());
-			if (muzeCharacter)
-			{
-				UKJS_TypeInviteNumWidget* InviteWidget = Cast<UKJS_TypeInviteNumWidget>(muzeCharacter->ShowHostCodeWidget);
-				if (InviteWidget)
-				{
-					// 랜덤 코드를 생성하고, 이를 InviteWidget에 표시합니다.
-					FString RoomCode = GenerateRandomCode(5);
-					InviteWidget->CreateInviteCode(RoomCode);
-					
-				}
-			}
-		}
+		//if (PlayerController)
+		//{
+		//	AMyCharacter* muzeCharacter = Cast<AMyCharacter>(PlayerController->GetCharacter());
+		//	if (muzeCharacter)
+		//	{
+		//		// 세션 생성에 성공하면, 생성된 세션의 이름을 KJS_TypeInviteNumWidget에 표시
+		//		//UKJS_TypeInviteNumWidget* InviteWidget = Cast<UKJS_TypeInviteNumWidget>(muzeCharacter->ShowHostCodeWidget);
+		//		//if (InviteWidget)
+		//		//{
+		//		//	// 랜덤 코드를 생성하고, 이를 InviteWidget에 표시합니다.
+		//		//	FString RoomCode = GenerateRandomCode(5);
+		//		//	InviteWidget->CreateInviteCode(RoomCode);
+		//		//	
+		//		//}
+		//
+		//
+		//	}
+		//}
 	}
 }
 
@@ -135,25 +140,26 @@ void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccess
 {
 	if (bWasSuccessful)
 	{
-		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Yellow_Multi");
+		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Box_indoor_Multi");
+		OnCreateSessionCompleted.Broadcast();
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result : %s"), result ? *FString("Success") : *FString("Failed"));
 	}
 }
 
-FString UOSY_GameInstance::GenerateRandomCode(int32 Length)
-{
-	FString Code;
-	FString Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-	for (int32 i = 0; i < Length; i++)
-	{
-		int32 Index = FMath::RandRange(0, Characters.Len()-1);
-		Code+=Characters[Index];
-	}
-
-	invite_code = Code;
-	return Code;
-}
+//FString UOSY_GameInstance::GenerateRandomCode(int32 Length)
+//{
+//	FString Code;
+//	FString Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+//
+//	for (int32 i = 0; i < Length; i++)
+//	{
+//		int32 Index = FMath::RandRange(0, Characters.Len()-1);
+//		Code+=Characters[Index];
+//	}
+//
+//	invite_code = Code;
+//	return Code;
+//}
 
 void UOSY_GameInstance::FindOtherSession()
 {
@@ -177,26 +183,39 @@ void UOSY_GameInstance::OnFindOtherSession(bool bWasSuccessful)
 	{
 		TArray<FOnlineSessionSearchResult> searchResults = sessionSearch->SearchResults;
 
-		for (int i = 0; i < searchResults.Num(); i++)
+		for (FOnlineSessionSearchResult& result : searchResults)
 		{
-			FOnlineSessionSearchResult result = searchResults[i];
 			FString roomName;
-			result.Session.SessionSettings.Get(FName("ROOM_NAME"), roomName);
-			//if (!roomName.Contains("Muze_Room")) continue;
-			FString hostName;
-			result.Session.SessionSettings.Get(FName("HOST_NAME"), hostName);
-			int32 openNumber = result.Session.NumOpenPublicConnections;
-			int32 maxNumber = result.Session.SessionSettings.NumPublicConnections;
-			int32 pingSpeed = result.PingInMs;
+			result.Session.SessionSettings.Get(FName("Room_Name"), roomName);
 
-			UE_LOG(LogTemp, Warning, TEXT("RoomName : %s, HostName : %s, Number : %d/%d, PingSpeed : %d"), *roomName, *hostName, openNumber, maxNumber, pingSpeed);
-
-			FSessionSlotInfo slotInfo;
-			slotInfo.Set(roomName, hostName, FString::Printf(TEXT("%d/%d"), openNumber, maxNumber), pingSpeed, i);
-
-			JoinSelectedSession(roomName);
-			OnSearchInfoCompleted.Broadcast(slotInfo);
+			if (roomName == mySessionName)
+			{
+				// 세션 참가 코드 추가
+				JoinMuzeSession(result);
+				break;
+			}
 		}
+
+		//for (int i = 0; i < searchResults.Num(); i++)
+		//{
+		//	FOnlineSessionSearchResult result = searchResults[i];
+		//	FString roomName;
+		//	result.Session.SessionSettings.Get(FName("ROOM_NAME"), roomName);
+		//	//if (!roomName.Contains("Muze_Room")) continue;
+		//	FString hostName;
+		//	result.Session.SessionSettings.Get(FName("HOST_NAME"), hostName);
+		//	int32 openNumber = result.Session.NumOpenPublicConnections;
+		//	int32 maxNumber = result.Session.SessionSettings.NumPublicConnections;
+		//	int32 pingSpeed = result.PingInMs;
+		//
+		//	UE_LOG(LogTemp, Warning, TEXT("RoomName : %s, HostName : %s, Number : %d/%d, PingSpeed : %d"), *roomName, *hostName, openNumber, //maxNumber, pingSpeed);
+		//
+		//	FSessionSlotInfo slotInfo;
+		//	slotInfo.Set(roomName, hostName, FString::Printf(TEXT("%d/%d"), openNumber, maxNumber), pingSpeed, i);
+		//
+		//	//JoinMuzeSession();
+		//	OnSearchInfoCompleted.Broadcast(slotInfo);
+		//}
 	}
 	else
 	{
@@ -205,20 +224,36 @@ void UOSY_GameInstance::OnFindOtherSession(bool bWasSuccessful)
 }
 
 
-void UOSY_GameInstance::JoinSelectedSession(FString RoomCode)
+//void UOSY_GameInstance::JoinSelectedSession(FString RoomCode)
+//{
+//	if (sessionSearch.IsValid())
+//	{
+//		for (int i = 0; i < sessionSearch->SearchResults.Num(); i++)
+//		{
+//			FString sessionName;
+//			sessionSearch->SearchResults[i].Session.SessionSettings.Get(FName("Room_Name"), sessionName);
+//			if (sessionName == RoomCode)
+//			{
+//				sessionInterface->JoinSession(0, FName(sessionName), sessionSearch->SearchResults[i]);
+//				break;
+//			}
+//		}
+//	}
+//}
+
+void UOSY_GameInstance::JoinMuzeSession(FOnlineSessionSearchResult SearchResult)
 {
-	if (sessionSearch.IsValid())
+	FName SessionName = mySessionName;
+
+	if (sessionInterface.IsValid() && SearchResult.IsValid())
 	{
-		for (int i = 0; i < sessionSearch->SearchResults.Num(); i++)
-		{
-			FString sessionName;
-			sessionSearch->SearchResults[i].Session.SessionSettings.Get(FName("Room_Name"), sessionName);
-			if (sessionName == RoomCode)
-			{
-				sessionInterface->JoinSession(0, FName(sessionName), sessionSearch->SearchResults[i]);
-				break;
-			}
-		}
+		
+		sessionInterface->JoinSession(0, SessionName, SearchResult);
+	}
+
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to join session."));
 	}
 }
 
@@ -276,9 +311,58 @@ void UOSY_GameInstance::OnUpdateSession(FName sessionName, bool bIsUpdate)
 
 void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 {
-	if (LoadedWorld->GetMapName() == "Yellow_Single"|| LoadedWorld->GetMapName() == "Yellow_Multi" || LoadedWorld->GetMapName() == "StreetCar_Play")
+	//UE_LOG(LogTemp, Warning, TEXT("%s(%d) map name: %s"), *FString(__FUNCTION__), __LINE__, *LoadedWorld->GetMapName());
+
+	if (LoadedWorld->GetMapName() == "Box_indoor_Single"|| LoadedWorld->GetMapName() == "Box_indoor_Multi" || LoadedWorld->GetMapName() == "StreetCar_Play")
 	{
 		UHeadMountedDisplayFunctionLibrary::EnableHMD(true);
+	}
+
+	if (LoadedWorld->GetMapName().Contains("Box_indoor_Multi"))
+	{
+		UWorld* World = GetWorld();
+
+		if(World)
+		{
+			FActorSpawnParameters params;
+			params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			FRotator SofaRotation = FRotator::ZeroRotator; // 회전값 0
+			ECheckBoxState DoubleSit1State = CheckboxStates.FindRef("Check_DoubleSit1");
+			ECheckBoxState DoubleSit2State = CheckboxStates.FindRef("Check_DoubleSit2");
+
+			if (DoubleSit1State == ECheckBoxState::Checked)
+			{
+				FVector SofaLocation1 = FVector(-150.0f, 0.0f, 0.0f);
+				FVector SofaLocation2 = FVector(150.0f, 0.0f, 0.0f);
+
+				FTransform SofaTransform1;
+				FTransform SofaTransform2;
+
+				SofaTransform1.SetLocation(SofaLocation1);
+				SofaTransform2.SetLocation(SofaLocation2);
+
+				SofaTransform1.SetRotation(SofaRotation.Quaternion());
+				SofaTransform2.SetRotation(SofaRotation.Quaternion());
+
+				SofaTransform1.SetScale3D(FVector::OneVector);  // 스케일 1
+				SofaTransform2.SetScale3D(FVector::OneVector);
+			
+				AKJS_BoxSofa* SpawnSofa = World->SpawnActor<AKJS_BoxSofa>(BoxSofa, SofaTransform1, params);
+				AKJS_BoxSofa* SpawnSofa2 = World->SpawnActor<AKJS_BoxSofa>(BoxSofa, SofaTransform2, params);
+			}
+
+			else if (DoubleSit2State == ECheckBoxState::Checked)
+			{
+				FVector SofaLocation3 = FVector(0.0f, 0.0f, 0.0f);
+				FTransform SofaTransform3;
+
+				SofaTransform3.SetLocation(SofaLocation3);
+				SofaTransform3.SetRotation(SofaRotation.Quaternion());
+				SofaTransform3.SetScale3D(FVector::OneVector);
+
+				AKJS_BoxSofa* SpawnSofa = World->SpawnActor<AKJS_BoxSofa>(BoxSofa, SofaTransform3, params);
+			}
+		}
 	}
 }
 

@@ -121,7 +121,7 @@ void UMainWidget::OnClickedButtonMedia()
 	
 	if (GEngine->XRSystem.IsValid())
 	{
-		FName LevelName = "Yellow_Single";
+		FName LevelName = "Box_indoor_Single";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}

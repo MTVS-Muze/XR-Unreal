@@ -52,11 +52,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UWidgetComponent* PlaylistWidget;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	class UWidgetComponent* ShowHostCodeWidget;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	class UWidgetComponent* EnterRoomWidget;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	//class UWidgetComponent* ShowHostCodeWidget;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	//class UWidgetComponent* EnterRoomWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UCameraComponent* StartCam;

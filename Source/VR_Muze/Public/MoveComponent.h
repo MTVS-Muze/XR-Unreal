@@ -29,8 +29,8 @@ public:
 public:
 	UPROPERTY()
 	class AMyCharacter* player;
-	//UPROPERTY()
-	//class UMediaLobbyWidget* playlist;
+	UPROPERTY()
+	class UMediaLobbyWidget* playlist;
 	//UPROPERTY()
 	//class UKJS_TypeInviteNumWidget* HostCodeWidget;
 	//UPROPERTY()
@@ -39,7 +39,7 @@ public:
 	void Move(const struct FInputActionValue& value);
 	void Rotate(const struct FInputActionValue& value);
 	void VisibiltyPlaylistWidget(const struct FInputActionValue& value);
-	void InputOuputRoomCodeWidget(const struct FInputActionValue& value);
+	//void InputOuputRoomCodeWidget(const struct FInputActionValue& value);
 
 	UFUNCTION()
 	void PressTrigger();

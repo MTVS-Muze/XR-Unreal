@@ -104,9 +104,6 @@ public:
 	void BackSelectMode();
 
 	UFUNCTION()
-	void JoinRoom();
-
-	UFUNCTION()
 	void CreateRoom();
 
 	UFUNCTION()
@@ -177,23 +174,36 @@ public:
 	UFUNCTION()
 	void OnClickedbtn_DownSocial();
 
+//Canvas_ChoiceJoinOrCreate
+public:
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=JoinOrCreate)
+	class UButton* btn_JoinSession;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=JoinOrCreate)
+	class UButton* btn_CreateSession;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
+	class UButton* btn_Back1;
+private:
+	UFUNCTION()
+	void OnClickedbtn_Back1();
+	UFUNCTION()
+	void OnClickedbtn_JoinSession();
+
+	UFUNCTION()
+	void OnClickedbtn_CreateSession();
+
 
 public:
 	//MakingRoom
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
-	class UEditableText* edit_roomName;				
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
-	class USlider* slider_playerCount;				
+	class UEditableText* edit_roomName;						
 													
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
-	class UTextBlock* text_sliderCount;				
+	class UButton* btn_Count2;						
 													
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
-	class UButton* btn_Next;						
-													
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
-	class UButton* btn_Back;
+	class UButton* btn_Back2;
 
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
@@ -201,50 +211,19 @@ public:
 public:
 	//MakingRoom 바인딩 함수
 	UFUNCTION()
-	void OnSliderMoved(float value);
+	void OnClickedbtn_Count2();
 
 	UFUNCTION()
-	void OnClickNextButton();
-
-	UFUNCTION()
-	void OnClickBackButton();
+	void OnClickedbtn_Back2();
 	
 public:
-	//Single 요소
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
-	class UCheckBox* Check_SingleSit1;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
-	class UCheckBox* Check_SingleSit2;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
-	class UImage* img_SingleSit1;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
-	class UImage* img_SingleSit2;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
-	class UButton* btn_BackSingle;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=SinglePanel)
-	class UButton* btn_CreateSingle;
-
 	UPROPERTY(EditAnywhere)
 	class AKJS_BoxSofa* BoxSofa;
 
 public:
 	//Single 함수
 	UFUNCTION()
-	void BackMakingRoom();
-
-	UFUNCTION()
 	void CreateSingleRoom();
-
-	UFUNCTION()
-	void OnCheckedSignleSit1(bool bIsChcecked);
-
-	UFUNCTION()
-	void OnCheckedSingleSit2(bool bIsChcecked);
 
 
 public:
@@ -273,7 +252,8 @@ private:
 	UPROPERTY()
 	class AMyCharacter* player;
 
-
+	UPROPERTY(EditAnywhere, Category = Sofa)
+	TSubclassOf<class AKJS_BoxSofa> MultiBoxSofa;
 
 
 };

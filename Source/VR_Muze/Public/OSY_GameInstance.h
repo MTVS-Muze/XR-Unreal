@@ -108,7 +108,7 @@ public:	// 세영
 public:
 	//네트워크
 	UPROPERTY()
-	FString mySessionName;
+	FName mySessionName;
 
 	UPROPERTY()
 	FString playerName;
@@ -126,18 +126,19 @@ public:
 	FOnCreateSessionCompletedSignature OnCreateSessionCompleted;
 
 
-	void CreateMuzeSession(int32 playerCount, FName SessionName);
+	void CreateMuzeSession(int32 playerCount);
 
 	void OnCreatedMuzeSession(FName sessionName, bool bWasSuccessful);
 
 	//랜덤코드 생성
-	FString GenerateRandomCode(int32 Length);
+	//FString GenerateRandomCode(int32 Length);
 
 	void FindOtherSession();
 
 	void OnFindOtherSession(bool bWasSuccessful);
 
-	void JoinSelectedSession(FString RoomCode);
+	//void JoinSelectedSession(FString RoomCode);
+	void JoinMuzeSession(FOnlineSessionSearchResult SearchResult);
 
 	void OnJoinFindSameSession(FName sessionName, EOnJoinSessionCompleteResult::Type result);
 
@@ -149,19 +150,21 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TMap<FString, ECheckBoxState> CheckboxStates;
 
-	//VR 장치 연결 확인
-	//bool IsHMDConnected();
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AKJS_BoxSofa> BoxSofa;
+
+
 	UFUNCTION()
 	void OnLevelLoaded(UWorld* LoadedWorld);
 
-	FORCEINLINE FString GetInviteCode() { return invite_code; };
+	//FORCEINLINE FString GetInviteCode() { return invite_code; };
 
 	//VR 장치 연결상태
 
 private:
 	bool bIsHMDConnectd;
 
-	FString invite_code = "";
+	//FString invite_code = "";
 
 public:
 #pragma region SeYoung

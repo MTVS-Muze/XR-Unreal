@@ -44,7 +44,7 @@ void UMoveComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhanced
 	enhancedInputComponent->BindAction(inputActions[2], ETriggerEvent::Started, this, &UMoveComponent::PressTrigger);
 	enhancedInputComponent->BindAction(inputActions[2], ETriggerEvent::Started, this, &UMoveComponent::ReleaseTrigger);
 	enhancedInputComponent->BindAction(inputActions[3], ETriggerEvent::Started, this, &UMoveComponent::VisibiltyPlaylistWidget);
-	enhancedInputComponent->BindAction(inputActions[4], ETriggerEvent::Started, this, &UMoveComponent::InputOuputRoomCodeWidget);
+	//enhancedInputComponent->BindAction(inputActions[4], ETriggerEvent::Started, this, &UMoveComponent::InputOuputRoomCodeWidget);
 	
 }
 
@@ -91,16 +91,16 @@ void UMoveComponent::VisibiltyPlaylistWidget(const struct FInputActionValue& val
 	UE_LOG(LogTemp, Warning, TEXT("Visible Playlist!!!"));
 }
 
-void UMoveComponent::InputOuputRoomCodeWidget(const struct FInputActionValue& value)
-{
-	bool isEnterRoomVisible = player->EnterRoomWidget->IsVisible();
-	bool isHostWidgetVisible = player->ShowHostCodeWidget->IsVisible();
-
-	player->EnterRoomWidget->SetVisibility(!isEnterRoomVisible);
-	player->ShowHostCodeWidget->SetVisibility(!isHostWidgetVisible);
-
-	UE_LOG(LogTemp, Warning, TEXT("Visible RoomCodeWidget!!!"));
-}
+//void UMoveComponent::InputOuputRoomCodeWidget(const struct FInputActionValue& value)
+//{
+//	bool isEnterRoomVisible = player->EnterRoomWidget->IsVisible();
+//	bool isHostWidgetVisible = player->ShowHostCodeWidget->IsVisible();
+//
+//	player->EnterRoomWidget->SetVisibility(!isEnterRoomVisible);
+//	player->ShowHostCodeWidget->SetVisibility(!isHostWidgetVisible);
+//
+//	UE_LOG(LogTemp, Warning, TEXT("Visible RoomCodeWidget!!!"));
+//}
 
 void UMoveComponent::PressTrigger()
 {
