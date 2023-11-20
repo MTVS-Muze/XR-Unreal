@@ -108,7 +108,9 @@ public :
     UAudioComponent* AudioComponent;
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
-	class USoundBase* superShy;
+	class USoundBase* Song;
+
+
 
 	
 #pragma endregion 

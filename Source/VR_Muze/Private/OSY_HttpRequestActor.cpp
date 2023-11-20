@@ -167,8 +167,6 @@ void AOSY_HttpRequestActor::PostRequest(const FString url, const FString& JsonSt
 {
 	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
 
-	//
-
 	if (url == gi->PostMyMap)
 	{
 		JsonObject->SetStringField("title", gi->title);
@@ -182,9 +180,9 @@ void AOSY_HttpRequestActor::PostRequest(const FString url, const FString& JsonSt
 	else if (url == gi->CustomURL)
 	{
 		JsonObject->SetNumberField("color", gi->color);
-		JsonObject->SetNumberField("color", gi->hat);
-		JsonObject->SetNumberField("color", gi->glass);
-		JsonObject->SetNumberField("color", gi->tie);
+		JsonObject->SetNumberField("hat", gi->hat);
+		JsonObject->SetNumberField("glass", gi->glass);
+		JsonObject->SetNumberField("tie", gi->tie);
 	}
 
 	FString OutputString;

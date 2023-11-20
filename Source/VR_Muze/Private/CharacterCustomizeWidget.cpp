@@ -62,7 +62,7 @@ void UCharacterCustomizeWidget::OnClickedbtn_IntoBox()
 	FString MapName = GetWorld()->GetMapName();
 	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 
-	FName LevelName = "ViewLevel";
+	FName LevelName = "2_ViewLevel";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }
@@ -101,6 +101,7 @@ void UCharacterCustomizeWidget::SwitchColorBlack()
 	
 	color=0;
 	gi->color=color;
+
 }
 
 void UCharacterCustomizeWidget::SwitchColorWhite()

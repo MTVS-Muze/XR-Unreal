@@ -16,6 +16,8 @@ void UOSY_SequenceWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+    gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
+
     TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
 
     if (sl_TimeStaff)
@@ -120,7 +122,8 @@ void UOSY_SequenceWidget::SequencePlay()
     {
         AudioComponent->Stop();
     }
-    AudioComponent = UGameplayStatics::SpawnSound2D(this, superShy,1,1,CurrentTime);
+    Song=gm->Song;
+    AudioComponent = UGameplayStatics::SpawnSound2D(this, Song,1,1,CurrentTime);
 }
 
 void UOSY_SequenceWidget::SequencePause()

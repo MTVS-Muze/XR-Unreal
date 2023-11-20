@@ -354,7 +354,7 @@ void UOSY_PropWidget::SpawnSpot()
 
 void UOSY_PropWidget::BackToMain()
 {
-	FName LevelName = "ViewLevel";
+	FName LevelName = "2_ViewLevel";
 
 	UGameplayStatics::OpenLevel(GetWorld(),LevelName,true);
 }
