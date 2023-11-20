@@ -190,6 +190,18 @@ public:
 	// 나의 정보를 받는다
 	UPROPERTY()
 	FString MemberInfourl ="http://13.124.244.232:8080/member/info";
+	// 레벨 하나의 정보를 디테일
+	UPROPERTY()
+	FString MapDetailInfo ="http://13.124.244.232:8080/map/find";
+	// 내가 만든 모든 맵
+	UPROPERTY()
+	FString AllMyMap ="http://13.124.244.232:8080/map/find/member";
+	// 내가 만든 모든 맵
+	UPROPERTY()
+	FString AllMap ="http://13.124.244.232:8080/map/find/all";
+	// 내가 만든 모든 맵[POST]
+	UPROPERTY()
+	FString PostMyMap ="http://13.124.244.232:8080/map/create";
 
 
 // 나의 정보		
