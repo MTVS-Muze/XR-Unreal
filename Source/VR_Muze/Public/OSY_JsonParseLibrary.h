@@ -17,7 +17,7 @@ class VR_MUZE_API UOSY_JsonParseLibrary : public UBlueprintFunctionLibrary
 public:
 	static FString PlayerInfoJsonParse(const FString& originData);
 	
-	static FString PlayerJsonParse(const FString& originData);
+	static FString PlayerCustomJsonParse(const FString& originData);
 
 	static FString LevelJsonParse(const FString& originData);
 

@@ -210,5 +210,17 @@ public:
 
 
 
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	class AOSY_HttpRequestActor* HttpActor;
+
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
+
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	FString JsonStringPost;
+
+
+	int color,glass,face;
+
 
 };

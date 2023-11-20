@@ -29,7 +29,6 @@ void AOSY_HttpRequestActor::BeginPlay()
 
 	gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
 
-	
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
 	Token = gi->Token;
@@ -67,9 +66,9 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 
 		
 	}
-	else if (url == gi->Playergeturl)
+	else if (url == gi->CustomURL)
 	{
-		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedPlayerData);
+		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedCustomData);
 	}
 	else if (url == gi->getlevelurl)
 	{
@@ -86,7 +85,7 @@ void AOSY_HttpRequestActor::OnRecivedMemberData(FHttpRequestPtr Request, FHttpRe
 	if (bConnectedSuccessfully)
 	{
 		FString res = Response->GetContentAsString();
-		FString parsedData = UOSY_JsonParseLibrary::PlayerJsonParse(res);
+		FString parsedData = UOSY_JsonParseLibrary::PlayerInfoJsonParse(res);
 
 		if (gi != nullptr)
 		{
@@ -112,19 +111,28 @@ void AOSY_HttpRequestActor::OnRecivedMemberData(FHttpRequestPtr Request, FHttpRe
 
 	}
 }
-
-void AOSY_HttpRequestActor::OnReceivedPlayerData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+// 커마 정보를 받아온다
+void AOSY_HttpRequestActor::OnReceivedCustomData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Received Data!"));
 
 	if (bConnectedSuccessfully)
 	{
 		FString res = Response->GetContentAsString();
-		FString parsedData = UOSY_JsonParseLibrary::PlayerJsonParse(res);
+		FString parsedData = UOSY_JsonParseLibrary::PlayerCustomJsonParse(res);
 
 		if (gi != nullptr)
 		{
-			gi->parsePlayerData = parsedData;
+			TArray<FString> parsedDataArray;
+			parsedData.ParseIntoArray(parsedDataArray, TEXT(":"), true);
+
+
+			gi->color = FCString::Atoi(*parsedDataArray[0]);
+			gi->hat = FCString::Atoi(*parsedDataArray[1]);
+			gi->glass = FCString::Atoi(*parsedDataArray[2]);
+			gi->tie = FCString::Atoi(*parsedDataArray[3]);
+
+			gi->parseCustomData = parsedData;
 		}
 	}
 	else
@@ -133,7 +141,7 @@ void AOSY_HttpRequestActor::OnReceivedPlayerData(FHttpRequestPtr Request, FHttpR
 		
 	}
 }
-
+// 맵 정보를 받아온다
 void AOSY_HttpRequestActor::OnReceivedlevelData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Received Data!"));
@@ -159,35 +167,26 @@ void AOSY_HttpRequestActor::PostRequest(const FString url, const FString& JsonSt
 {
 	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
 
-	JsonObject->SetStringField("title", title);
-	JsonObject->SetStringField("song", song);
-	JsonObject->SetStringField("singer", singer);
-	JsonObject->SetStringField("info", info);
-	JsonObject->SetStringField("data", JsonString);
+	//
 
-	/*
-	TArray<TSharedPtr<FJsonValue>> SpawnInfosArray;
-
-	for (const FActorSpawnInfo3& SpawnInfo : PendingSpawns)
+	if (url == gi->PostMyMap)
 	{
-		TSharedPtr<FJsonObject> SpawnInfoObj = MakeShared<FJsonObject>();
+		JsonObject->SetStringField("title", gi->title);
+		JsonObject->SetStringField("song", gi->song);
+		JsonObject->SetStringField("singer", gi->singer);
+		JsonObject->SetStringField("info", gi->info);
+		JsonObject->SetStringField("data", JsonString);
 
-		SpawnInfoObj->SetStringField("Location", FString::Printf(TEXT("(%f, %f, %f)"), SpawnInfo.Location.X, SpawnInfo.Location.Y, SpawnInfo.Location.Z));
-		SpawnInfoObj->SetStringField("Rotation", FString::Printf(TEXT("(%f, %f, %f)"), SpawnInfo.Rotation.Pitch, SpawnInfo.Rotation.Yaw, SpawnInfo.Rotation.Roll));
-		SpawnInfoObj->SetStringField("Scale", FString::Printf(TEXT("(%f, %f, %f)"), SpawnInfo.Scale.X, SpawnInfo.Scale.Y, SpawnInfo.Scale.Z));
-		SpawnInfoObj->SetStringField("ActorClass", SpawnInfo.ActorClass->GetName());
-		SpawnInfoObj->SetStringField("SpawnTime", FString::Printf(TEXT("%f"), SpawnInfo.SpawnTime));
 
-		TSharedRef<FJsonValueObject> SpawnInfoValue = MakeShared<FJsonValueObject>(SpawnInfoObj);
-		SpawnInfosArray.Add(SpawnInfoValue);
 	}
-	FString SpawnInfosArrayString;
-	TSharedRef<TJsonWriter<>> ArrayWriter = TJsonWriterFactory<>::Create(&SpawnInfosArrayString);
-	FJsonSerializer::Serialize(SpawnInfosArray, ArrayWriter);
+	else if (url == gi->CustomURL)
+	{
+		JsonObject->SetNumberField("color", gi->color);
+		JsonObject->SetNumberField("color", gi->hat);
+		JsonObject->SetNumberField("color", gi->glass);
+		JsonObject->SetNumberField("color", gi->tie);
+	}
 
-	JsonObject->SetStringField("data", SpawnInfosArrayString); // Add the SpawnInfos array to the JsonObject with the key "data"
-
-	*/
 	FString OutputString;
 	TSharedRef<TJsonWriter<>> ObjectWriter = TJsonWriterFactory<>::Create(&OutputString);
 	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), ObjectWriter);
@@ -210,13 +209,8 @@ void AOSY_HttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TShared
 {
 	if (bConnectedSuccessfully)
 	{
-// 		FString receivedData = Response->GetContentAsString();
-// 		FString SavePath = FPaths::ProjectContentDir() + TEXT("SavedData.csv");
-
-
 		UE_LOG(LogTemp,Warning,TEXT("Success"));
 
-		//gm->SetLogText(receivedData);
 	}
 	else
 	{

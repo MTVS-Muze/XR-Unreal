@@ -199,20 +199,27 @@ public:
 	// 내가 만든 모든 맵
 	UPROPERTY()
 	FString AllMap ="http://13.124.244.232:8080/map/find/all";
-	// 내가 만든 모든 맵[POST]
+	// 내가 만든 맵[POST]
 	UPROPERTY()
 	FString PostMyMap ="http://13.124.244.232:8080/map/create";
+	// 내가 만든 모든 맵[POST]
+	UPROPERTY()
+	FString CustomURL ="http://13.124.244.232:8080/character";
 
 
 // 나의 정보		
 
-	int id;
+	int id,color,hat,glass,tie;
 	FString name, sub, profileImage, platform, role, email;
+
+	FString title,info,song,singer;
 
 
 
 	UPROPERTY()
 	FString parsePlayerData;
+	UPROPERTY()
+	FString parseCustomData;
 
 	UPROPERTY()
 	FString parseLevelData;

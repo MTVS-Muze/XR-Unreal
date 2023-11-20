@@ -408,8 +408,6 @@ void UOSY_PropWidget::SaveJsonData()
 	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
 	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
 
-	JsonStringPost=JsonString;
-
 	FString SavePath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
 	FFileHelper::SaveStringToFile(JsonString, *SavePath);
 	
@@ -428,9 +426,58 @@ void UOSY_PropWidget::GetJSon()
 // 업로드 하는 함수
 void UOSY_PropWidget::PostJSon()
 {
+	JsonObject = MakeShareable(new FJsonObject);
+
+	TArray<TSharedPtr<FJsonValue>> LocationsArray;
+	TArray<TSharedPtr<FJsonValue>> RotationsArray;
+	TArray<TSharedPtr<FJsonValue>> ScalesArray;
+	TArray<TSharedPtr<FJsonValue>> ActorClassesArray;
+	TArray<TSharedPtr<FJsonValue>> SpawnTimeArray;
+	TArray<TSharedPtr<FJsonValue>> LifeSpanArray;
+
+
+	for (int i = 0; i < SavedLocations.Num(); i++)
+	{
+		TSharedPtr<FJsonObject> LocationObj = MakeShareable(new FJsonObject);
+		LocationObj->SetNumberField(TEXT("X"), SavedLocations[i].X);
+		LocationObj->SetNumberField(TEXT("Y"), SavedLocations[i].Y);
+		LocationObj->SetNumberField(TEXT("Z"), SavedLocations[i].Z);
+		LocationsArray.Add(MakeShareable(new FJsonValueObject(LocationObj)));
+
+		TSharedPtr<FJsonObject> RotationObj = MakeShareable(new FJsonObject);
+		RotationObj->SetNumberField(TEXT("Pitch"), SavedRotations[i].Pitch);
+		RotationObj->SetNumberField(TEXT("Yaw"), SavedRotations[i].Yaw);
+		RotationObj->SetNumberField(TEXT("Roll"), SavedRotations[i].Roll);
+		RotationsArray.Add(MakeShareable(new FJsonValueObject(RotationObj)));
+
+		TSharedPtr<FJsonObject> ScaleObj = MakeShareable(new FJsonObject);
+		ScaleObj->SetNumberField(TEXT("X"), SavedScales[i].X);
+		ScaleObj->SetNumberField(TEXT("Y"), SavedScales[i].Y);
+		ScaleObj->SetNumberField(TEXT("Z"), SavedScales[i].Z);
+		ScalesArray.Add(MakeShareable(new FJsonValueObject(ScaleObj)));
+
+		ActorClassesArray.Add(MakeShareable(new FJsonValueString(SavedActorClasses[i]->GetName())));
+		SpawnTimeArray.Add(MakeShareable(new FJsonValueNumber(SavedSpawnTimes[i])));
+		LifeSpanArray.Add(MakeShareable(new FJsonValueNumber(SavedLifeSpans[i])));
+
+	}
+
+	JsonObject->SetArrayField(TEXT("Locations"), LocationsArray);
+	JsonObject->SetArrayField(TEXT("Rotations"), RotationsArray);
+	JsonObject->SetArrayField(TEXT("Scales"), ScalesArray);
+	JsonObject->SetArrayField(TEXT("ActorClasses"), ActorClassesArray);
+	JsonObject->SetArrayField(TEXT("SpawnTime"), SpawnTimeArray);
+	JsonObject->SetArrayField(TEXT("LifeSpan"), LifeSpanArray);
+
+
+	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
+	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
+
+	JsonStringPost = JsonString;
+	
 	if (HttpActor != nullptr)
 	{
-		HttpActor->PostRequest(posturl,JsonStringPost);
+		HttpActor->PostRequest(gi->PostMyMap,JsonStringPost);
 	}
 }
 
