@@ -23,6 +23,15 @@ public:
 
 	class UMainWidget* ModeSelectUI;
 
+	UFUNCTION()
+	void GetMemberInfo();
+
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	class AOSY_HttpRequestActor* HttpActor;
+
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
+
 private:
 	
 };

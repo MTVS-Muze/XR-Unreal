@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "KJS_BoxSofa.h"
 #include "OSY_GameInstance.generated.h"
 
  USTRUCT(BlueprintType)
@@ -185,14 +186,25 @@ public:
 	UPROPERTY()
 	FString getlevelurl ="http://172.20.10.2:8080/map/1";
 
+
+	// 나의 정보를 받는다
+	UPROPERTY()
+	FString MemberInfourl ="http://13.124.244.232:8080/member/info";
+
+
+// 나의 정보		
+
+	int id;
+	FString name, sub, profileImage, platform, role, email;
+
+
+
 	UPROPERTY()
 	FString parsePlayerData;
 
 	UPROPERTY()
 	FString parseLevelData;
 
-	int id;
-	FString name, sub, profileImage, platform, role, email;
 
 	UFUNCTION()
 	void ParsePlayerData();

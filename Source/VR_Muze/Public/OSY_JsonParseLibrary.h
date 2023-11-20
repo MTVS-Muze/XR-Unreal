@@ -15,6 +15,8 @@ class VR_MUZE_API UOSY_JsonParseLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
+	static FString PlayerInfoJsonParse(const FString& originData);
+	
 	static FString PlayerJsonParse(const FString& originData);
 
 	static FString LevelJsonParse(const FString& originData);
@@ -22,5 +24,7 @@ public:
 	TSharedPtr<FJsonObject> ParseJSON(const FString& JSONString);
 	
 	static FString MakeJson(TMap<FString, FString> source);
+
+	
 	
 };

@@ -12,6 +12,8 @@
 #include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
 #include "Runtime/MovieScene/Public/MovieSceneSequencePlayer.h"
 #include "Runtime/Engine/Public/EngineUtils.h"
+#include "OSY_HttpRequestActor.h"
+#include "OSY_GameInstance.h"
 
 void UOSY_LoginWidget::NativeConstruct()
 {
@@ -53,12 +55,17 @@ void UOSY_LoginWidget::NativeConstruct()
 	
 	
 	loginGM = Cast<AOSY_LoginGameMode>(UGameplayStatics::GetGameMode(this));
+	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
 	WebBrowser = Cast<UWebBrowser>(GetWidgetFromName(TEXT("WebBrowser")));
 	if (WebBrowser)
 	{
 		WebBrowser->OnUrlChanged.AddDynamic(this, &UOSY_LoginWidget::HandleUrlChanged);
 	}
+
+
+
+
 }
 
 
@@ -90,6 +97,7 @@ void UOSY_LoginWidget::Login()
 }
 
 
+
 void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
 {
 	FString Url = InText.ToString();
@@ -105,6 +113,7 @@ void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
 			if (!MyGameInstance->Token.IsEmpty())
 			{
 				CompleteLogin(Token2);
+				
 				GotoLobbyMap();
 			}
 		}
