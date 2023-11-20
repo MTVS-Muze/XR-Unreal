@@ -7,6 +7,34 @@
 #include "Runtime/Json/Public/Serialization/JsonSerializer.h"
 
 
+FString UOSY_JsonParseLibrary::PlayerInfoJsonParse(const FString& originData)
+{
+	FString parsedData;
+
+	TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(originData);
+
+	TSharedPtr<FJsonObject> result = MakeShareable(new FJsonObject());
+
+	// JSON 데이터를 파싱
+	if (FJsonSerializer::Deserialize(reader, result) && result.IsValid())
+	{
+		int id = result->GetIntegerField("id");
+		FString name = result->GetStringField("name");
+		FString sub = result->GetStringField("sub");
+		FString profileImage = result->GetStringField("profileImage");
+		FString platform = result->GetStringField("platform");
+		FString role = result->GetStringField("role");
+		FString email = result->GetStringField("email");
+
+
+		UE_LOG(LogTemp, Warning, TEXT("%d:%s:%s:%s:%s:%s:%s"), id, *name, *sub, *profileImage, *platform, *role, *email);
+
+		parsedData = FString::Printf(TEXT("%d:%s:%s:%s:%s:%s:%s"), id, *name, *sub, *profileImage, *platform, *role, *email);
+	}
+
+	return parsedData;
+}
+
 FString UOSY_JsonParseLibrary::PlayerJsonParse(const FString& originData)
 {
 

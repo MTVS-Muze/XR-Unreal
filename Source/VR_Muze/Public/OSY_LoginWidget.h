@@ -64,6 +64,15 @@ public:
 	class AOSY_KakaoHttpRequestActor* KaKaoActor;
 
 
+	// Info
+	
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	class AOSY_HttpRequestActor* HttpActor;
+
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
+
+
 	
 
 

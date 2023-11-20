@@ -42,9 +42,6 @@ void AOSY_HttpRequestActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	currenTime+= DeltaTime;
-
-	
 
 }
 
@@ -62,7 +59,15 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 	req->SetVerb(TEXT("GET"));
 	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 	req->SetHeader(TEXT("Authorization"), BearerToken);
-	if (url == gi->Playergeturl)
+	if (url == gi->MemberInfourl)
+	{
+
+		req->OnProcessRequestComplete().BindUObject(this,&AOSY_HttpRequestActor::OnRecivedMemberData);
+		UE_LOG(LogTemp, Warning, TEXT("Yogiha?"))
+
+		
+	}
+	else if (url == gi->Playergeturl)
 	{
 		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedPlayerData);
 	}
@@ -72,6 +77,40 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 	}
 	req->ProcessRequest();
 
+}
+// 맴버 정보를 받아온다
+void AOSY_HttpRequestActor::OnRecivedMemberData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Received Data!"));
+
+	if (bConnectedSuccessfully)
+	{
+		FString res = Response->GetContentAsString();
+		FString parsedData = UOSY_JsonParseLibrary::PlayerJsonParse(res);
+
+		if (gi != nullptr)
+		{
+			TArray<FString> parsedDataArray;
+			parsedData.ParseIntoArray(parsedDataArray, TEXT(":"), true);
+
+			
+				gi->id = FCString::Atoi(*parsedDataArray[0]);
+				gi->name = parsedDataArray[1];
+				gi->sub = parsedDataArray[2];
+				gi->profileImage = parsedDataArray[3]+parsedDataArray[4];
+				gi->platform = parsedDataArray[5];
+				gi->role = parsedDataArray[6];
+				gi->email = parsedDataArray[7];
+		
+
+			gi->parsePlayerData = parsedData;
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed"));
+
+	}
 }
 
 void AOSY_HttpRequestActor::OnReceivedPlayerData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
