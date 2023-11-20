@@ -140,7 +140,7 @@ void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccess
 {
 	if (bWasSuccessful)
 	{
-		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Box_indoor_Multi");
+		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Box_indoor_Multi?Listen");
 		OnCreateSessionCompleted.Broadcast();
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result : %s"), result ? *FString("Success") : *FString("Failed"));
 	}

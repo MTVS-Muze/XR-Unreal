@@ -64,6 +64,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UStaticMeshComponent* StarthmdMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UCameraComponent* CustomizeCam;
+
 public:
 	UPROPERTY()
 	class APlayerController* pc;

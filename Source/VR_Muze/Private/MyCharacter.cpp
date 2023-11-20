@@ -42,6 +42,11 @@ AMyCharacter::AMyCharacter()
 	StarthmdMesh->SetupAttachment(StartCam);
 	StartCam->bAutoActivate = true;
 
+	CustomizeCam = CreateDefaultSubobject<UCameraComponent>(TEXT("CustomizeCam"));
+	CustomizeCam->SetupAttachment(RootComponent);
+	CustomizeCam->bAutoActivate = false;
+	CustomizeCam->SetRelativeLocation(FVector(250.0f, 0.0f, 35.f));
+
 	
 	//왼쪽 컨트롤러
 	leftMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Left Motion Controller"));
@@ -80,10 +85,11 @@ AMyCharacter::AMyCharacter()
 	
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempThirdMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/DEV/KJS/Character/SitInChair/Mannequin/Character/Mesh/SK_Mannequin.SK_Mannequin'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempThirdMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/DEV/KJS/Character/Character/Idle.Idle'"));
 	if (TempThirdMesh.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(TempThirdMesh.Object);
+		GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	}
 	
 	//위젯 interaction
@@ -144,6 +150,13 @@ void AMyCharacter::BeginPlay()
 	{
 		// 그 외의 맵에서는 StartCam을 비활성화합니다.
 		StartCam->Deactivate();
+	}
+
+	if (MapName == "CustomizeMap")
+	{
+		hmdCam->Deactivate();
+		CustomizeCam->Activate();
+
 	}
 
 	PlayLevelSequence();
