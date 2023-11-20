@@ -67,6 +67,11 @@ public:
 	
 	TArray<FActorTransformInfo> postData;
 
+	UPROPERTY()
+	USoundBase* Song;
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
+
 	
 
 };

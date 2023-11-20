@@ -6,6 +6,7 @@
 #include "OSY_GameInstance.h"
 #include "Runtime/UMG/Public/Components/ComboBoxString.h"
 #include "Runtime/UMG/Public/Components/Button.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 void UMapInfoWidget::NativeConstruct()
 {
@@ -28,10 +29,11 @@ void UMapInfoWidget::NativeConstruct()
 	}
 	if (scb_SongList)
 	{
-
-		scb_SongList->AddOption("A");
-		scb_SongList->AddOption("B");
-		scb_SongList->AddOption("C");
+		scb_SongList->AddOption("Deep_Future_Garage");
+		scb_SongList->AddOption("LoFI_Chill");
+		scb_SongList->AddOption("Ocean_in_Paris");
+		scb_SongList->AddOption("Relaxing");
+		scb_SongList->AddOption("Titanium");
 
 		scb_SongList->OnSelectionChanged.AddDynamic(this, &UMapInfoWidget::HandleOnSelectionChanged);
 	}
@@ -63,27 +65,44 @@ void UMapInfoWidget::InfoCommitted(const FText& Text, ETextCommit::Type CommitMe
 
 void UMapInfoWidget::HandleOnSelectionChanged(FString SelectedItem, ESelectInfo::Type SelectionType)
 {
-	if (SelectedItem == "A") 
+
+	if (SelectedItem == "Deep_Future_Garage") 
 	{
-		song = "Song A";
-		singer = "Singer A";
+		song = "Deep_Future_Garage";
+		singer = "Coma-Media";
 		gi->song= song;
 		gi->singer	= singer;
 	}
-	else if (SelectedItem == "B") 
+	else if (SelectedItem == "LoFi_Chill") 
 	{
-		song = "Song B";
-		singer = "Singer B";
+		song = "LoFI_Chill";
+		singer = "BoDleasons";
 		gi->song = song;
 		gi->singer = singer;
 	}
-	else if (SelectedItem == "C") 
+	else if (SelectedItem == "ocean_In_Paris") 
 	{
-		song = "Song C";
-		singer = "Singer C";
+		song = "ocean_In_Paris";
+		singer = "Pumpupthemind";
 		gi->song = song;
 		gi->singer = singer;
 	}
+	else if (SelectedItem == "Relaxing")
+	{
+		song = "Relaxing";
+		singer = "lemonmusicstudio";
+		gi->song = song;
+		gi->singer = singer;
+	}
+	else if (SelectedItem == "Titanium")
+	{
+		song = "Titanium";
+		singer = "AlishaMusic";
+		gi->song = song;
+		gi->singer = singer;
+	}
+
+
 }
 
 void UMapInfoWidget::GoCreateMap()
@@ -94,7 +113,9 @@ void UMapInfoWidget::GoCreateMap()
 	}
 	else
 	{
-		UE_LOG(LogTemp,Warning,TEXT("SIBURe"));
+		FName LevelName = "3_3CreateMap";
+
+		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
 	
 }

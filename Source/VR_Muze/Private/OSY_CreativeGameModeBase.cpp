@@ -10,6 +10,7 @@
 #include "OSY_TImeActor.h"
 #include "OSY_LoginWidget.h"
 #include "OSY_OutLinerWidget.h"
+#include "OSY_GameInstance.h"
 
 AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
 {
@@ -25,6 +26,9 @@ AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
 void AOSY_CreativeGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
+
+    gi = Cast<UOSY_GameInstance>(GetGameInstance());
+
 
     httpUI = CreateWidget<UOSY_PropWidget>(GetWorld(), httpWidget);
     if (httpUI != nullptr)
@@ -88,12 +92,23 @@ void AOSY_CreativeGameModeBase::Tick(float DeltaTime)
 
 void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
 {
-    USoundWave* Song = LoadObject<USoundWave>(nullptr, TEXT("/Game/DEV/Sounds/SuperShy.SuperShy"), nullptr, LOAD_None, nullptr);
+    // 선택한 노래의 이름을 가져옵니다.
+    FString songName = gi->song;
+
+    // 노래의 경로를 생성합니다.
+    FString songPath = FString::Printf(TEXT("/Game/DEV/Sounds/%s.%s"), *songName, *songName);
+    ///Script/Engine.SoundWave'/Game/DEV/Sounds/Deep_Future_Garage.Deep_Future_Garage'
+
+    // 노래를 로드합니다.
+    Song = LoadObject<USoundBase>(nullptr, *songPath, nullptr, LOAD_None, nullptr);
 
     if (Song)
     {
+        superShy=Song;
         SequnceUI->MaxTime = Song->Duration;
     }
+
+	
 }
 
 

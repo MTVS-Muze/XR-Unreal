@@ -31,8 +31,7 @@ public:
 
 public:
 #pragma region SeverData;
-	//UPROPERTY()
-	//FString url ="http://192.168.0.232:8080/map/test/1";
+	
 
 	UPROPERTY()
 	FString url ="http://192.168.0.189:8080/give/token";
@@ -54,8 +53,7 @@ public:
 	UFUNCTION()
 	void GotoLobbyMap();
 	
-	UFUNCTION()
-	void Login();
+	
 
 	UFUNCTION()
 	void BackToMain();
@@ -90,7 +88,6 @@ public:
 
 	   FString ExtractTokenFromUrl(const FString& Url);
 
-	   void CompleteLogin(const FString& Token);
 
 	   FString Token2;
 #pragma endregion

@@ -27,13 +27,13 @@ void UMainWidget::NativeConstruct()
 	
 	LevelName2 = UGameplayStatics::GetCurrentLevelName(this);
 
-	if (LevelName2 == "ViewLevel")
+	if (LevelName2 == "2_ViewLevel")
 	{
 		btn_MediaEnter->OnClicked.Clear(); // 기존에 설정된 클릭 이벤트를 제거합니다.
 		btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::mediaPlay); // 새로운 클릭 이벤트를 추가합니다.
 	}
 	// 그렇지 않고 B라는 이름이면 버튼에 함수를 GotoCreativeLeve2로해
-	else if (LevelName2 == "CreativeLevel")
+	else if (LevelName2 == "3_CreativeLevel")
 	{
 		btn_MediaEnter->OnClicked.Clear(); // 기존에 설정된 클릭 이벤트를 제거합니다.
 		btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::GotoViewLevel);
@@ -41,25 +41,19 @@ void UMainWidget::NativeConstruct()
 
 
 	// 만약 A라는 이름의 레벨이면 버튼에 함수를 GotoCreativeLevel로해
-	if(LevelName2 == "ViewLevel")
+	if(LevelName2 == "2_ViewLevel")
 	{
 		btn_SwitchCreative->OnClicked.Clear(); // 기존에 설정된 클릭 이벤트를 제거합니다.
 		btn_SwitchCreative->OnClicked.AddDynamic(this, &UMainWidget::GotoCreativeLevel); // 새로운 클릭 이벤트를 추가합니다.
 	}
 	// 그렇지 않고 B라는 이름이면 버튼에 함수를 GotoCreativeLeve2로해
-	else if(LevelName2 == "CreativeLevel")
+	else if(LevelName2 == "3_CreativeLevel")
 	{
 		btn_SwitchCreative->OnClicked.Clear(); // 기존에 설정된 클릭 이벤트를 제거합니다.
 		btn_SwitchCreative->OnClicked.AddDynamic(this, &UMainWidget::createPlay);
 	}
 
 
-	//JSCode
-	/*
-	btn_MediaEnter->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonMedia);
-	btn_SwitchCreative->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonSwitchCreative);
-	*/
-	//btn_CreativeEnter->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreativeMode);
 	btn_BackModeSelect->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonBackModeSelect);
 	btn_CreateBox->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreateBox);
 	btn_Create->OnClicked.AddDynamic(this, &UMainWidget::OnClickedButtonCreateEnd);
@@ -163,7 +157,7 @@ void UMainWidget::OnClickedButtonCreateBox()
 {
 	//SwitchCanvas(2);
 
-	FName LevelName = "NewWorld";
+	FName LevelName = "3_2CreateInfo";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }
@@ -172,7 +166,7 @@ void UMainWidget::OnClickedButtonCreateEnd()
 {
 	//SwitchCanvas(2);
 
-	FName LevelName = "NewWorld";
+	FName LevelName = "3_2CreateInfo";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }
@@ -198,7 +192,7 @@ void UMainWidget::createPlay()
 
 void UMainWidget::GotoCreativeLevel()
 {
-	FName LevelName = "CreativeLevel";
+	FName LevelName = "3_CreativeLevel";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 
@@ -206,7 +200,7 @@ void UMainWidget::GotoCreativeLevel()
 
 void UMainWidget::GotoViewLevel()
 {
-	FName LevelName = "ViewLevel";
+	FName LevelName = "2_ViewLevel";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 

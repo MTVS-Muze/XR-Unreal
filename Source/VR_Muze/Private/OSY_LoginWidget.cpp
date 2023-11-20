@@ -51,20 +51,15 @@ void UOSY_LoginWidget::NativeConstruct()
 
 
 	btn_Start->OnClicked.AddDynamic(this, &UOSY_LoginWidget::GotoLoginCanvas);
-
-	
 	
 	loginGM = Cast<AOSY_LoginGameMode>(UGameplayStatics::GetGameMode(this));
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
-	WebBrowser = Cast<UWebBrowser>(GetWidgetFromName(TEXT("WebBrowser")));
-	if (WebBrowser)
-	{
-		WebBrowser->OnUrlChanged.AddDynamic(this, &UOSY_LoginWidget::HandleUrlChanged);
-	}
-
-
-
+ 	WebBrowser = Cast<UWebBrowser>(GetWidgetFromName(TEXT("WebBrowser")));
+ 	if (WebBrowser)
+ 	{
+ 		WebBrowser->OnUrlChanged.AddDynamic(this, &UOSY_LoginWidget::HandleUrlChanged);
+ 	}
 
 }
 
@@ -82,20 +77,12 @@ void UOSY_LoginWidget::GotoLoginCanvas()
 
 void UOSY_LoginWidget::GotoLobbyMap()
 {
-	FName LevelName = "ViewLevel";
+	FName LevelName = "1_2CH_MAP";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }
 
 #pragma endregion 
-
-void UOSY_LoginWidget::Login()
-{
-	
-	WebBrowser->LoadURL(TEXT("http://192.168.0.5:8080/oauth2/authorize/kakao?redirect_uri=http://192.168.0.99:7777/oauth2/redirect"));
-
-}
-
 
 
 void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
@@ -112,8 +99,7 @@ void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
 			MyGameInstance->Token=Token2;
 			if (!MyGameInstance->Token.IsEmpty())
 			{
-				CompleteLogin(Token2);
-				
+							
 				GotoLobbyMap();
 			}
 		}
@@ -144,12 +130,6 @@ FString UOSY_LoginWidget::ExtractTokenFromUrl(const FString& Url)
 
 }
 
-void UOSY_LoginWidget::CompleteLogin(const FString& Token)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Login completed with token: %s"), *Token);
-
-	
-}
 
 void UOSY_LoginWidget::OnStop()
 {
