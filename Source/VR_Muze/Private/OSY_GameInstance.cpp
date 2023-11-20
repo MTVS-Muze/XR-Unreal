@@ -50,7 +50,6 @@ void UOSY_GameInstance::CloseSideToolPanel()
 	{
 		sideToolPanelInstance->RemoveFromParent();
 	}
-	
 }
 /// <summary>
 /// /////////////////////////////////////////////////////////////////////////////////////////

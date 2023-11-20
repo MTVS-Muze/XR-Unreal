@@ -45,7 +45,8 @@ AMyCharacter::AMyCharacter()
 	CustomizeCam = CreateDefaultSubobject<UCameraComponent>(TEXT("CustomizeCam"));
 	CustomizeCam->SetupAttachment(RootComponent);
 	CustomizeCam->bAutoActivate = false;
-	CustomizeCam->SetRelativeLocation(FVector(250.0f, 0.0f, 35.f));
+	CustomizeCam->SetRelativeLocation(FVector(480.0f, 0.0f, 35.f));
+	CustomizeCam->SetFieldOfView(35.0f);
 
 	
 	//왼쪽 컨트롤러
@@ -152,7 +153,7 @@ void AMyCharacter::BeginPlay()
 		StartCam->Deactivate();
 	}
 
-	if (MapName == "CustomizeMap")
+	if (MapName == "CustomizeMap"||MapName=="CH_MAP")
 	{
 		hmdCam->Deactivate();
 		CustomizeCam->Activate();

@@ -59,6 +59,12 @@ public:
 	void OnClickedbtn_BackSelect();
 
 //Color Panel
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+    TArray<UMaterialInstance*> BodyMaterials;
+
+	UFUNCTION()
+	void SwitchBodyColor(int32 Index);
+
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ColorBtn)
 	class UButton* btn_Black;
 	
@@ -119,4 +125,90 @@ public:
 
 	UFUNCTION()
 	void SwitchColorNavy();
+////////////////////////////////////////////////////////
+//Accessory Panel
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	TArray<UStaticMesh*> GlassMeshes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	class UStaticMeshComponent* AttachedGlass;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=AccessoryMain)
+	class UWidgetSwitcher* ws_AccessorySwitch;
+
+	UFUNCTION()
+	void SwitchAccessoryCanvas(int32 index);
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=AccessoryMain)
+	class UButton* btn_Hat;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=AccessoryMain)
+	class UButton* btn_Glass;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=AccessoryMain)
+	class UButton* btn_Tie;
+
+	UFUNCTION()
+	void OnClickedbtn_Hat();
+
+	UFUNCTION()
+	void OnClickedbtn_Glass();
+
+	UFUNCTION()
+	void OnClickedbtn_Tie();
+
+
+	UFUNCTION()
+	void AttachGlass(int32 Index);
+
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryHat)
+	class UButton* btn_Hat1;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryGlasses)
+	class UButton* btn_Glass0;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryGlasses)
+	class UButton* btn_Glass1;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryGlasses)
+	class UButton* btn_Glass2;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryGlasses)
+	class UButton* btn_Glass3;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryGlasses)
+	class UButton* btn_Glass4;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryGlasses)
+	class UButton* btn_Glass5;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryGlasses)
+	class UButton* btn_Glass6;
+
+
+	UFUNCTION()
+	void WearGlass0();
+
+	UFUNCTION()
+	void WearGlass1();
+
+	UFUNCTION()
+	void WearGlass2();
+
+	UFUNCTION()
+	void WearGlass3();
+
+	UFUNCTION()
+	void WearGlass4();
+
+	UFUNCTION()
+	void WearGlass5();
+
+	UFUNCTION()
+	void WearGlass6();
+
+
+
+
 };
