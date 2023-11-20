@@ -153,7 +153,7 @@ void AMyCharacter::BeginPlay()
 		StartCam->Deactivate();
 	}
 
-	if (MapName == "CustomizeMap"||MapName=="CH_MAP")
+	if (MapName == "CustomizeMap"||MapName.Contains("CH_MAP"))
 	{
 		hmdCam->Deactivate();
 		CustomizeCam->Activate();
