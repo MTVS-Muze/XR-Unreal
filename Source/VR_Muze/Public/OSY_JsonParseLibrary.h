@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "KJS_GameModeBase.h"
 #include "OSY_JsonParseLibrary.generated.h"
 
 /**
@@ -19,12 +20,13 @@ public:
 	
 	static FString PlayerCustomJsonParse(const FString& originData);
 
+	static TArray<FAllLevelData> AllLevelJsonParse(const FString& originData);
+
 	static FString LevelJsonParse(const FString& originData);
 
 	TSharedPtr<FJsonObject> ParseJSON(const FString& JSONString);
 	
 	static FString MakeJson(TMap<FString, FString> source);
 
-	
 	
 };

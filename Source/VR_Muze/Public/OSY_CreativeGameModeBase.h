@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "KJS_GameModeBase.h"
 #include "OSY_CreativeGameModeBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -66,6 +67,8 @@ public:
 
 	
 	TArray<FActorTransformInfo> postData;
+
+	TArray<FAllLevelData> AllLevel;
 
 	UPROPERTY()
 	USoundBase* Song;

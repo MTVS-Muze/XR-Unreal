@@ -187,30 +187,39 @@ public:
 	FString getlevelurl ="http://172.20.10.2:8080/map/1";
 
 
-	// 나의 정보를 받는다
+	// 나의 정보를 줘
 	UPROPERTY()
 	FString MemberInfourl ="http://13.124.244.232:8080/member/info";
-	// 레벨 하나의 정보를 디테일
-	UPROPERTY()
-	FString MapDetailInfo ="http://13.124.244.232:8080/map/find";
-	// 내가 만든 모든 맵
-	UPROPERTY()
-	FString AllMyMap ="http://13.124.244.232:8080/map/find/member";
-	// 내가 만든 모든 맵
-	UPROPERTY()
-	FString AllMap ="http://13.124.244.232:8080/map/find/all";
-	// 내가 만든 맵[POST]
-	UPROPERTY()
-	FString PostMyMap ="http://13.124.244.232:8080/map/create";
-	// 내가 만든 모든 맵[POST]
+	
+	// 커스텀 줘
 	UPROPERTY()
 	FString CustomURL ="http://13.124.244.232:8080/character";
 
+	// 모든 맵
+	UPROPERTY()
+	FString AllMap ="http://13.124.244.232:8080/map/find/all";
+
+	// 내가 만든 레벨 다줘
+	UPROPERTY()
+	FString AllMyMap ="http://13.124.244.232:8080/map/find/member";
+
+	// 내가 만든 레벨 하나만 줘
+	UPROPERTY()
+	FString MapDetailInfo ="http://13.124.244.232:8080/map/find";
+	
+	// 내가 만든 맵[POST]
+	UPROPERTY()
+	FString PostMyMap ="http://13.124.244.232:8080/map/create";
 
 // 나의 정보		
-
-	int id,color,hat,glass,tie;
+	// 맴버정보
+	int id;
 	FString name, sub, profileImage, platform, role, email;
+	// 커스텀 정보
+	int color, hat, glass, tie;
+	
+
+
 
 	FString title,info,song,singer;
 

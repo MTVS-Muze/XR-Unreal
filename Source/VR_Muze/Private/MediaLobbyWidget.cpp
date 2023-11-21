@@ -19,6 +19,7 @@
 #include "EngineUtils.h"
 #include "KJS_GameModeBase.h"
 #include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
+#include "OSY_HttpRequestActor.h"
 
 
 void UMediaLobbyWidget::NativeConstruct()
@@ -26,6 +27,7 @@ void UMediaLobbyWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
 	//MediaBox= Cast<AKJS_Box>(UGameplayStatics::)
 	//////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +66,9 @@ void UMediaLobbyWidget::NativeConstruct()
 
 	btn_UpSocial->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_UpSocial);
 	btn_DownSocial->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_DownSocial);
+	btn_LeftSocial->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnCheckedbtn_LeftSocial);
+	btn_RightSocial->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnCheckedbtn_RightSocial);
+
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,16 +150,32 @@ void UMediaLobbyWidget::OnClickedbtn_DownOriginal()
 {
 	SwitchCanvasCategory(1);
 }
-
+#pragma region Social
 void UMediaLobbyWidget::OnClickedbtn_UpSocial()
 {
 	SwitchCanvasCategory(0);
+	// 서버에 저장된 레벨 1개 불러와서 인포에 띄워
+	HttpActor->SendRequest(gi->AllMap);
 }
 
 void UMediaLobbyWidget::OnClickedbtn_DownSocial()
 {
 	SwitchCanvasCategory(2);
+	// 서버에 저장된 레벨 1개 불러와서 인포에 띄워
+	HttpActor->SendRequest(gi->AllMap);
 }
+
+void UMediaLobbyWidget::OnCheckedbtn_LeftSocial()
+{
+	// 데이터 불러와
+}
+
+void UMediaLobbyWidget::OnCheckedbtn_RightSocial()
+{
+	// 데이터 불러와
+
+}
+#pragma endregion 
 
 void UMediaLobbyWidget::OnClickedbtn_Back1()
 {

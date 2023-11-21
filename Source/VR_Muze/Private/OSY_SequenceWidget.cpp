@@ -182,7 +182,7 @@ void UOSY_SequenceWidget::LoadJsonData()
                     FVector LoadedScale(ScaleObj->GetNumberField(TEXT("X")), ScaleObj->GetNumberField(TEXT("Y")), ScaleObj->GetNumberField(TEXT("Z")));
 
                     FString ActorClassName = ActorClassesArray[i]->AsString();
-                    UClass* ActorClass = FindObject<UClass>(ANY_PACKAGE, *ActorClassName);
+                    UClass* ActorClass = LoadObject<UClass>(nullptr, *ActorClassName);
 
                     float SavedTime = SpawnTimeArray[i]->AsNumber();
 

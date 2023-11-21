@@ -27,7 +27,9 @@ void AOSY_HttpRequestActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
+
+	OCgm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
+	KVgm = GetWorld()->GetAuthGameMode<AKJS_GameModeBase>();
 
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
@@ -58,26 +60,39 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 	req->SetVerb(TEXT("GET"));
 	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 	req->SetHeader(TEXT("Authorization"), BearerToken);
+	
+	// 나의 정보를 줘
 	if (url == gi->MemberInfourl)
 	{
-
 		req->OnProcessRequestComplete().BindUObject(this,&AOSY_HttpRequestActor::OnRecivedMemberData);
-		UE_LOG(LogTemp, Warning, TEXT("Yogiha?"))
-
 		
 	}
+	// 커스텀 줘
 	else if (url == gi->CustomURL)
 	{
 		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedCustomData);
 	}
-	else if (url == gi->getlevelurl)
+	// 레벨 전부다 줘
+	else if (url == gi->AllMap)
+	{
+		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedAllLevel);
+	}
+	// 내가 만든 레벨 다줘
+	else if (url == gi->AllMyMap)
+	{
+		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedAllMyLevel);
+
+	}
+	// 내가 만든 레벨 하나만 줘
+	else if (url == gi->MapDetailInfo)
 	{
 		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedlevelData);
+
 	}
 	req->ProcessRequest();
 
 }
-// 맴버 정보를 받아온다
+// 나의 정보를 줘
 void AOSY_HttpRequestActor::OnRecivedMemberData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Received Data!"));
@@ -111,7 +126,7 @@ void AOSY_HttpRequestActor::OnRecivedMemberData(FHttpRequestPtr Request, FHttpRe
 
 	}
 }
-// 커마 정보를 받아온다
+// 커스텀 줘
 void AOSY_HttpRequestActor::OnReceivedCustomData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Received Data!"));
@@ -140,7 +155,48 @@ void AOSY_HttpRequestActor::OnReceivedCustomData(FHttpRequestPtr Request, FHttpR
 		UE_LOG(LogTemp, Warning, TEXT("Failed"));
 		
 	}
+
+	
 }
+
+// 모든 맵
+void AOSY_HttpRequestActor::OnReceivedAllLevel(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+{
+	if (bConnectedSuccessfully)
+	{
+		FString res = Response->GetContentAsString();
+		TArray<FAllLevelData> AllLevel = UOSY_JsonParseLibrary::AllLevelJsonParse(res);
+		
+		
+		FString currentLevel = UGameplayStatics::GetCurrentLevelName(this, true);
+		if (currentLevel == "A")
+		{
+			OCgm->AllLevel = AllLevel;
+		}
+		else if (currentLevel == "Box_indoor_Single")
+		{
+			KVgm->AllLevelArray=AllLevel;
+		}
+
+		for (const FAllLevelData& Data : AllLevel)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Id: %d"), Data.Id);
+			UE_LOG(LogTemp, Warning, TEXT("MemberName: %s"), *Data.MemberName);
+			UE_LOG(LogTemp, Warning, TEXT("Title: %s"), *Data.Title);
+			UE_LOG(LogTemp, Warning, TEXT("Song: %s"), *Data.Song);
+			UE_LOG(LogTemp, Warning, TEXT("Singer: %s"), *Data.Singer);
+			UE_LOG(LogTemp, Warning, TEXT("Info: %s"), *Data.Info);
+			UE_LOG(LogTemp, Warning, TEXT("Data: %s"), *Data.Data);
+			UE_LOG(LogTemp, Warning, TEXT("CreatedDate: %s"), *Data.CreatedDate);
+		}
+	}
+}
+
+void AOSY_HttpRequestActor::OnReceivedAllMyLevel(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+{
+
+}
+
 // 맵 정보를 받아온다
 void AOSY_HttpRequestActor::OnReceivedlevelData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {

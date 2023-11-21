@@ -6,9 +6,20 @@
 #include "GameFramework/GameModeBase.h"
 #include "KJS_GameModeBase.generated.h"
 
-/**
- * 
- */
+USTRUCT()
+struct FAllLevelData
+{
+    GENERATED_BODY()
+
+    int32 Id;
+    FString MemberName;
+    FString Title;
+    FString Song;
+    FString Singer;
+    FString Info;
+    FString Data;
+    FString CreatedDate;
+};
 UCLASS()
 class VR_MUZE_API AKJS_GameModeBase : public AGameModeBase
 {
@@ -21,5 +32,7 @@ class VR_MUZE_API AKJS_GameModeBase : public AGameModeBase
 public:
 	UFUNCTION()
 	void PlaySequence();
+
+    TArray<FAllLevelData> AllLevelArray;
 
 };

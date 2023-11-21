@@ -174,6 +174,11 @@ public:
 	UFUNCTION()
 	void OnClickedbtn_DownSocial();
 
+	UFUNCTION()
+	void OnCheckedbtn_LeftSocial();
+	UFUNCTION()
+	void OnCheckedbtn_RightSocial();
+
 //Canvas_ChoiceJoinOrCreate
 public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=JoinOrCreate)
@@ -207,6 +212,10 @@ public:
 
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
+
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	class AOSY_HttpRequestActor* HttpActor;
+
 
 public:
 	//MakingRoom 바인딩 함수

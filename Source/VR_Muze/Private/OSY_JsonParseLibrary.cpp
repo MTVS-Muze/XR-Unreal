@@ -5,6 +5,7 @@
 #include "Json.h"
 #include "Runtime/Json/Public/Serialization/JsonWriter.h"
 #include "Runtime/Json/Public/Serialization/JsonSerializer.h"
+#include "KJS_GameModeBase.h"
 
 
 FString UOSY_JsonParseLibrary::PlayerInfoJsonParse(const FString& originData)
@@ -49,12 +50,48 @@ FString UOSY_JsonParseLibrary::PlayerCustomJsonParse(const FString& originData)
 	{
 		int color = result->GetIntegerField("color");
 		int hat = result->GetIntegerField("hat");
-		int face = result->GetIntegerField("face");
+		int glass = result->GetIntegerField("glass");
+		int tie = result->GetIntegerField("tie");
 		
-		parsedData = FString::Printf(TEXT("%d:%d:%d"), color,hat,face);
+		parsedData = FString::Printf(TEXT("%d:%d:%d"), color,hat, glass, tie);
 	}
 
 	return parsedData;
+}
+
+TArray<FAllLevelData>  UOSY_JsonParseLibrary::AllLevelJsonParse(const FString& originData)
+{
+	TArray<FAllLevelData> AllLevelArray;
+
+	TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(originData);
+
+	TArray<TSharedPtr<FJsonValue>> items;
+
+	if (FJsonSerializer::Deserialize(reader, items))
+	{
+		// 각 객체에 대해
+		for (auto& Item : items)
+		{
+			TSharedPtr<FJsonObject> DataObject = Item->AsObject();
+
+			// 필드 읽기
+			FAllLevelData Data;
+			Data.Id = DataObject->GetIntegerField("id");
+			Data.MemberName = DataObject->GetStringField("memberName");
+			Data.Title = DataObject->GetStringField("title");
+			Data.Song = DataObject->GetStringField("song");
+			Data.Singer = DataObject->GetStringField("singer");
+			Data.Info = DataObject->GetStringField("info");
+			Data.Data = DataObject->GetStringField("data");
+			Data.CreatedDate = DataObject->GetStringField("createdDate");
+
+			// 배열에 추가
+			AllLevelArray.Add(Data);
+		}
+	}
+
+	return AllLevelArray;
+
 }
 
 FString UOSY_JsonParseLibrary::LevelJsonParse(const FString& originData)

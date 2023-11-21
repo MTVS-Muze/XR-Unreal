@@ -44,10 +44,15 @@ public:
 	UFUNCTION()
 	void SendRequest(const FString url);
 
+	// 나의 정보를 줘
 	void OnRecivedMemberData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
-
+	// 커스텀 줘
 	void OnReceivedCustomData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
-
+	// 레벨 전부다 줘
+	void OnReceivedAllLevel(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+	// 내가 만든 레벨 다줘
+	void OnReceivedAllMyLevel(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+	// 내가 만든 레벨 하나만 줘
 	void OnReceivedlevelData(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	UFUNCTION()
@@ -63,7 +68,10 @@ public:
 	class UOSY_GameInstance* MyGameInstance;
 
 	UPROPERTY()
-	class AOSY_CreativeGameModeBase* gm;
+	class AOSY_CreativeGameModeBase* OCgm;
+
+	UPROPERTY()
+	class AKJS_GameModeBase* KVgm;
 
 	// 파일 세이브하기
 	void SaveJson(const FString jsonData);
