@@ -6,20 +6,11 @@
 #include "Runtime/LevelSequence/Public/LevelSequence.h"
 #include "Runtime/MovieScene/Public/MovieSceneSequencePlaybackSettings.h"
 #include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Classes/GameFramework/PlayerStart.h"
 
 
 
-void AKJS_GameModeBase::SetVRMode()
-{
 
 
-}
 
-void AKJS_GameModeBase::PlaySequence()
-{
-    
-}
-
-// 함수 시퀀스 플레이
-// 만약 플레이어에 있는 위젯의 싱글 플레이 버튼을 누르면
-// 시퀀스를 플레이한다.

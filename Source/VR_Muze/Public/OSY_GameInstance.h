@@ -154,7 +154,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AKJS_BoxSofa> BoxSofa;
 
-
 	UFUNCTION()
 	void OnLevelLoaded(UWorld* LoadedWorld);
 
@@ -164,6 +163,8 @@ public:
 
 private:
 	bool bIsHMDConnectd;
+
+
 
 	//FString invite_code = "";
 
