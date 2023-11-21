@@ -25,7 +25,7 @@ class VR_MUZE_API AKJS_GameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-
+public:
     TArray<FAllLevelData> AllLevelArray;
 
 };
