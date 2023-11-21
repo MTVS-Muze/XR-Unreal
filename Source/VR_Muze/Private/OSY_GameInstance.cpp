@@ -308,6 +308,7 @@ void UOSY_GameInstance::OnUpdateSession(FName sessionName, bool bIsUpdate)
 	}
 }
 
+
 void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("%s(%d) map name: %s"), *FString(__FUNCTION__), __LINE__, *LoadedWorld->GetMapName());
