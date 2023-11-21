@@ -106,6 +106,12 @@ AMyCharacter::AMyCharacter()
 	//EnterRoomWidget->SetupAttachment(RootComponent);
 
 	ConstructorHelpers::FObjectFinder<USoundBase>TempSound(TEXT("/Script/Engine.SoundWave'/Game/DEV/KJS/PC_Widget/WidgetSound/Netflix-Intro_cut.Netflix-Intro_cut'"));
+
+	IdleAnimation = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/Idle.Idle"));
+	SittingAnimation = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/SittingAnim.SittingAnim"));
+	SittingIdle = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/Sitting_Idle.Sitting_Idle"));
+
+	ai = UKJS_CharacterAnimInstance::StaticClass();
 }
 
 // Called when the game starts or when spawned
@@ -159,6 +165,24 @@ void AMyCharacter::BeginPlay()
 		CustomizeCam->Activate();
 
 	}
+
+	UKJS_CharacterAnimInstance* AnimInstance = Cast<UKJS_CharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (AnimInstance)
+	{
+		AnimInstance->CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+	}
+
+	if (MapName.Contains("CH_MAP"))
+	{
+		GetMesh()->PlayAnimation(IdleAnimation, false);
+	}
+
+	else if (MapName.Contains("Box_indoor_Single"))
+	{
+		GetMesh()->PlayAnimation(SittingAnimation, false);
+	}
+	
+
 
 	PlayLevelSequence();
 

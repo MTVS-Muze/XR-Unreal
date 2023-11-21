@@ -50,6 +50,9 @@ void UCharacterCustomizeWidget::NativeConstruct()
 	btn_Glass4->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearGlass4);
 	btn_Glass5->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearGlass5);
 	btn_Glass6->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearGlass6);
+	//////////////////////////////////////////////////////
+	btn_Hat1->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearHat1);
+	btn_Hat2->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearHat2);
 }
 
 void UCharacterCustomizeWidget::SwitchCanvas(int32 index)
@@ -201,7 +204,7 @@ void UCharacterCustomizeWidget::AttachGlass(int32 Index)
 		}
 		AttachedGlass = NewObject<UStaticMeshComponent>(player);
 		AttachedGlass->SetStaticMesh(GlassMeshes[Index]);
-		AttachedGlass->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("HeadSocket"));
+		AttachedGlass->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("GlassSocket"));
 		AttachedGlass->RegisterComponent();
 	}
 }
@@ -253,4 +256,35 @@ void UCharacterCustomizeWidget::WearGlass6()
 	AttachGlass(6);
 	glass=6;
 	gi->glass = glass;
+}
+
+
+void UCharacterCustomizeWidget::AttachHat(int32 Index)
+{
+	if (Index >= 0 && Index < HatMeshes.Num() && HatMeshes[Index] != nullptr)
+	{
+		if (AttachedGlass)
+		{
+			AttachedGlass->DestroyComponent();
+			AttachedGlass = nullptr;
+		}
+		AttachedGlass = NewObject<UStaticMeshComponent>(player);
+		AttachedGlass->SetStaticMesh(HatMeshes[Index]);
+		AttachedGlass->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("HatSocket"));
+		AttachedGlass->RegisterComponent();
+	}
+}
+
+void UCharacterCustomizeWidget::WearHat1()
+{
+	AttachHat(0);
+	hat = 0;
+	gi->hat = hat;
+}
+
+void UCharacterCustomizeWidget::WearHat2()
+{
+	AttachHat(1);
+	hat = 1;
+	gi->hat = hat;
 }

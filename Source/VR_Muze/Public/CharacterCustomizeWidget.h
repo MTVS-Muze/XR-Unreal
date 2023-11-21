@@ -165,6 +165,9 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryHat)
 	class UButton* btn_Hat1;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryHat)
+	class UButton* btn_Hat2;
+
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryGlasses)
 	class UButton* btn_Glass0;
 
@@ -209,6 +212,21 @@ public:
 	void WearGlass6();
 
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	TArray<UStaticMesh*> HatMeshes;
+
+	UFUNCTION()
+	void WearHat1();
+
+	UFUNCTION()
+	void WearHat2();
+
+	UFUNCTION()
+	void AttachHat(int32 Index);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	TArray<UStaticMesh*> TieMeshes;
+
 
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	class AOSY_HttpRequestActor* HttpActor;
@@ -220,7 +238,7 @@ public:
 	FString JsonStringPost;
 
 
-	int color,glass,face;
+	int color,glass,face,hat;
 
 
 };

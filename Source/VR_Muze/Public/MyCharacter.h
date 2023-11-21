@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Runtime/UMG/Public/Components/WidgetComponent.h"
+#include "KJS_CharacterAnimInstance.h"
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -102,4 +103,31 @@ public:
 	UFUNCTION()
 	void ChangeFOV(UWorld* LoadedWorld);
 
+
+	UPROPERTY(EditDefaultsOnly, Category = Animation)
+    TSubclassOf<UKJS_CharacterAnimInstance> ai;
+
+	UPROPERTY(EditDefaultsOnly, Category = Animation)
+    class UAnimSequence* IdleAnimation;
+
+    UPROPERTY(EditDefaultsOnly, Category = Animation)
+	class UAnimSequence* SittingAnimation;
+
+	UPROPERTY(EditDefaultsOnly, Category = Animation)
+	class UAnimSequence* SittingIdle;
+
+	UPROPERTY()
+    class UAnimSequence* AnimToPlay;
+
+
+	UPROPERTY(EditDefaultsOnly, Category = Items)
+    class UStaticMesh* HatMesh;
+
+    UPROPERTY(EditDefaultsOnly, Category = Items)
+	class UStaticMesh* TieMesh;
+
+    UPROPERTY(EditDefaultsOnly, Category = Items)
+	class UStaticMesh* GlassMesh;
+
+	//UStaticMeshComponent* CreateMeshComponent(UStaticMesh* Mesh, const FName& SocketName);
 };
