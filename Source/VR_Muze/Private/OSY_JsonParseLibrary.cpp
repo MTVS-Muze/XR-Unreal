@@ -99,6 +99,7 @@ void UOSY_JsonParseLibrary::LevelJsonParse(const FString& OriginData, AOSY_Creat
 {
 
 	UE_LOG(LogTemp,Warning,TEXT("originData:%s"),*OriginData);
+
 	TSharedRef<TJsonReader<TCHAR>> Reader = TJsonReaderFactory<TCHAR>::Create(OriginData);
 	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
 
@@ -111,38 +112,35 @@ void UOSY_JsonParseLibrary::LevelJsonParse(const FString& OriginData, AOSY_Creat
 
 		if (FJsonSerializer::Deserialize(DataReader, DataJsonObject) && DataJsonObject.IsValid())
 		{
-			// 각 배열을 순회하며 필요한 정보를 추출
-			for (auto& Location : DataJsonObject->GetArrayField("Locations"))
-			{
-				TSharedPtr<FJsonObject> LocationObj = Location->AsObject();
-				GameMode->Locations.Add(FVector(LocationObj->GetNumberField("X"), LocationObj->GetNumberField("Y"), LocationObj->GetNumberField("Z")));
-			}
+			TArray<TSharedPtr<FJsonValue>> SpawnInfos = DataJsonObject->GetArrayField("SpawnInfos");
 
-			for (auto& Rotation : DataJsonObject->GetArrayField("Rotations"))
+			for (auto& SpawnInfo : SpawnInfos)
 			{
-				TSharedPtr<FJsonObject> RotationObj = Rotation->AsObject();
-				GameMode->Rotations.Add(FRotator(RotationObj->GetNumberField("X"), RotationObj->GetNumberField("Y"), RotationObj->GetNumberField("Z")));
-			}
+				TSharedPtr<FJsonObject> SpawnInfoObj = SpawnInfo->AsObject();
 
-			for (auto& Scale : DataJsonObject->GetArrayField("Scales"))
-			{
-				TSharedPtr<FJsonObject> ScaleObj = Scale->AsObject();
-				GameMode->Scales.Add(FVector(ScaleObj->GetNumberField("X"), ScaleObj->GetNumberField("Y"), ScaleObj->GetNumberField("Z")));
-			}
+				FVector Location;
+				Location.X = SpawnInfoObj->GetObjectField("Location")->GetNumberField("X");
+				Location.Y = SpawnInfoObj->GetObjectField("Location")->GetNumberField("Y");
+				Location.Z = SpawnInfoObj->GetObjectField("Location")->GetNumberField("Z");
+				GameMode->Locations.Add(Location);
 
-			for (auto& ActorClass : DataJsonObject->GetArrayField("ActorClasses"))
-			{
-				GameMode->ActorClasses.Add(ActorClass->AsString());
-			}
+				FRotator Rotation;
+				Rotation.Pitch = SpawnInfoObj->GetObjectField("Rotation")->GetNumberField("X");
+				Rotation.Yaw = SpawnInfoObj->GetObjectField("Rotation")->GetNumberField("Y");
+				Rotation.Roll = SpawnInfoObj->GetObjectField("Rotation")->GetNumberField("Z");
+				GameMode->Rotations.Add(Rotation);
 
-			for (auto& SpawnTime : DataJsonObject->GetArrayField("SpawnTime"))
-			{
-				GameMode->SpawnTimes.Add(SpawnTime->AsNumber());
-			}
+				FVector Scale;
+				Scale.X = SpawnInfoObj->GetObjectField("Scale")->GetNumberField("X");
+				Scale.Y = SpawnInfoObj->GetObjectField("Scale")->GetNumberField("Y");
+				Scale.Z = SpawnInfoObj->GetObjectField("Scale")->GetNumberField("Z");
+				GameMode->Scales.Add(Scale);
 
-			for (auto& LifeSpan : DataJsonObject->GetArrayField("LifeSpan"))
-			{
-				GameMode->LifeSpans.Add(LifeSpan->AsNumber());
+				FString ActorClass = SpawnInfoObj->GetStringField("ActorClass");
+				GameMode->ActorClasses.Add(ActorClass);
+
+				double SpawnTime = SpawnInfoObj->GetNumberField("SpawnTime");
+				GameMode->SpawnTimes.Add(SpawnTime);
 			}
 		}
 	}
@@ -175,12 +173,6 @@ void UOSY_JsonParseLibrary::LevelJsonParse(const FString& OriginData, AOSY_Creat
 	for (double SpawnTime : GameMode->SpawnTimes)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%f"), SpawnTime);
-	}
-
-	UE_LOG(LogTemp, Warning, TEXT("LifeSpans:"));
-	for (int32 LifeSpan : GameMode->LifeSpans)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%d"), LifeSpan);
 	}
 }
 
