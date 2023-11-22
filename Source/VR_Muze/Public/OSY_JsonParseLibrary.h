@@ -30,5 +30,9 @@ public:
 	
 	static FString MakeJson(TMap<FString, FString> source);
 
+	static FVector ParseFVector(const FString& Str);
+
+	static FRotator ParseFRotator(const FString& Str);
+
 	
 };

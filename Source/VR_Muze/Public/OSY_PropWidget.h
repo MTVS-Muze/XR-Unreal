@@ -191,6 +191,9 @@ public:
 	
 	UPROPERTY()
    class UOSY_OutLinerWidget* OutlinerWidgetInstance;
+
+   UFUNCTION()
+   void LoadJson();
     
 
 	

@@ -4,15 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "KJS_GameModeBase.h"
 #include "OSY_SequenceWidget.generated.h"
 
-struct FActorSpawnInfo2
+struct FLevelInfo
 {
 	FVector Location;
 	FRotator Rotation;
 	FVector Scale;
 	UClass* ActorClass;
 	float SpawnTime;
+	float LifeSpan;
 };
 UCLASS()
 class VR_MUZE_API UOSY_SequenceWidget : public UUserWidget
@@ -86,11 +88,12 @@ public :
 	TArray<float> SavedSpawnTimes;
 	TArray<TSubclassOf<AActor>> SavedActorClasses;
 
-	TArray<FActorSpawnInfo2> PendingSpawns;
 
 	
 	UPROPERTY()
 	class AOSY_HttpRequestActor* HttpActor;
+
+	TArray<FLevelInfo> PendingSpawns;
 #pragma endregion
 
 	
@@ -109,6 +112,8 @@ public :
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	class USoundBase* Song;
+
+	int32 currentIndex = 0;
 
 
 

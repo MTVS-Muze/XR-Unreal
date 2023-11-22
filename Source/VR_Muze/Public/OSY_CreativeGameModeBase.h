@@ -87,8 +87,8 @@ public:
 	TArray<FRotator> Rotations;
 	TArray<FVector> Scales;
 	TArray<FString> ActorClasses;
-	TArray<double> SpawnTimes;
-	TArray<int32> LifeSpans;
+	TArray<float> SpawnTimes;
+	TArray<float> LifeSpans;
 	
 
 };

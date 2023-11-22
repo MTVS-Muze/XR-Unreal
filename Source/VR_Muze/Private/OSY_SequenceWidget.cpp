@@ -34,7 +34,8 @@ void UOSY_SequenceWidget::NativeConstruct()
 #pragma endregion
 
 
-    LoadJsonData();
+    FTimerHandle TimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UOSY_SequenceWidget::LoadJsonData, 2.0f, false);
 }
 
 void UOSY_SequenceWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -42,6 +43,7 @@ void UOSY_SequenceWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaT
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
     CurrentTime = TimeManager->CurrentTime;
+    UE_LOG(LogTemp,Warning,TEXT("%f"),CurrentTime);
 
     if (CurrentTime <= MaxTime)
     {
@@ -51,34 +53,35 @@ void UOSY_SequenceWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaT
         }
     }
 
-    for (int32 i = PendingSpawns.Num() - 1; i >= 0; --i)
+    if (currentIndex >= PendingSpawns.Num())
     {
-        const FActorSpawnInfo2& SpawnInfo = PendingSpawns[i];
-        if (CurrentTime >= SpawnInfo.SpawnTime)
-        {
-            // 액터를 생성합니다.
-            UWorld* World = GetWorld();
-            if (World && SpawnInfo.ActorClass)
-            {
-                FActorSpawnParameters Params;
-                Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-                AActor* SpawnedActor = World->SpawnActor<AActor>(SpawnInfo.ActorClass, SpawnInfo.Location, SpawnInfo.Rotation, Params);
-                if (SpawnedActor)
-                {
-                    SpawnedActor->SetActorScale3D(SpawnInfo.Scale);
-                    SpawnedActor->SetActorHiddenInGame(false);
+        return;
+    }
 
-                    float DestroyTime = SpawnInfo.SpawnTime + SpawnedActor->GetLifeSpan();
-                    if (TimeManager->CurrentTime >= DestroyTime)
-                    {
-                        SpawnedActor->Destroy();
-                    }
+    const FLevelInfo& SpawnInfo = PendingSpawns[currentIndex];
+    if (CurrentTime >= SpawnInfo.SpawnTime)
+    {
+        UWorld* World = GetWorld();
+        if (World && SpawnInfo.ActorClass)
+        {
+            FActorSpawnParameters Params;
+            Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+            AActor* SpawnedActor = World->SpawnActor<AActor>(SpawnInfo.ActorClass, SpawnInfo.Location, SpawnInfo.Rotation, Params);
+            if (SpawnedActor)
+            {
+                SpawnedActor->SetActorScale3D(SpawnInfo.Scale);
+                SpawnedActor->SetActorHiddenInGame(false);
+
+                float DestroyTime = SpawnInfo.SpawnTime + SpawnedActor->GetLifeSpan();
+                if (TimeManager->CurrentTime >= DestroyTime)
+                {
+                    SpawnedActor->Destroy();
                 }
             }
-
-            // 생성한 액터의 정보는 리스트에서 제거합니다.
-            PendingSpawns.RemoveAt(i);
         }
+
+        // 다음 액터를 스폰하기 위해 currentNodeIndex를 증가시킵니다.
+        currentIndex++;
     }
        
 }
@@ -153,51 +156,36 @@ void UOSY_SequenceWidget::SequenceStop()
 
 void UOSY_SequenceWidget::LoadJsonData()
 {
-    FString LoadPath = FPaths::ProjectSavedDir() / TEXT("SavedData.json");
 
-    FString JsonString;
-    if (FFileHelper::LoadFileToString(JsonString, *LoadPath))
+    // gm에 있는 데이터를 PendingSpawns에 추가한다.
+
+
+    for (int i = 0; i < gm->Locations.Num(); i++)
     {
-        TSharedPtr<FJsonObject> JsonObject;
-        TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create(JsonString);
+        FLevelInfo pendingSpawn;
+        pendingSpawn.Location = gm->Locations[i];
+        pendingSpawn.Rotation = gm->Rotations[i];
+        pendingSpawn.Scale = gm->Scales[i];
 
-        if (FJsonSerializer::Deserialize(JsonReader, JsonObject))
-        {
-            if (JsonObject->HasField(TEXT("Locations")) && JsonObject->HasField(TEXT("Rotations")) && JsonObject->HasField(TEXT("Scales")) && JsonObject->HasField(TEXT("ActorClasses")) && JsonObject->HasField(TEXT("SpawnTime")))
-            {
-                TArray<TSharedPtr<FJsonValue>> LocationsArray = JsonObject->GetArrayField(TEXT("Locations"));
-                TArray<TSharedPtr<FJsonValue>> RotationsArray = JsonObject->GetArrayField(TEXT("Rotations"));
-                TArray<TSharedPtr<FJsonValue>> ScalesArray = JsonObject->GetArrayField(TEXT("Scales"));
-                TArray<TSharedPtr<FJsonValue>> ActorClassesArray = JsonObject->GetArrayField(TEXT("ActorClasses"));
-                TArray<TSharedPtr<FJsonValue>> SpawnTimeArray = JsonObject->GetArrayField(TEXT("SpawnTime"));
 
-                for (int i = 0; i < LocationsArray.Num(); i++)
-                {
-                    TSharedPtr<FJsonObject> LocationObj = LocationsArray[i]->AsObject();
-                    TSharedPtr<FJsonObject> RotationObj = RotationsArray[i]->AsObject();
-                    TSharedPtr<FJsonObject> ScaleObj = ScalesArray[i]->AsObject();
+        FString BlueprintName = gm->ActorClasses[i];
+        BlueprintName = BlueprintName.Replace(TEXT("_C"), TEXT(""));
+        FString BlueprintHame= gm->ActorClasses[i];
+        FString BlueprintPath = FString::Printf(TEXT("/Game/DEV/OOSY/Blueprints/BP_Niagara/%s.%s"), *BlueprintName, *BlueprintHame);
+        
 
-                    FVector LoadedLocation(LocationObj->GetNumberField(TEXT("X")), LocationObj->GetNumberField(TEXT("Y")), LocationObj->GetNumberField(TEXT("Z")));
-                    FRotator LoadedRotation(RotationObj->GetNumberField(TEXT("Pitch")), RotationObj->GetNumberField(TEXT("Yaw")), RotationObj->GetNumberField(TEXT("Roll")));
-                    FVector LoadedScale(ScaleObj->GetNumberField(TEXT("X")), ScaleObj->GetNumberField(TEXT("Y")), ScaleObj->GetNumberField(TEXT("Z")));
+        UClass* ActorClass = LoadObject<UClass>(nullptr, *BlueprintPath);
+        pendingSpawn.ActorClass = ActorClass;
 
-                    FString ActorClassName = ActorClassesArray[i]->AsString();
-                    UClass* ActorClass = LoadObject<UClass>(nullptr, *ActorClassName);
+        pendingSpawn.SpawnTime = gm->SpawnTimes[i];
+        pendingSpawn.LifeSpan = gm->LifeSpans[i];
 
-                    float SavedTime = SpawnTimeArray[i]->AsNumber();
+        PendingSpawns.Add(pendingSpawn);
 
-                    FActorSpawnInfo2 SpawnInfo;
-                    SpawnInfo.Location = LoadedLocation;
-                    SpawnInfo.Rotation = LoadedRotation;
-                    SpawnInfo.Scale = LoadedScale;
-                    SpawnInfo.ActorClass = ActorClass;
-                    SpawnInfo.SpawnTime = SavedTime;
 
-                    PendingSpawns.Add(SpawnInfo);
-                }
-            }
-        }
     }
+
+
 }
 
 

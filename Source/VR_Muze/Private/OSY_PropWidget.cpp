@@ -64,6 +64,8 @@ void UOSY_PropWidget::NativeConstruct()
 	btn_PostJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostJSon);
 // sever get(????)
 	btn_GetLevel->OnClicked.AddDynamic(this, &UOSY_PropWidget::GetLevel);
+// sever check
+	btn_LoadJsonData->OnClicked.AddDynamic(this,&UOSY_PropWidget::LoadJson);
 
 }
 
@@ -481,6 +483,41 @@ void UOSY_PropWidget::PostJSon()
 	}
 }
 
+
+void UOSY_PropWidget::LoadJson()
+{
+
+	// 로그 출력
+	UE_LOG(LogTemp, Warning, TEXT("Locations:"));
+	for (const FVector& Location : gm->Locations)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *Location.ToString());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Rotations:"));
+	for (const FRotator& Rotation : gm->Rotations)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *Rotation.ToString());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Scales:"));
+	for (const FVector& Scale : gm->Scales)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *Scale.ToString());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("ActorClasses:"));
+	for (const FString& ActorClass : gm->ActorClasses)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *ActorClass);
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("SpawnTimes:"));
+	for (double SpawnTime : gm->SpawnTimes)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%f"), SpawnTime);
+	}
+}
 
 // 레벨데이터를 받아내는 함수
 void UOSY_PropWidget::GetLevel()
