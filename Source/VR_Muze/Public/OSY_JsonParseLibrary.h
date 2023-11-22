@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "KJS_GameModeBase.h"
+#include "OSY_CreativeGameModeBase.h"
 #include "OSY_JsonParseLibrary.generated.h"
 
 /**
@@ -22,7 +23,8 @@ public:
 
 	static TArray<FAllLevelData> AllLevelJsonParse(const FString& originData);
 
-	static FString LevelJsonParse(const FString& originData);
+	static void LevelJsonParse(const FString& OriginData, AOSY_CreativeGameModeBase* GameMode);
+	
 
 	TSharedPtr<FJsonObject> ParseJSON(const FString& JSONString);
 	

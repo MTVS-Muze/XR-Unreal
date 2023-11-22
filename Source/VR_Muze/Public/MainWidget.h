@@ -48,8 +48,6 @@ public:
 
 public:
 	//BoxList 캔버스
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=BoxList)
-	class UScrollBox* sb_BoxList;
 
 	//뒤로가기
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=BoxList)
@@ -146,5 +144,30 @@ public:
 	class ALevelSequenceActor* LevelSequenceActor= nullptr; // 멤버 변수로 선언
 
 	FString LevelName2;
+
+	UPROPERTY()
+	class AModeSelectGameModeBase* MSgm;
+
+	UFUNCTION()
+    void DisplayLevelInfo();
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=BoxList)
+	class UScrollBox* sb_BoxList;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UVerticalBox* vb_Level;
+	
+	
+
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	class AOSY_HttpRequestActor* HttpActor;
+
+	UPROPERTY(EditAnywhere,Category= MySettings)
+    class UOSY_MainWidgetButton* ButtonWidget;
+
+	UFUNCTION()
+	void OnButtonClicked(int LevelId);
 
 };

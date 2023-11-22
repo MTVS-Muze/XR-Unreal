@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "KJS_GameModeBase.h"
 #include "ModeSelectGameModeBase.generated.h"
 
 /**
@@ -31,6 +32,9 @@ public:
 
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
+
+	TArray<FAllLevelData> AllLevelArray;
+
 
 private:
 	

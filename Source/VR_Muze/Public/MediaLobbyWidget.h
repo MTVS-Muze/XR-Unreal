@@ -41,6 +41,7 @@ public:
 	class AKJS_Box* MediaBox;
 ////////////////////////////////////////////////
 //Canvas Original
+#pragma region CanvasOriginal
 public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Main)
 	class UWidgetSwitcher* ws_CategorySwitcher;
@@ -117,9 +118,11 @@ public:
 
 	UFUNCTION()
 	void OnClickedbtn_DownOriginal();
+#pragma endregion
 
-public:
 //Canvas Social
+#pragma region Canvas Social
+public:
 UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Original)
 	class UButton* btn_UpSocial;
 
@@ -166,6 +169,7 @@ UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Original)
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Original)
 	class UButton* btn_RightSocial;
 
+
 public:
 	//Canvas_Social 바인딩 함수
 	UFUNCTION()
@@ -179,7 +183,10 @@ public:
 	UFUNCTION()
 	void OnCheckedbtn_RightSocial();
 
+#pragma endregion
+
 //Canvas_ChoiceJoinOrCreate
+#pragma region Canvas_ChoiceJoinOrCreate
 public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=JoinOrCreate)
 	class UButton* btn_JoinSession;
@@ -198,9 +205,9 @@ private:
 	UFUNCTION()
 	void OnClickedbtn_CreateSession();
 
+#pragma endregion
 
 public:
-	//MakingRoom
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
 	class UEditableText* edit_roomName;						
 													
@@ -210,11 +217,6 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
 	class UButton* btn_Back2;
 
-	UPROPERTY()
-	class UOSY_GameInstance* gi;
-
-	UPROPERTY(EditAnywhere, Category= MySettings)
-	class AOSY_HttpRequestActor* HttpActor;
 
 
 public:
@@ -263,6 +265,41 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Sofa)
 	TSubclassOf<class AKJS_BoxSofa> MultiBoxSofa;
+
+#pragma region Seyoung
+public:
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTextBlock* text_Title;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTextBlock* text_Singer;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTextBlock* text_Artist;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTextBlock* text_Info;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UTextBlock* text_ID;
+	
+	UPROPERTY()
+	class AKJS_GameModeBase* gm;
+
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
+
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	class AOSY_HttpRequestActor* HttpActor;
+
+	UFUNCTION()
+	void SetWidgetText(int id);
+
+	UPROPERTY(EditAnywhere,Category=MySettings)
+	int idnum=0;
+
+	
+#pragma endregion
 
 
 };

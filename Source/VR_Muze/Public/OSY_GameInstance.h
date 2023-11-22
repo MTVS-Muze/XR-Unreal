@@ -219,6 +219,10 @@ public:
 	// 커스텀 정보
 	int color, hat, glass, tie;
 	
+	// 재생할 애 아이디
+	int PlayId;
+
+	void ReceiveLevelDataID(int LevelDataID);
 
 
 

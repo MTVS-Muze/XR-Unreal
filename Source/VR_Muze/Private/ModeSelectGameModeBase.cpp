@@ -23,7 +23,13 @@ void AModeSelectGameModeBase::BeginPlay()
     }
     gi = Cast<UOSY_GameInstance>(GetGameInstance());
     HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
+   
+   
     GetMemberInfo();
+
+
+   
+
 }
 
 void AModeSelectGameModeBase::GetMemberInfo()
@@ -32,6 +38,8 @@ UE_LOG(LogTemp,Warning,TEXT("haigo"));
         if (HttpActor != nullptr)
         {
             HttpActor->SendRequest(gi->MemberInfourl);
+            HttpActor->SendRequest(gi->AllMap);
         }
     
 }
+

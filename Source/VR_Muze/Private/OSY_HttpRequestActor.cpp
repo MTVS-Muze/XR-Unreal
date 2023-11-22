@@ -11,6 +11,8 @@
 #include "OSY_JsonParseLibrary.h"
 #include "OSY_PropWidget.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "KJS_GameModeBase.h"
+#include "ModeSelectGameModeBase.h"
 
 // Sets default values
 AOSY_HttpRequestActor::AOSY_HttpRequestActor()
@@ -29,6 +31,7 @@ void AOSY_HttpRequestActor::BeginPlay()
 
 
 	OCgm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
+	MSgm = GetWorld()->GetAuthGameMode<AModeSelectGameModeBase>();
 	KVgm = GetWorld()->GetAuthGameMode<AKJS_GameModeBase>();
 
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
@@ -84,7 +87,7 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 
 	}
 	// 내가 만든 레벨 하나만 줘
-	else if (url == gi->MapDetailInfo)
+	else 
 	{
 		req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnReceivedlevelData);
 
@@ -177,6 +180,10 @@ void AOSY_HttpRequestActor::OnReceivedAllLevel(FHttpRequestPtr Request, FHttpRes
 		{
 			KVgm->AllLevelArray=AllLevel;
 		}
+		else if (currentLevel == "4_ViewMapLobby"||currentLevel =="3_CreativeLevel" )
+		{
+			MSgm->AllLevelArray=AllLevel;
+		}
 
 		for (const FAllLevelData& Data : AllLevel)
 		{
@@ -205,12 +212,9 @@ void AOSY_HttpRequestActor::OnReceivedlevelData(FHttpRequestPtr Request, FHttpRe
 	if (bConnectedSuccessfully)
 	{
 		FString res = Response->GetContentAsString();
-		FString parsedData = UOSY_JsonParseLibrary::LevelJsonParse(res);
+		UOSY_JsonParseLibrary::LevelJsonParse(res,OCgm);
 
-		if (gi != nullptr)
-		{
-			gi->parseLevelData = parsedData;
-		}
+		
 	}
 	else
 	{

@@ -75,6 +75,20 @@ public:
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
 
+
+	UPROPERTY()
+	class AOSY_HttpRequestActor* HttpActor;
+
+	UFUNCTION()
+	void Request();
+
+public:
+	TArray<FVector> Locations;
+	TArray<FRotator> Rotations;
+	TArray<FVector> Scales;
+	TArray<FString> ActorClasses;
+	TArray<double> SpawnTimes;
+	TArray<int32> LifeSpans;
 	
 
 };
