@@ -8,6 +8,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "MediaLobbyWidget.h"
 #include "OSY_GameInstance.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AKJS_BoxSofa::AKJS_BoxSofa()
@@ -23,6 +24,8 @@ AKJS_BoxSofa::AKJS_BoxSofa()
 	SelectedStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	SelectedStaticMesh->SetupAttachment(RootComponent);
 	SelectedStaticMesh->SetRelativeScale3D(FVector(3.5f));
+
+	SetReplicates(true);
 
 }
 

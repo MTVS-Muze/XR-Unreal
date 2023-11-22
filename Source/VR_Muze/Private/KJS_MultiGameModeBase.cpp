@@ -35,6 +35,7 @@ void AKJS_MultiGameModeBase::BeginPlay()
         APlayerStart* HostStartSpot = UsedPlayerStarts[0];
         UsedPlayerStarts.RemoveAt(0);
         HostController->GetPawn()->SetActorLocation(HostStartSpot->GetActorLocation());
+        HostController->GetPawn()->SetActorRotation(HostStartSpot->GetActorRotation());
     }
 }
 
