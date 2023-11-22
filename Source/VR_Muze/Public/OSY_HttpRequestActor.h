@@ -73,6 +73,9 @@ public:
 	UPROPERTY()
 	class AKJS_GameModeBase* KVgm;
 
+	UPROPERTY()
+	class AModeSelectGameModeBase* MSgm;
+
 	// 파일 세이브하기
 	void SaveJson(const FString jsonData);
 

@@ -20,12 +20,14 @@
 #include "KJS_GameModeBase.h"
 #include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
 #include "OSY_HttpRequestActor.h"
+#include "ModeSelectGameModeBase.h"
 
 
 void UMediaLobbyWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	gm =GetWorld()->GetAuthGameMode<AKJS_GameModeBase>();
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
@@ -50,6 +52,9 @@ void UMediaLobbyWidget::NativeConstruct()
 	btn_RightOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Right);
 	btn_UpOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_UpOriginal);
 	btn_DownOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_DownOriginal);
+
+	
+
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	//Canvas_Social
@@ -149,31 +154,35 @@ void UMediaLobbyWidget::OnClickedbtn_UpOriginal()
 void UMediaLobbyWidget::OnClickedbtn_DownOriginal()
 {
 	SwitchCanvasCategory(1);
+	HttpActor->SendRequest(gi->AllMap);
+	if (!gm->AllLevelArray.IsEmpty())
+	{
+		SetWidgetText(idnum);
+	}
 }
 #pragma region Social
 void UMediaLobbyWidget::OnClickedbtn_UpSocial()
 {
 	SwitchCanvasCategory(0);
-	// 서버에 저장된 레벨 1개 불러와서 인포에 띄워
-	HttpActor->SendRequest(gi->AllMap);
 }
 
 void UMediaLobbyWidget::OnClickedbtn_DownSocial()
 {
 	SwitchCanvasCategory(2);
-	// 서버에 저장된 레벨 1개 불러와서 인포에 띄워
-	HttpActor->SendRequest(gi->AllMap);
 }
 
 void UMediaLobbyWidget::OnCheckedbtn_LeftSocial()
 {
 	// 데이터 불러와
+	idnum++;
+	SetWidgetText(idnum);
 }
 
 void UMediaLobbyWidget::OnCheckedbtn_RightSocial()
 {
 	// 데이터 불러와
-
+	idnum--;
+	SetWidgetText(idnum);
 }
 #pragma endregion 
 
@@ -234,6 +243,25 @@ void UMediaLobbyWidget::OnCheckedDoubleSit2(bool bIsChcecked)
 	{
 		Check_DoubleSit1->SetIsChecked(false);
 	}
+}
+
+
+void UMediaLobbyWidget::SetWidgetText(int id)
+{
+	FText IDText = FText::AsNumber(gm->AllLevelArray[id].Id);
+	text_ID->SetText(IDText);
+
+	FText TitleText = FText::FromString(gm->AllLevelArray[id].Title);
+	text_Title->SetText(TitleText);
+
+	FText SingerText = FText::FromString(gm->AllLevelArray[id].Singer);
+	text_Singer->SetText(SingerText);
+
+	FText ArtistText = FText::FromString(gm->AllLevelArray[id].MemberName);
+	text_Artist->SetText(ArtistText);
+
+	FText InfoText = FText::FromString(gm->AllLevelArray[id].Info);
+	text_Info->SetText(InfoText);
 }
 
 void UMediaLobbyWidget::CreateDoubleRoom()

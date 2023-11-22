@@ -11,6 +11,7 @@
 #include "OSY_LoginWidget.h"
 #include "OSY_OutLinerWidget.h"
 #include "OSY_GameInstance.h"
+#include "OSY_HttpRequestActor.h"
 
 AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
 {
@@ -19,7 +20,6 @@ AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
     {
         LevelInfoTable = DataTable.Object;
     }
-    TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
 
 }
 
@@ -28,7 +28,9 @@ void AOSY_CreativeGameModeBase::BeginPlay()
     Super::BeginPlay();
 
     gi = Cast<UOSY_GameInstance>(GetGameInstance());
+    HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
+    TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
 
     httpUI = CreateWidget<UOSY_PropWidget>(GetWorld(), httpWidget);
     if (httpUI != nullptr)
@@ -83,6 +85,8 @@ void AOSY_CreativeGameModeBase::BeginPlay()
             UE_LOG(LogTemp, Error, TEXT("TimeManager is null."));
         }
     }
+
+    Request();
 }
 
 void AOSY_CreativeGameModeBase::Tick(float DeltaTime)
@@ -111,5 +115,14 @@ void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
 	
 }
 
+void AOSY_CreativeGameModeBase::Request()
+{
+    if (HttpActor != nullptr)
+    {
+        FString GiId=FString::FormatAsNumber(gi->PlayId);
+        FString IdMapDetailInfo = gi->MapDetailInfo+"/"+GiId;
+        HttpActor->SendRequest(IdMapDetailInfo);
+    }
+}
 
 

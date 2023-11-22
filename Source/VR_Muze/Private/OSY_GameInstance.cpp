@@ -366,6 +366,14 @@ void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 	}
 }
 
+
+void UOSY_GameInstance::ReceiveLevelDataID(int LevelDataID)
+{
+	PlayId=LevelDataID;
+
+	UE_LOG(LogTemp,Warning,TEXT("%d"),PlayId);
+}
+
 void UOSY_GameInstance::ParsePlayerData()
 {
 	parsePlayerData.ParseIntoArray(DataArray, TEXT(":"), true);
