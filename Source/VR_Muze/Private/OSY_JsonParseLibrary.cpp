@@ -107,6 +107,9 @@ void UOSY_JsonParseLibrary::LevelJsonParse(const FString& OriginData, AOSY_Creat
 	if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
 	{
 		FString Data = JsonObject->GetStringField("data");
+		FString Song = JsonObject->GetStringField("song");
+		GameMode->PlaySong = Song;
+		//UE_LOG(LogTemp,Warning,TEXT("Song :%s"),*Song);
 
 		TSharedRef<TJsonReader<TCHAR>> DataReader = TJsonReaderFactory<TCHAR>::Create(Data);
 		TSharedPtr<FJsonObject> DataJsonObject = MakeShareable(new FJsonObject);

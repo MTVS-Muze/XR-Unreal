@@ -43,7 +43,15 @@ void UOSY_SequenceWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaT
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
     CurrentTime = TimeManager->CurrentTime;
-    UE_LOG(LogTemp,Warning,TEXT("%f"),CurrentTime);
+    //UE_LOG(LogTemp,Warning,TEXT("%f"),CurrentTime);
+
+
+    int32 TotalSeconds = FMath::RoundToInt(CurrentTime);
+    int32 Minutes = TotalSeconds / 60;
+    int32 Seconds = TotalSeconds % 60;
+
+    FString TimeString = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
+    tb_Currentime->SetText(FText::FromString(TimeString));
 
     if (CurrentTime <= MaxTime)
     {

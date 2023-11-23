@@ -89,6 +89,8 @@ public:
 	TArray<FString> ActorClasses;
 	TArray<float> SpawnTimes;
 	TArray<float> LifeSpans;
+
+	FString PlaySong;
 	
 
 };

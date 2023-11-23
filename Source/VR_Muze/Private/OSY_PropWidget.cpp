@@ -73,10 +73,11 @@ void UOSY_PropWidget::NativeConstruct()
 void UOSY_PropWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-
+	
 	if (TimeManager->bShouldTick)
 	{
 		CurrentTime=TimeManager->CurrentTime;
+		
 	}
 
 }
@@ -486,6 +487,8 @@ void UOSY_PropWidget::PostJSon()
 
 void UOSY_PropWidget::LoadJson()
 {
+
+	UE_LOG(LogTemp, Warning, TEXT("GmSong:%s"),*gm->PlaySong);
 
 	// 로그 출력
 	UE_LOG(LogTemp, Warning, TEXT("Locations:"));

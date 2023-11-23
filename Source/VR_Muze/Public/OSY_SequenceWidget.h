@@ -52,6 +52,12 @@ public :
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UButton* btn_Pause;
   
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* tb_MaxTime;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* tb_Currentime;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* tb_SongName;
 
 	
 

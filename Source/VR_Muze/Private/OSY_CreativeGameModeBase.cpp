@@ -12,6 +12,7 @@
 #include "OSY_OutLinerWidget.h"
 #include "OSY_GameInstance.h"
 #include "OSY_HttpRequestActor.h"
+#include "Runtime/UMG/Public/Components/TextBlock.h"
 
 AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
 {
@@ -50,7 +51,6 @@ void AOSY_CreativeGameModeBase::BeginPlay()
         OutLinerUI->AddToViewport();
     }
 
-    SetMaxTimeFromSong();
 
     if (LevelInfoTable != nullptr)
     {
@@ -87,6 +87,9 @@ void AOSY_CreativeGameModeBase::BeginPlay()
     }
 
     Request();
+
+    FTimerHandle TimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AOSY_CreativeGameModeBase::SetMaxTimeFromSong, 2.0f, false);
 }
 
 void AOSY_CreativeGameModeBase::Tick(float DeltaTime)
@@ -97,7 +100,7 @@ void AOSY_CreativeGameModeBase::Tick(float DeltaTime)
 void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
 {
     // 선택한 노래의 이름을 가져옵니다.
-    FString songName = gi->song;
+    FString songName = PlaySong;
 
     // 노래의 경로를 생성합니다.
     FString songPath = FString::Printf(TEXT("/Game/DEV/Sounds/%s.%s"), *songName, *songName);
@@ -110,6 +113,15 @@ void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
     {
         superShy=Song;
         SequnceUI->MaxTime = Song->Duration;
+        int32 TotalSeconds = FMath::RoundToInt(Song->Duration);
+        int32 Minutes = TotalSeconds / 60;
+        int32 Seconds = TotalSeconds % 60;
+
+        FString TimeString = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
+        SequnceUI->tb_MaxTime->SetText(FText::FromString(TimeString));
+
+        SequnceUI->tb_SongName->SetText(FText::FromString(songName));
+
     }
 
 	
