@@ -22,6 +22,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputMappingContext.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputAction.h"
+#include "KJS_GameModeBase.h"
 
 
 
@@ -33,11 +34,11 @@ AMyCharacter::AMyCharacter()
 	//VR카메라
 	hmdCam = CreateDefaultSubobject<UCameraComponent>(TEXT("HMD Camera"));
 	hmdCam->SetupAttachment(RootComponent);
-	hmdCam->bAutoActivate = false;
+	hmdCam->bAutoActivate = true;
 	//VR카메라 메쉬
 	hmdMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HMD Mesh"));
 	hmdMesh->SetupAttachment(hmdCam);
-	//hmdMesh->SetVisibility(false);
+	hmdMesh->SetVisibility(false);
 
 	//StartCam = CreateDefaultSubobject<UCameraComponent>(TEXT("StartCam"));
 	//StartCam->SetupAttachment(RootComponent);
@@ -82,10 +83,10 @@ AMyCharacter::AMyCharacter()
 	}
 	////////////////////////////////////////////////
 	////////////////////////////////////////////////
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = true;
+	bUseControllerRotationPitch = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
-	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
 
@@ -153,7 +154,7 @@ void AMyCharacter::BeginPlay()
 	}
 	pc = GetController<APlayerController>();
 
-	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Stage);
+	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Eye);
 
 
 	if (pc)
@@ -175,14 +176,8 @@ void AMyCharacter::BeginPlay()
 		rightHand->SetVisibility(false);
 		leftHand->SetVisibility(false);
 		hmdMesh->SetVisibility(false);
-		//StartCam->Activate();
-		//FTimerHandle TimerHandle;
-		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMyCharacter::SwitchVRCamera, 5.0f, false);
-	}
-	else
-	{
-		// 그 외의 맵에서는 StartCam을 비활성화합니다.
-		//StartCam->Deactivate();
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMyCharacter::SwitchVRCamera, 16.5f, false);
 	}
 
 	if (MapName == "CustomizeMap"||MapName.Contains("CH_MAP"))
@@ -245,24 +240,20 @@ void AMyCharacter::SwitchVRCamera()
 {
 	if (pc)
 	{
-		if (APlayerCameraManager* pcm = pc->PlayerCameraManager)
-		{
-			pcm->StartCameraFade(0.f, 1.f, 3.0f, FColor::Black, false, true);
-
-			FTimerHandle TimerHandle;
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, pcm]()
-				{
-					StartCam->Deactivate();
-					hmdCam->Activate();
-					rightHand->SetVisibility(true);
-					leftHand->SetVisibility(true);
-					hmdMesh->SetVisibility(true);
-
-					GetMesh()->SetVisibility(false);
-
-					pcm->StartCameraFade(1.0f, 0.0f, 3.0f, FColor::Black, false, true);
-				}, 3.0f, false);
-		}
+		rightHand->SetVisibility(true);
+		leftHand->SetVisibility(true);
+		hmdMesh->SetVisibility(true);
+		GetMesh()->SetVisibility(false);
+		//if (APlayerCameraManager* pcm = pc->PlayerCameraManager)
+		//{
+		//	//pcm->StartCameraFade(0.f, 1.f, 3.0f, FColor::Black, false, true);
+		//
+		//	FTimerHandle TimerHandle;
+		//	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, pcm]()
+		//		{
+		//			
+		//		}, 1.0f, false);
+		//}
 	}
 }
 

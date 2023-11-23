@@ -12,10 +12,6 @@ void AKJS_GameModeBase::InitGame(const FString& MapName, const FString& Options,
 {
     Super::InitGame(MapName, Options, ErrorMessage);
 
-    
-
-    //FTimerHandle TimerHandle;
-    //GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AKJS_GameModeBase::OnLevelSequenceEnd, 10.0f, false);
 }
 
 void AKJS_GameModeBase::BeginPlay()

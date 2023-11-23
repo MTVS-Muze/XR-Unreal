@@ -42,6 +42,8 @@ public:
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
 
+public:
+    class AMyCharacter* MyCharacter;
 
 
 };

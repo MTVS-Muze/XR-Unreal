@@ -73,8 +73,8 @@ public:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	//class UWidgetComponent* EnterRoomWidget;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	class UCameraComponent* StartCam;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	//class UCameraComponent* StartCam;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UStaticMeshComponent* StarthmdMesh;
