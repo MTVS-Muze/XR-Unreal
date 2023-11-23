@@ -37,14 +37,29 @@ public:
 	FString url ="http://192.168.0.189:8080/give/token";
 #pragma endregion
 
+
+
+#pragma region LoginCanvas
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
+	class UButton* btn_Login;
+
+	UFUNCTION()
+	void GotoLoginCanvas();
+
+#pragma endregion
+
+#pragma region LoginWeb
+	UFUNCTION()
+	void GotoStartCanvas();
+#pragma endregion
+
 #pragma region StartCanvas
 
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category= Login)
 	class UButton* btn_Start;
 
-	UFUNCTION()
-	void GotoLoginCanvas();
 
 #pragma endregion
 
@@ -77,6 +92,8 @@ public:
 
 	
 #pragma endregion
+	UFUNCTION()
+	void SwithchCanvas();
 
 #pragma region GetToken
 
@@ -97,6 +114,13 @@ UPROPERTY()
 
 	UFUNCTION()
 	void OnStop();
+
+	UFUNCTION()
+	void GetCustom();
+
+
+	UPROPERTY()
+	FString BearerToken;
 
 
 
