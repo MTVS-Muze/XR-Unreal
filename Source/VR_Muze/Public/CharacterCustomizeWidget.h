@@ -59,11 +59,11 @@ public:
 	void OnClickedbtn_BackSelect();
 
 //Color Panel
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
-    TArray<UMaterialInstance*> BodyMaterials;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+   //TArray<UMaterialInstance*> BodyMaterials;
 
-	UFUNCTION()
-	void SwitchBodyColor(int32 Index);
+	//UFUNCTION()
+	//void SwitchBodyColor(int32 Index);
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ColorBtn)
 	class UButton* btn_Black;
@@ -127,17 +127,8 @@ public:
 	void SwitchColorNavy();
 ////////////////////////////////////////////////////////
 //Accessory Panel
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
-	TArray<UStaticMesh*> GlassMeshes;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
-	class UStaticMeshComponent* AttachedGlass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
-	class UStaticMeshComponent* AttachedHat;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
-	class UStaticMeshComponent* AttachedTie;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	//TArray<UStaticMesh*> GlassMeshes;
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=AccessoryMain)
 	class UWidgetSwitcher* ws_AccessorySwitch;
@@ -164,8 +155,8 @@ public:
 	void OnClickedbtn_Tie();
 
 
-	UFUNCTION()
-	void AttachGlass(int32 Index);
+	//UFUNCTION()
+	//void AttachGlass(int32 Index);
 
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryHat)
@@ -227,8 +218,8 @@ public:
 	void WearGlass6();
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
-	TArray<UStaticMesh*> HatMeshes;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	//TArray<UStaticMesh*> HatMeshes;
 
 	UFUNCTION()
 	void WearHat1();
@@ -236,14 +227,14 @@ public:
 	UFUNCTION()
 	void WearHat2();
 
-	UFUNCTION()
-	void AttachHat(int32 Index);
+	//UFUNCTION()
+	//void AttachHat(int32 Index);
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
-	TArray<UStaticMesh*> TieMeshes;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	//TArray<UStaticMesh*> TieMeshes;
 
-	UFUNCTION()
-	void AttachTie(int32 Index);
+	//UFUNCTION()
+	//void AttachTie(int32 Index);
 
 	UFUNCTION()
 	void WearTie1();

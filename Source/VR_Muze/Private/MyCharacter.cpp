@@ -23,6 +23,7 @@
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputMappingContext.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputAction.h"
 #include "KJS_GameModeBase.h"
+#include "OSY_GameInstance.h"
 
 
 
@@ -115,8 +116,154 @@ AMyCharacter::AMyCharacter()
 	IdleAnimation = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/Idle.Idle"));
 	SittingAnimation = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/SittingAnim.SittingAnim"));
 	SittingIdle = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/Sitting_Idle.Sitting_Idle"));
+	//////////////////////////////////////////////////////////////////////////////////
 
+	AttachedGlass = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Glass"));
+	AttachedGlass->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("GlassSocket"));
+
+	AttachedHat = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat"));
+	AttachedHat->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("HatSocket"));
+
+	AttachedTie = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tie"));
+	AttachedTie->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("TieSocket"));
+
+	//////////////////////////////////////////////////////////////////////////////////
 	ai = UKJS_CharacterAnimInstance::StaticClass();
+	//////////////////////////////////////////////////////////////////////////////////
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempBlack(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_Black.Body_Black'"));
+	if (TempBlack.Succeeded())
+	{
+		BodyMaterials.Add(TempBlack.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempWhite(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_White.Body_White'"));
+	if (TempWhite.Succeeded())
+	{
+		BodyMaterials.Add(TempWhite.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempBlue(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_SkyBlue.Body_SkyBlue'"));
+	if (TempBlue.Succeeded())
+	{
+		BodyMaterials.Add(TempBlue.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempPink(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_Pink.Body_Pink'"));
+	if (TempPink.Succeeded())
+	{
+		BodyMaterials.Add(TempPink.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempYellow(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_Yellow.Body_Yellow'"));
+	if (TempYellow.Succeeded())
+	{
+		BodyMaterials.Add(TempYellow.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempGreen(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_Green.Body_Green'"));
+	if (TempGreen.Succeeded())
+	{
+		BodyMaterials.Add(TempGreen.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempDeepYellow(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_DeepYellow.Body_DeepYellow'"));
+	if (TempDeepYellow.Succeeded())
+	{
+		BodyMaterials.Add(TempDeepYellow.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempViolet(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_Violet.Body_Violet'"));
+	if (TempViolet.Succeeded())
+	{
+		BodyMaterials.Add(TempViolet.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempCoral(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_Coral.Body_Coral'"));
+	if (TempCoral.Succeeded())
+	{
+		BodyMaterials.Add(TempCoral.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstance>TempNavy(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/DEV/KJS/Character/Character/Material/Body_Navy.Body_Navy'"));
+	if (TempNavy.Succeeded())
+	{
+		BodyMaterials.Add(TempNavy.Object);
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHat1(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/HAT/meSH/HAT1.HAT1'"));
+	if(TempHat1.Succeeded())
+	{
+		HatMeshes.Add(TempHat1.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHat2(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/HAT/meSH/HAT2.HAT2'"));
+	if (TempHat2.Succeeded())
+	{
+		HatMeshes.Add(TempHat2.Object);
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempGlass1(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Glasses/Glass1.Glass1'"));
+	if (TempGlass1.Succeeded())
+	{
+		GlassMeshes.Add(TempGlass1.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempGlass2(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Glasses/Glass2.Glass2'"));
+	if (TempGlass2.Succeeded())
+	{
+		GlassMeshes.Add(TempGlass2.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempGlass3(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Glasses/Glass3.Glass3'"));
+	if (TempGlass3.Succeeded())
+	{
+		GlassMeshes.Add(TempGlass3.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempGlass4(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Glasses/Glass4.Glass4'"));
+	if (TempGlass4.Succeeded())
+	{
+		GlassMeshes.Add(TempGlass4.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempGlass5(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Glasses/Glass5.Glass5'"));
+	if (TempGlass5.Succeeded())
+	{
+		GlassMeshes.Add(TempGlass5.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempGlass6(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Glasses/Glass6.Glass6'"));
+	if (TempGlass6.Succeeded())
+	{
+		GlassMeshes.Add(TempGlass6.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempGlass7(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Glasses/Glass7.Glass7'"));
+	if (TempGlass7.Succeeded())
+	{
+		GlassMeshes.Add(TempGlass7.Object);
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempTie1(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Tie/BowTie.BowTie'"));
+	if (TempTie1.Succeeded())
+	{
+		TieMeshes.Add(TempTie1.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempTie2(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Tie/BowTie2.BowTie2'"));
+	if (TempTie2.Succeeded())
+	{
+		TieMeshes.Add(TempTie2.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempTie3(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Tie/BowTie3.BowTie3'"));
+	if (TempTie3.Succeeded())
+	{
+		TieMeshes.Add(TempTie3.Object);
+	}
+
+
 
 	//ConstructorHelpers::FObjectFinder<UInputMappingContext> tempIMC(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/DEV/KJS//Character//Input/IMC_Input.IMC_Input'"));
 	//if (tempIMC.Succeeded())
@@ -143,7 +290,16 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("Character's BeginPlay is called."));
+	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+
+
+	if (gi)
+	{
+		SwitchBodyColor(gi->color);
+		AttachHat(gi->hat);
+		AttachGlass(gi->face);
+		AttachTie(gi->tie);
+	}
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -153,7 +309,7 @@ void AMyCharacter::BeginPlay()
 		}
 	}
 	pc = GetController<APlayerController>();
-
+	
 	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Eye);
 
 
@@ -244,6 +400,9 @@ void AMyCharacter::SwitchVRCamera()
 		leftHand->SetVisibility(true);
 		hmdMesh->SetVisibility(true);
 		GetMesh()->SetVisibility(false);
+		AttachedGlass->SetVisibility(false);
+		AttachedHat->SetVisibility(false);
+		AttachedTie->SetVisibility(false);
 		//if (APlayerCameraManager* pcm = pc->PlayerCameraManager)
 		//{
 		//	//pcm->StartCameraFade(0.f, 1.f, 3.0f, FColor::Black, false, true);
@@ -297,5 +456,27 @@ void AMyCharacter::ChangeFOV(UWorld* LoadedWorld)
 			hmdCam->SetFieldOfView(90.0f);  // Change this to your default FOV value
 		}
 	}
+}
+
+
+void AMyCharacter::SwitchBodyColor(int32 Index)
+{
+	GetMesh()->SetMaterial(0, BodyMaterials[Index]);
+}
+
+void AMyCharacter::AttachGlass(int32 Index)
+{
+	AttachedGlass->SetStaticMesh(GlassMeshes[Index]);
+}
+
+void AMyCharacter::AttachHat(int32 Index)
+{
+	AttachedHat->SetStaticMesh(HatMeshes[Index]);
+}
+
+void AMyCharacter::AttachTie(int32 Index)
+{
+	AttachedTie->SetStaticMesh(TieMeshes[Index]);
+
 }
 

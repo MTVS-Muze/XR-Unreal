@@ -95,86 +95,85 @@ void UCharacterCustomizeWidget::OnClickedbtn_BackSelect()
 	SwitchCanvas(0);
 }
 
-void UCharacterCustomizeWidget::SwitchBodyColor(int32 Index)
-{
-	if (Index >= 0 && Index < BodyMaterials.Num() && BodyMaterials[Index] != nullptr)
-	{
-		player->GetMesh()->SetMaterial(0, BodyMaterials[Index]);
-	}
-}
 
 void UCharacterCustomizeWidget::SwitchColorBlack()
 {
-	SwitchBodyColor(0);
 	
 	color=0;
 	gi->color=color;
-
+	player->SwitchBodyColor(color);
 }
 
 void UCharacterCustomizeWidget::SwitchColorWhite()
 {
-	SwitchBodyColor(1);
 	color=1;
 	gi->color = color;
+	
+	player->SwitchBodyColor(color);
 }
 
 void UCharacterCustomizeWidget::SwitchColorSkyBlue()
 {
-	SwitchBodyColor(2);
 	color=2;
 	gi->color = color;
+	
+	player->SwitchBodyColor(color);
 }
 
 void UCharacterCustomizeWidget::SwitchColorPink()
 {
-	//UMaterialInstance* PinkMaterial = Cast<UMaterialInstance>(StaticLoadObject(UMaterialInstance::StaticClass(), nullptr, TEXT("/Game/DEV/KJS/Character/Character/Material/Body_Pink.Body_Pink")));
-
-	SwitchBodyColor(3);
 	color=3;
+	player->SwitchBodyColor(color);
 	gi->color = color;
+
 }
 
 void UCharacterCustomizeWidget::SwitchColorYellow()
 {
-	SwitchBodyColor(4);
 	color=4;
 	gi->color = color;
+	
+	player->SwitchBodyColor(color);
 }
 
 void UCharacterCustomizeWidget::SwitchColorGreen()
 {
-	SwitchBodyColor(5);
 	color=5;
 	gi->color = color;
+
+	player->SwitchBodyColor(color);
 }
 
 void UCharacterCustomizeWidget::SwitchColorDeepYellow()
 {
-	SwitchBodyColor(6);
 	color=6;
 	gi->color = color;
+
+	player->SwitchBodyColor(color);
 }
 
 void UCharacterCustomizeWidget::SwitchColorViolet()
 {
-	SwitchBodyColor(7);
 	color=7;
 	gi->color = color;
+
+	player->SwitchBodyColor(color);
 }
 
 void UCharacterCustomizeWidget::SwitchColorCoral()
 {
-	SwitchBodyColor(8);
 	color=8;
 	gi->color = color;
+
+	player->SwitchBodyColor(color);
 }
 
 void UCharacterCustomizeWidget::SwitchColorNavy()
 {
-	SwitchBodyColor(9);
 	color=9;
 	gi->color = color;
+	
+	player->SwitchBodyColor(color);
 }
 
 void UCharacterCustomizeWidget::SwitchAccessoryCanvas(int32 index)
@@ -198,136 +197,89 @@ void UCharacterCustomizeWidget::OnClickedbtn_Tie()
 	SwitchAccessoryCanvas(2);
 }
 
-void UCharacterCustomizeWidget::AttachGlass(int32 Index)
-{
-	if (Index >= 0 && Index < GlassMeshes.Num() && GlassMeshes[Index] != nullptr)
-	{
-		if (AttachedGlass)
-		{
-			AttachedGlass->DestroyComponent();
-			AttachedGlass = nullptr;
-		}
-		AttachedGlass = NewObject<UStaticMeshComponent>(player);
-		AttachedGlass->SetStaticMesh(GlassMeshes[Index]);
-		AttachedGlass->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("GlassSocket"));
-		AttachedGlass->RegisterComponent();
-	}
-}
 
 void UCharacterCustomizeWidget::WearGlass0()
 {
-	AttachGlass(0);
 	face=0;
 	gi->face=face;
+	player->AttachGlass(face);
 }
 
 void UCharacterCustomizeWidget::WearGlass1()
 {
-	AttachGlass(1);
 	face=1;
 	gi->face = face;
+	player->AttachGlass(face);
 }
 
 void UCharacterCustomizeWidget::WearGlass2()
 {
-	AttachGlass(2);
 	face=2;
 	gi->face = face;
+	player->AttachGlass(face);
 }
 
 void UCharacterCustomizeWidget::WearGlass3()
 {
-	AttachGlass(3);
 	face=3;
 	gi->face = face;
+	player->AttachGlass(face);
 }
 
 void UCharacterCustomizeWidget::WearGlass4()
 {
-	AttachGlass(4);
 	face=4;
 	gi->face = face;
+	player->AttachGlass(face);
 }
 
 void UCharacterCustomizeWidget::WearGlass5()
 {
-	AttachGlass(5);
 	face=5;
 	gi->face = face;
+	player->AttachGlass(face);
 }
 
 void UCharacterCustomizeWidget::WearGlass6()
 {
-	AttachGlass(6);
 	face=6;
 	gi->face = face;
-}
-
-
-void UCharacterCustomizeWidget::AttachHat(int32 Index)
-{
-	if (Index >= 0 && Index < HatMeshes.Num() && HatMeshes[Index] != nullptr)
-	{
-		if (AttachedHat)
-		{
-			AttachedHat->DestroyComponent();
-			AttachedHat = nullptr;
-		}
-		AttachedHat = NewObject<UStaticMeshComponent>(player);
-		AttachedHat->SetStaticMesh(HatMeshes[Index]);
-		AttachedHat->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("HatSocket"));
-		AttachedHat->RegisterComponent();
-	}
+	player->AttachGlass(face);
 }
 
 
 void UCharacterCustomizeWidget::WearHat1()
 {
-	AttachHat(0);
 	hat = 0;
 	gi->hat = hat;
+	player->AttachHat(hat);
 }
 
 void UCharacterCustomizeWidget::WearHat2()
 {
-	AttachHat(1);
 	hat = 1;
 	gi->hat = hat;
+	player->AttachHat(hat);
 }
 
-void UCharacterCustomizeWidget::AttachTie(int32 Index)
-{
-	if (Index >= 0 && Index < TieMeshes.Num() && TieMeshes[Index] != nullptr)
-	{
-		if (AttachedTie)
-		{
-			AttachedTie->DestroyComponent();
-			AttachedTie = nullptr;
-		}
-		AttachedTie = NewObject<UStaticMeshComponent>(player);
-		AttachedTie->SetStaticMesh(TieMeshes[Index]);
-		AttachedTie->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("TieSocket"));
-		AttachedTie->RegisterComponent();
-	}
-}
 
 void UCharacterCustomizeWidget::WearTie1()
 {
-	AttachTie(0);
 	tie = 0;
 	gi->tie = tie;
+	player->AttachTie(tie);
 }
 
 void UCharacterCustomizeWidget::WearTie2()
 {
-	AttachTie(1);
 	tie = 1;
 	gi->tie = tie;
+	player->AttachTie(tie);
 }
 
 void UCharacterCustomizeWidget::WearTie3()
 {
-	AttachTie(2);
 	tie = 2;
 	gi->tie = tie;
+	player->AttachTie(tie);
 }

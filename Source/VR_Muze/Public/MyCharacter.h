@@ -67,6 +67,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	class UWidgetComponent* PlaylistWidget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
+	class UOSY_GameInstance* gi;
+
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	//class UWidgetComponent* ShowHostCodeWidget;
 	//
@@ -117,7 +120,6 @@ public:
 	UFUNCTION()
 	void ChangeFOV(UWorld* LoadedWorld);
 
-
 	UPROPERTY(EditDefaultsOnly, Category = Animation)
     TSubclassOf<UKJS_CharacterAnimInstance> ai;
 
@@ -132,16 +134,44 @@ public:
 
 	UPROPERTY()
     class UAnimSequence* AnimToPlay;
+	/// <summary>
+	/// //////////////////////////////////////////////////////////////////
+	/// </summary>
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+    TArray<UMaterialInstance*> BodyMaterials;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	TArray<UStaticMesh*> HatMeshes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	TArray<UStaticMesh*> GlassMeshes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	TArray<UStaticMesh*> TieMeshes;
 
 
-	UPROPERTY(EditDefaultsOnly, Category = Items)
-    class UStaticMesh* HatMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
+	class UStaticMeshComponent* AttachedGlass;
 
-    UPROPERTY(EditDefaultsOnly, Category = Items)
-	class UStaticMesh* TieMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
+	class UStaticMeshComponent* AttachedHat;
 
-    UPROPERTY(EditDefaultsOnly, Category = Items)
-	class UStaticMesh* GlassMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
+	class UStaticMeshComponent* AttachedTie;
+
+	///////////////////////////////////////////////////////////////
+	UFUNCTION()
+	void SwitchBodyColor(int32 Index);
+
+	UFUNCTION()
+	void AttachGlass(int32 Index);
+
+	UFUNCTION()
+	void AttachHat(int32 Index);
+
+	UFUNCTION()
+	void AttachTie(int32 Index);
 
 	//UStaticMeshComponent* CreateMeshComponent(UStaticMesh* Mesh, const FName& SocketName);
 };

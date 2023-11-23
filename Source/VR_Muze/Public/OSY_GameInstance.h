@@ -225,8 +225,6 @@ public:
 
 	void ReceiveLevelDataID(int LevelDataID);
 
-
-
 	FString title,info,song,singer;
 
 
