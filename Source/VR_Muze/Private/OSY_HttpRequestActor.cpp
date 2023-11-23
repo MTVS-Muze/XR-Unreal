@@ -29,16 +29,14 @@ void AOSY_HttpRequestActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
 	OCgm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
 	MSgm = GetWorld()->GetAuthGameMode<AModeSelectGameModeBase>();
 	KVgm = GetWorld()->GetAuthGameMode<AKJS_GameModeBase>();
 
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
-	Token = gi->Token;
-	BearerToken = "Bearer " + Token;
-	
+
 }
 
 // Called every frame
@@ -46,6 +44,8 @@ void AOSY_HttpRequestActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
+	
 
 }
 
@@ -56,13 +56,14 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedPtr<IHttpRequest> req = httpModule.CreateRequest();
 
-	RequestedURL = url;
+	//RequestedURL = url;
 
+	UE_LOG(LogTemp,Warning,TEXT("SibalZom : %s"),*gi->Token);
 	// 요청하기 위한 정보를 설정한다.
 	req->SetURL(url);
 	req->SetVerb(TEXT("GET"));
 	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
-	req->SetHeader(TEXT("Authorization"), BearerToken);
+	req->SetHeader(TEXT("Authorization"), gi->Token);
 	
 	// 나의 정보를 줘
 	if (url == gi->MemberInfourl)
@@ -139,6 +140,8 @@ void AOSY_HttpRequestActor::OnReceivedCustomData(FHttpRequestPtr Request, FHttpR
 		FString res = Response->GetContentAsString();
 		FString parsedData = UOSY_JsonParseLibrary::PlayerCustomJsonParse(res);
 
+		UE_LOG(LogTemp,Warning,TEXT("Parse : %s"),*res);
+
 		if (gi != nullptr)
 		{
 			TArray<FString> parsedDataArray;
@@ -147,8 +150,13 @@ void AOSY_HttpRequestActor::OnReceivedCustomData(FHttpRequestPtr Request, FHttpR
 
 			gi->color = FCString::Atoi(*parsedDataArray[0]);
 			gi->hat = FCString::Atoi(*parsedDataArray[1]);
-			gi->glass = FCString::Atoi(*parsedDataArray[2]);
+			gi->face = FCString::Atoi(*parsedDataArray[2]);
 			gi->tie = FCString::Atoi(*parsedDataArray[3]);
+
+			UE_LOG(LogTemp,Warning,TEXT("gi->color :%d"),gi->color);
+			UE_LOG(LogTemp,Warning,TEXT("gi->hat :%d"),gi->hat);
+			UE_LOG(LogTemp,Warning,TEXT("gi->face :%d"),gi->face);
+			UE_LOG(LogTemp,Warning,TEXT("gi->tie :%d"),gi->tie);
 
 			gi->parseCustomData = parsedData;
 		}
@@ -241,7 +249,7 @@ void AOSY_HttpRequestActor::PostRequest(const FString url, const FString& JsonSt
 	{
 		JsonObject->SetNumberField("color", gi->color);
 		JsonObject->SetNumberField("hat", gi->hat);
-		JsonObject->SetNumberField("glass", gi->glass);
+		JsonObject->SetNumberField("face", gi->face);
 		JsonObject->SetNumberField("tie", gi->tie);
 	}
 
@@ -257,7 +265,7 @@ void AOSY_HttpRequestActor::PostRequest(const FString url, const FString& JsonSt
 	req->SetURL(url);
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
-	req->SetHeader(TEXT("Authorization"), BearerToken);
+	req->SetHeader(TEXT("Authorization"), gi->Token);
 	req->SetContentAsString(OutputString);
 	req->OnProcessRequestComplete().BindUObject(this, &AOSY_HttpRequestActor::OnPostData);
 	req->ProcessRequest();

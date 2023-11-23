@@ -265,7 +265,7 @@ public:
 	FString JsonStringPost;
 
 
-	int color,glass,tie,hat;
+	int color,face,tie,hat;
 
 
 };

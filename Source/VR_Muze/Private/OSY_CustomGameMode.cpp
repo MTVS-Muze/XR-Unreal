@@ -27,6 +27,6 @@ void AOSY_CustomGameMode::BeginPlay()
     gi = Cast<UOSY_GameInstance>(GetGameInstance());
     HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
-    HttpActor->SendRequest(gi->CustomURL);
+    //HttpActor->SendRequest(gi->CustomURL);
 
 }

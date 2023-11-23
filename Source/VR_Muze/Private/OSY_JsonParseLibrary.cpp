@@ -51,10 +51,10 @@ FString UOSY_JsonParseLibrary::PlayerCustomJsonParse(const FString& originData)
 	{
 		int color = result->GetIntegerField("color");
 		int hat = result->GetIntegerField("hat");
-		int glass = result->GetIntegerField("glass");
+		int face = result->GetIntegerField("face");
 		int tie = result->GetIntegerField("tie");
 		
-		parsedData = FString::Printf(TEXT("%d:%d:%d"), color,hat, glass, tie);
+		parsedData = FString::Printf(TEXT("%d:%d:%d:%d"), color,hat, face, tie);
 	}
 
 	return parsedData;

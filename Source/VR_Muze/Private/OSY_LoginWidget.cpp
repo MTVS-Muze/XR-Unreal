@@ -50,10 +50,13 @@ void UOSY_LoginWidget::NativeConstruct()
 	}
 
 
-	btn_Start->OnClicked.AddDynamic(this, &UOSY_LoginWidget::GotoLoginCanvas);
+	btn_Login->OnClicked.AddDynamic(this, &UOSY_LoginWidget::GotoLoginCanvas);
+	btn_Start->OnClicked.AddDynamic(this, &UOSY_LoginWidget::GotoLobbyMap);
 	
 	loginGM = Cast<AOSY_LoginGameMode>(UGameplayStatics::GetGameMode(this));
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+
+	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
  	WebBrowser = Cast<UWebBrowser>(GetWidgetFromName(TEXT("WebBrowser")));
  	if (WebBrowser)
@@ -73,6 +76,21 @@ void UOSY_LoginWidget::SwithLoginCanvas(int32 index)
 void UOSY_LoginWidget::GotoLoginCanvas()
 {
 	SwithLoginCanvas(1);
+
+}
+
+void UOSY_LoginWidget::GotoStartCanvas()
+{
+
+
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UOSY_LoginWidget::GetCustom, 1.0f, false);
+
+
+	//GetCustom();
+	
+	
 }
 
 void UOSY_LoginWidget::GotoLobbyMap()
@@ -85,22 +103,31 @@ void UOSY_LoginWidget::GotoLobbyMap()
 #pragma endregion 
 
 
+void UOSY_LoginWidget::SwithchCanvas()
+{
+
+	SwithLoginCanvas(2);
+}
+
 void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
 {
 	FString Url = InText.ToString();
 
 	Token2 = ExtractTokenFromUrl(Url);
+	BearerToken = "Bearer " + Token2;
 
 	if (!Token2.IsEmpty())
 	{
 		UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetWorld()->GetGameInstance());
 		if (MyGameInstance != nullptr)
 		{
-			MyGameInstance->Token=Token2;
+
+
+			MyGameInstance->Token= BearerToken;
 			if (!MyGameInstance->Token.IsEmpty())
 			{
-							
-				GotoLobbyMap();
+				UE_LOG(LogTemp,Warning,TEXT("Token : %s"),*MyGameInstance->Token);
+				GotoStartCanvas();
 			}
 		}
 	}
@@ -145,6 +172,13 @@ void UOSY_LoginWidget::OnStop()
 		// 다시 재생
 		Player->Play();
 	}
+}
+
+void UOSY_LoginWidget::GetCustom()
+{
+	HttpActor->SendRequest(gi->CustomURL);
+
+	SwithchCanvas();
 }
 
 void UOSY_LoginWidget::BackToMain()

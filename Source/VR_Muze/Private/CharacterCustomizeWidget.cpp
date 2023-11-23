@@ -217,50 +217,50 @@ void UCharacterCustomizeWidget::AttachGlass(int32 Index)
 void UCharacterCustomizeWidget::WearGlass0()
 {
 	AttachGlass(0);
-	glass=0;
-	gi->glass=glass;
+	face=0;
+	gi->face=face;
 }
 
 void UCharacterCustomizeWidget::WearGlass1()
 {
 	AttachGlass(1);
-	glass=1;
-	gi->glass = glass;
+	face=1;
+	gi->face = face;
 }
 
 void UCharacterCustomizeWidget::WearGlass2()
 {
 	AttachGlass(2);
-	glass=2;
-	gi->glass = glass;
+	face=2;
+	gi->face = face;
 }
 
 void UCharacterCustomizeWidget::WearGlass3()
 {
 	AttachGlass(3);
-	glass=3;
-	gi->glass = glass;
+	face=3;
+	gi->face = face;
 }
 
 void UCharacterCustomizeWidget::WearGlass4()
 {
 	AttachGlass(4);
-	glass=4;
-	gi->glass = glass;
+	face=4;
+	gi->face = face;
 }
 
 void UCharacterCustomizeWidget::WearGlass5()
 {
 	AttachGlass(5);
-	glass=5;
-	gi->glass = glass;
+	face=5;
+	gi->face = face;
 }
 
 void UCharacterCustomizeWidget::WearGlass6()
 {
 	AttachGlass(6);
-	glass=6;
-	gi->glass = glass;
+	face=6;
+	gi->face = face;
 }
 
 

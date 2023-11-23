@@ -217,7 +217,8 @@ public:
 	int id;
 	FString name, sub, profileImage, platform, role, email;
 	// 커스텀 정보
-	int color, hat, glass, tie;
+	int color, hat, face;
+	int tie;
 	
 	// 재생할 애 아이디
 	int PlayId;
