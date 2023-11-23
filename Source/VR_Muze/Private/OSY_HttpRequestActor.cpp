@@ -142,7 +142,7 @@ void AOSY_HttpRequestActor::OnReceivedCustomData(FHttpRequestPtr Request, FHttpR
 
 		UE_LOG(LogTemp,Warning,TEXT("Parse : %s"),*res);
 
-		if (gi != nullptr)
+		if (!parsedData.IsEmpty() && gi != nullptr)
 		{
 			TArray<FString> parsedDataArray;
 			parsedData.ParseIntoArray(parsedDataArray, TEXT(":"), true);

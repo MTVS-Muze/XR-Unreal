@@ -178,6 +178,8 @@ void UOSY_LoginWidget::GetCustom()
 {
 	HttpActor->SendRequest(gi->CustomURL);
 
+	
+
 	SwithchCanvas();
 }
 
