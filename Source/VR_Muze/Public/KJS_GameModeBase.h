@@ -28,4 +28,20 @@ class VR_MUZE_API AKJS_GameModeBase : public AGameModeBase
 public:
     TArray<FAllLevelData> AllLevelArray;
 
+protected:
+    virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+
+	void BeginPlay() override;
+
+    UFUNCTION()
+    void OnLevelSequenceEnd();
+
+    
+
+public:
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
+
+
+
 };

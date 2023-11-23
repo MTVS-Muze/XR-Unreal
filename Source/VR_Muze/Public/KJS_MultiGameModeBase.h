@@ -19,10 +19,12 @@ protected:
 	void BeginPlay() override;
 
 public:
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+
+public:
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
-	APlayerStart* SpawnPlayerStart(FVector Location);
-
+	APlayerStart* SpawnPlayerStart(FVector Location, FRotator Rotation);
 
 	UPROPERTY()
 	class UOSY_GameInstance* gi;

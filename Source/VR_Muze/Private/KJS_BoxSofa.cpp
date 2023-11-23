@@ -25,7 +25,7 @@ AKJS_BoxSofa::AKJS_BoxSofa()
 	SelectedStaticMesh->SetupAttachment(RootComponent);
 	SelectedStaticMesh->SetRelativeScale3D(FVector(3.5f));
 
-	SetReplicates(true);
+	bReplicates = true;
 
 }
 

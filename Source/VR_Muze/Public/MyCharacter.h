@@ -5,8 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Runtime/UMG/Public/Components/WidgetComponent.h"
+#include "InputActionValue.h"
 #include "KJS_CharacterAnimInstance.h"
 #include "MyCharacter.generated.h"
+
+//class UInputMappingContext;
+//class UInputAction;
+//struct FInputActionValue;
 
 UCLASS()
 class VR_MUZE_API AMyCharacter : public ACharacter
@@ -27,6 +32,15 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+public:
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//UInputMappingContext* DefaultMappingContext;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//UInputAction* InputTrigger;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//UInputAction* VisibilityPlaylist;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")

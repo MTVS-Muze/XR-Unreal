@@ -133,6 +133,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
 	class UStaticMeshComponent* AttachedGlass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	class UStaticMeshComponent* AttachedHat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	class UStaticMeshComponent* AttachedTie;
+
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=AccessoryMain)
 	class UWidgetSwitcher* ws_AccessorySwitch;
 
@@ -189,6 +195,15 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryGlasses)
 	class UButton* btn_Glass6;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryHat)
+	class UButton* btn_Tie1;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryHat)
+	class UButton* btn_Tie2;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryHat)
+	class UButton* btn_Tie3;
+
 
 	UFUNCTION()
 	void WearGlass0();
@@ -227,6 +242,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
 	TArray<UStaticMesh*> TieMeshes;
 
+	UFUNCTION()
+	void AttachTie(int32 Index);
+
+	UFUNCTION()
+	void WearTie1();
+
+	UFUNCTION()
+	void WearTie2();
+
+	UFUNCTION()
+	void WearTie3();
+
 
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	class AOSY_HttpRequestActor* HttpActor;
@@ -238,7 +265,7 @@ public:
 	FString JsonStringPost;
 
 
-	int color,glass,face,hat;
+	int color,glass,tie,hat;
 
 
 };

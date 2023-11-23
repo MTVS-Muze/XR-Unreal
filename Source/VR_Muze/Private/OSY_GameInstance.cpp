@@ -366,7 +366,7 @@ void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 		}
 	}
 
-	ServerOnLevelLoaded(LoadedWorld);
+	//ServerOnLevelLoaded(LoadedWorld);
 }
 
 
@@ -391,62 +391,62 @@ void UOSY_GameInstance::ParsePlayerData()
 }
 
 
-void UOSY_GameInstance::ServerOnLevelLoaded_Implementation(UWorld* LoadedWorld)
-{
-	MulticastOnLevelLoaded(LoadedWorld);
-}
-
-void UOSY_GameInstance::MulticastOnLevelLoaded_Implementation(UWorld* LoadedWorld)
-{
-	if (LoadedWorld->GetMapName() == "Box_indoor_Single" || LoadedWorld->GetMapName() == "Box_indoor_Multi" || LoadedWorld->GetMapName() == "StreetCar_Play")
-	{
-		UHeadMountedDisplayFunctionLibrary::EnableHMD(true);
-	}
-
-	if (LoadedWorld->GetMapName().Contains("Box_indoor_Multi"))
-	{
-		UWorld* World = GetWorld();
-
-		if (World)
-		{
-			FActorSpawnParameters params;
-			params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			FRotator SofaRotation = FRotator::ZeroRotator; // 회전값 0
-			ECheckBoxState DoubleSit1State = CheckboxStates.FindRef("Check_DoubleSit1");
-			ECheckBoxState DoubleSit2State = CheckboxStates.FindRef("Check_DoubleSit2");
-
-			if (DoubleSit1State == ECheckBoxState::Checked)
-			{
-				FVector SofaLocation1 = FVector(-150.0f, 0.0f, 0.0f);
-				FVector SofaLocation2 = FVector(150.0f, 0.0f, 0.0f);
-
-				FTransform SofaTransform1;
-				FTransform SofaTransform2;
-
-				SofaTransform1.SetLocation(SofaLocation1);
-				SofaTransform2.SetLocation(SofaLocation2);
-
-				SofaTransform1.SetRotation(SofaRotation.Quaternion());
-				SofaTransform2.SetRotation(SofaRotation.Quaternion());
-
-				SofaTransform1.SetScale3D(FVector::OneVector);  // 스케일 1
-				SofaTransform2.SetScale3D(FVector::OneVector);
-
-				AKJS_BoxSofa* SpawnSofa = World->SpawnActor<AKJS_BoxSofa>(BoxSofa, SofaTransform1, params);
-				AKJS_BoxSofa* SpawnSofa2 = World->SpawnActor<AKJS_BoxSofa>(BoxSofa, SofaTransform2, params);
-			}
-
-			else if (DoubleSit2State == ECheckBoxState::Checked)
-			{
-				FVector SofaLocation3 = FVector(0.0f, 0.0f, 0.0f);
-				FTransform SofaTransform3;
-
-				SofaTransform3.SetLocation(SofaLocation3);
-				SofaTransform3.SetRotation(SofaRotation.Quaternion());
-				SofaTransform3.SetScale3D(FVector::OneVector);
-
-				AKJS_BoxSofa* SpawnSofa = World->SpawnActor<AKJS_BoxSofa>(BoxSofa, SofaTransform3, params);
-			}
-		}
-	}
-}
+//void UOSY_GameInstance::ServerOnLevelLoaded_Implementation(UWorld* LoadedWorld)
+//{
+//	MulticastOnLevelLoaded(LoadedWorld);
+//}
+//
+//void UOSY_GameInstance::MulticastOnLevelLoaded_Implementation(UWorld* LoadedWorld)
+//{
+//	if (LoadedWorld->GetMapName() == "Box_indoor_Single" || LoadedWorld->GetMapName() == "Box_indoor_Multi" || LoadedWorld->GetMapName() == "StreetCar_Play")
+//	{
+//		UHeadMountedDisplayFunctionLibrary::EnableHMD(true);
+//	}
+//
+//	if (LoadedWorld->GetMapName().Contains("Box_indoor_Multi"))
+//	{
+//		UWorld* World = GetWorld();
+//
+//		if (World)
+//		{
+//			FActorSpawnParameters params;
+//			params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+//			FRotator SofaRotation = FRotator::ZeroRotator; // 회전값 0
+//			ECheckBoxState DoubleSit1State = CheckboxStates.FindRef("Check_DoubleSit1");
+//			ECheckBoxState DoubleSit2State = CheckboxStates.FindRef("Check_DoubleSit2");
+//
+//			if (DoubleSit1State == ECheckBoxState::Checked)
+//			{
+//				FVector SofaLocation1 = FVector(-150.0f, 0.0f, 0.0f);
+//				FVector SofaLocation2 = FVector(150.0f, 0.0f, 0.0f);
+//
+//				FTransform SofaTransform1;
+//				FTransform SofaTransform2;
+//
+//				SofaTransform1.SetLocation(SofaLocation1);
+//				SofaTransform2.SetLocation(SofaLocation2);
+//
+//				SofaTransform1.SetRotation(SofaRotation.Quaternion());
+//				SofaTransform2.SetRotation(SofaRotation.Quaternion());
+//
+//				SofaTransform1.SetScale3D(FVector::OneVector);  // 스케일 1
+//				SofaTransform2.SetScale3D(FVector::OneVector);
+//
+//				AKJS_BoxSofa* SpawnSofa = World->SpawnActor<AKJS_BoxSofa>(BoxSofa, SofaTransform1, params);
+//				AKJS_BoxSofa* SpawnSofa2 = World->SpawnActor<AKJS_BoxSofa>(BoxSofa, SofaTransform2, params);
+//			}
+//
+//			else if (DoubleSit2State == ECheckBoxState::Checked)
+//			{
+//				FVector SofaLocation3 = FVector(0.0f, 0.0f, 0.0f);
+//				FTransform SofaTransform3;
+//
+//				SofaTransform3.SetLocation(SofaLocation3);
+//				SofaTransform3.SetRotation(SofaRotation.Quaternion());
+//				SofaTransform3.SetScale3D(FVector::OneVector);
+//
+//				AKJS_BoxSofa* SpawnSofa = World->SpawnActor<AKJS_BoxSofa>(BoxSofa, SofaTransform3, params);
+//			}
+//		}
+//	}
+//}
