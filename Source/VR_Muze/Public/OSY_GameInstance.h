@@ -250,11 +250,11 @@ public:
 
 #pragma region Multicast
 
-	UFUNCTION(Server, Reliable, Category = Multi)
-	void ServerOnLevelLoaded(UWorld* LoadedWorld);
-
-	UFUNCTION(NetMulticast, Reliable, Category = Multi)
-	void MulticastOnLevelLoaded(UWorld* LoadedWorld);
+	//UFUNCTION(Server, Reliable, Category = Multi)
+	//void ServerOnLevelLoaded(UWorld* LoadedWorld);
+	//
+	//UFUNCTION(NetMulticast, Reliable, Category = Multi)
+	//void MulticastOnLevelLoaded(UWorld* LoadedWorld);
 
 
 

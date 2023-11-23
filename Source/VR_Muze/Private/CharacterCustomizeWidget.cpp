@@ -53,6 +53,11 @@ void UCharacterCustomizeWidget::NativeConstruct()
 	//////////////////////////////////////////////////////
 	btn_Hat1->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearHat1);
 	btn_Hat2->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearHat2);
+	/////////////////////////////////////////////////////////
+	btn_Tie1->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearTie1);
+	btn_Tie2->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearTie2);
+	btn_Tie3->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearTie3);
+
 }
 
 void UCharacterCustomizeWidget::SwitchCanvas(int32 index)
@@ -263,17 +268,18 @@ void UCharacterCustomizeWidget::AttachHat(int32 Index)
 {
 	if (Index >= 0 && Index < HatMeshes.Num() && HatMeshes[Index] != nullptr)
 	{
-		if (AttachedGlass)
+		if (AttachedHat)
 		{
-			AttachedGlass->DestroyComponent();
-			AttachedGlass = nullptr;
+			AttachedHat->DestroyComponent();
+			AttachedHat = nullptr;
 		}
-		AttachedGlass = NewObject<UStaticMeshComponent>(player);
-		AttachedGlass->SetStaticMesh(HatMeshes[Index]);
-		AttachedGlass->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("HatSocket"));
-		AttachedGlass->RegisterComponent();
+		AttachedHat = NewObject<UStaticMeshComponent>(player);
+		AttachedHat->SetStaticMesh(HatMeshes[Index]);
+		AttachedHat->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("HatSocket"));
+		AttachedHat->RegisterComponent();
 	}
 }
+
 
 void UCharacterCustomizeWidget::WearHat1()
 {
@@ -287,4 +293,41 @@ void UCharacterCustomizeWidget::WearHat2()
 	AttachHat(1);
 	hat = 1;
 	gi->hat = hat;
+}
+
+void UCharacterCustomizeWidget::AttachTie(int32 Index)
+{
+	if (Index >= 0 && Index < TieMeshes.Num() && TieMeshes[Index] != nullptr)
+	{
+		if (AttachedTie)
+		{
+			AttachedTie->DestroyComponent();
+			AttachedTie = nullptr;
+		}
+		AttachedTie = NewObject<UStaticMeshComponent>(player);
+		AttachedTie->SetStaticMesh(TieMeshes[Index]);
+		AttachedTie->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("TieSocket"));
+		AttachedTie->RegisterComponent();
+	}
+}
+
+void UCharacterCustomizeWidget::WearTie1()
+{
+	AttachTie(0);
+	tie = 0;
+	gi->tie = tie;
+}
+
+void UCharacterCustomizeWidget::WearTie2()
+{
+	AttachTie(1);
+	tie = 1;
+	gi->tie = tie;
+}
+
+void UCharacterCustomizeWidget::WearTie3()
+{
+	AttachTie(2);
+	tie = 2;
+	gi->tie = tie;
 }

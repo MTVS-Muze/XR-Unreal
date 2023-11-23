@@ -20,6 +20,8 @@
 #include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
 #include "Runtime/CinematicCamera/Public/CineCameraActor.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputMappingContext.h"
+#include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputAction.h"
 
 
 
@@ -35,12 +37,13 @@ AMyCharacter::AMyCharacter()
 	//VR카메라 메쉬
 	hmdMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HMD Mesh"));
 	hmdMesh->SetupAttachment(hmdCam);
+	//hmdMesh->SetVisibility(false);
 
-	StartCam = CreateDefaultSubobject<UCameraComponent>(TEXT("StartCam"));
-	StartCam->SetupAttachment(RootComponent);
-	StarthmdMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StarthmdMesh"));
-	StarthmdMesh->SetupAttachment(StartCam);
-	StartCam->bAutoActivate = true;
+	//StartCam = CreateDefaultSubobject<UCameraComponent>(TEXT("StartCam"));
+	//StartCam->SetupAttachment(RootComponent);
+	//StarthmdMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StarthmdMesh"));
+	//StarthmdMesh->SetupAttachment(StartCam);
+	//StartCam->bAutoActivate = true;
 
 	CustomizeCam = CreateDefaultSubobject<UCameraComponent>(TEXT("CustomizeCam"));
 	CustomizeCam->SetupAttachment(RootComponent);
@@ -79,10 +82,10 @@ AMyCharacter::AMyCharacter()
 	}
 	////////////////////////////////////////////////
 	////////////////////////////////////////////////
-	bUseControllerRotationYaw = true;
-	bUseControllerRotationPitch = true;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
-	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
 
@@ -100,6 +103,7 @@ AMyCharacter::AMyCharacter()
 
 	PlaylistWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PlayListWidget"));
 	PlaylistWidget->SetupAttachment(RootComponent);
+	//PlaylistWidget->SetVisibility(false);
 	//ShowHostCodeWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("RoomCodeWidget"));
 	//ShowHostCodeWidget->SetupAttachment(RootComponent);
 	//EnterRoomWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("EnterCodeWidget"));
@@ -112,12 +116,33 @@ AMyCharacter::AMyCharacter()
 	SittingIdle = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/Sitting_Idle.Sitting_Idle"));
 
 	ai = UKJS_CharacterAnimInstance::StaticClass();
+
+	//ConstructorHelpers::FObjectFinder<UInputMappingContext> tempIMC(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/DEV/KJS//Character//Input/IMC_Input.IMC_Input'"));
+	//if (tempIMC.Succeeded())
+	//{
+	//	DefaultMappingContext = tempIMC.Object;
+	//}
+	//
+	//ConstructorHelpers::FObjectFinder<UInputAction>tempTrigger(TEXT("/Script/EnhancedInput.InputAction'/Game/DEV/KJS/Character/Input///IA_Trigger.IA_Trigger'"));
+	//if (tempTrigger.Succeeded())
+	//{
+	//	InputTrigger = tempTrigger.Object;
+	//}
+	//
+	//ConstructorHelpers::FObjectFinder<UInputAction>tempVisible(TEXT("/Script/EnhancedInput.InputAction'/Game/DEV/KJS/Character/Input///IA_VisibiltyPlaylist.IA_VisibiltyPlaylist'"));
+	//if (tempVisible.Succeeded())
+	//{
+	//	VisibilityPlaylist = tempVisible.Object;
+	//}
+
 }
 
 // Called when the game starts or when spawned
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Warning, TEXT("Character's BeginPlay is called."));
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -129,6 +154,7 @@ void AMyCharacter::BeginPlay()
 	pc = GetController<APlayerController>();
 
 	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Stage);
+
 
 	if (pc)
 	{
@@ -149,21 +175,20 @@ void AMyCharacter::BeginPlay()
 		rightHand->SetVisibility(false);
 		leftHand->SetVisibility(false);
 		hmdMesh->SetVisibility(false);
-		StartCam->Activate();
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMyCharacter::SwitchVRCamera, 5.0f, false);
+		//StartCam->Activate();
+		//FTimerHandle TimerHandle;
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMyCharacter::SwitchVRCamera, 5.0f, false);
 	}
 	else
 	{
 		// 그 외의 맵에서는 StartCam을 비활성화합니다.
-		StartCam->Deactivate();
+		//StartCam->Deactivate();
 	}
 
 	if (MapName == "CustomizeMap"||MapName.Contains("CH_MAP"))
 	{
 		hmdCam->Deactivate();
 		CustomizeCam->Activate();
-
 	}
 
 	UKJS_CharacterAnimInstance* AnimInstance = Cast<UKJS_CharacterAnimInstance>(GetMesh()->GetAnimInstance());
@@ -181,10 +206,14 @@ void AMyCharacter::BeginPlay()
 	{
 		GetMesh()->PlayAnimation(SittingAnimation, false);
 	}
+	else if (MapName.Contains("Box_indoor_Multi"))
+	{
+		GetMesh()->PlayAnimation(SittingIdle, true);
+	}
 	
+	//PlayLevelSequence();
 
-
-	PlayLevelSequence();
+	
 
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &AMyCharacter::ChangeFOV);
 }
@@ -202,11 +231,14 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-	if (enhancedInputComponent != nullptr)
+	//if (enhancedInputComponent != nullptr)
+	//{
+	//	moveComp->SetupPlayerInputComponent(enhancedInputComponent, inputActions);
+	//}
+	if (enhancedInputComponent != nullptr && moveComp != nullptr && inputActions.Num() > 0)
 	{
 		moveComp->SetupPlayerInputComponent(enhancedInputComponent, inputActions);
 	}
-
 }
 
 void AMyCharacter::SwitchVRCamera()
@@ -236,20 +268,20 @@ void AMyCharacter::SwitchVRCamera()
 
 void AMyCharacter::PlayLevelSequence()
 {
-	SetViewToCineCamera();
-	
+	//SetViewToCineCamera();
 }
 
 void AMyCharacter::SetViewToCineCamera()
 {
-	pc = GetWorld()->GetFirstPlayerController();
-	if (ACineCameraActor* CineCamera = Cast<ACineCameraActor>(StaticFindObject(ACineCameraActor::StaticClass(), GetWorld(), TEXT("CineCameraActor"))))
-	{
-		if (pc)
-		{
-			pc->SetViewTargetWithBlend(CineCamera, 0.5f);
-		}
-	}
+	//pc = GetWorld()->GetFirstPlayerController();
+	//if (ACineCameraActor* CineCamera = Cast<ACineCameraActor>(StaticFindObject(ACineCameraActor::StaticClass(), GetWorld(), TEXT("CineCameraActor"))))
+	//{
+	//	if (pc)
+	//	{
+	//		pc->SetViewTargetWithBlend(CineCamera, 0.5f);
+	//	}
+	//}
+
 }
 
 void AMyCharacter::ChangeFOV(UWorld* LoadedWorld)
