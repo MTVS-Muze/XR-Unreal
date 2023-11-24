@@ -248,6 +248,9 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=DoublePanel)
 	class UCheckBox* Check_DoubleSit2;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=DoublePanel)
+	class UButton* btn_BackDouble;
+
 public:
 	//Double ÇÔ¼ö
 	UFUNCTION()
@@ -258,6 +261,9 @@ public:
 
 	UFUNCTION()
 	void OnCheckedDoubleSit2(bool bIsChcecked);
+
+	UFUNCTION()
+	void OnClickedbtn_BackDouble();
 
 private:
 	UPROPERTY()

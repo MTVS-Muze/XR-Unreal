@@ -84,6 +84,7 @@ void UMediaLobbyWidget::NativeConstruct()
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	btn_Count2->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Count2);
 	btn_Back2->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Back2);
+	btn_BackDouble->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_BackDouble);
 	
 	Check_DoubleSit1->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedDoubleSit1);
 	Check_DoubleSit2->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedDoubleSit2);
@@ -245,6 +246,11 @@ void UMediaLobbyWidget::OnCheckedDoubleSit2(bool bIsChcecked)
 	}
 }
 
+
+void UMediaLobbyWidget::OnClickedbtn_BackDouble()
+{
+	SwitchCanvas(2);
+}
 
 void UMediaLobbyWidget::SetWidgetText(int id)
 {
