@@ -29,8 +29,6 @@ void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Opt
     }
 }
 
-
-
 void AKJS_MultiGameModeBase::BeginPlay()
 {
 	

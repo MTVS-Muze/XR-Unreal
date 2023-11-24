@@ -173,5 +173,6 @@ public:
 	UFUNCTION()
 	void AttachTie(int32 Index);
 
-	//UStaticMeshComponent* CreateMeshComponent(UStaticMesh* Mesh, const FName& SocketName);
+	
+
 };

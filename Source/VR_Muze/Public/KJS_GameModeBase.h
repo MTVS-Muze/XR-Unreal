@@ -33,11 +33,6 @@ protected:
 
 	void BeginPlay() override;
 
-    UFUNCTION()
-    void OnLevelSequenceEnd();
-
-    
-
 public:
 	UPROPERTY()
 	class UOSY_GameInstance* gi;

@@ -108,35 +108,35 @@ void UOSY_GameInstance::CreateMuzeSession(int32 playerCount)
 	bool isSuccess = sessionInterface->CreateSession(0, SessionName, settings);
 	UE_LOG(LogTemp, Warning, TEXT("Session Create Result : %s"), isSuccess ? *FString("Success") : *FString("Failed"));
 
-	if (isSuccess)
-	{
-		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-		//if (PlayerController)
-		//{
-		//	AMyCharacter* muzeCharacter = Cast<AMyCharacter>(PlayerController->GetCharacter());
-		//	if (muzeCharacter)
-		//	{
-		//		// 세션 생성에 성공하면, 생성된 세션의 이름을 KJS_TypeInviteNumWidget에 표시
-		//		//UKJS_TypeInviteNumWidget* InviteWidget = Cast<UKJS_TypeInviteNumWidget>(muzeCharacter->ShowHostCodeWidget);
-		//		//if (InviteWidget)
-		//		//{
-		//		//	// 랜덤 코드를 생성하고, 이를 InviteWidget에 표시합니다.
-		//		//	FString RoomCode = GenerateRandomCode(5);
-		//		//	InviteWidget->CreateInviteCode(RoomCode);
-		//		//	
-		//		//}
-		//
-		//
-		//	}
-		//}
-	}
+	//if (isSuccess)
+	//{
+	//	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	//	//if (PlayerController)
+	//	//{
+	//	//	AMyCharacter* muzeCharacter = Cast<AMyCharacter>(PlayerController->GetCharacter());
+	//	//	if (muzeCharacter)
+	//	//	{
+	//	//		// 세션 생성에 성공하면, 생성된 세션의 이름을 KJS_TypeInviteNumWidget에 표시
+	//	//		//UKJS_TypeInviteNumWidget* InviteWidget = Cast<UKJS_TypeInviteNumWidget>(muzeCharacter->ShowHostCodeWidget);
+	//	//		//if (InviteWidget)
+	//	//		//{
+	//	//		//	// 랜덤 코드를 생성하고, 이를 InviteWidget에 표시합니다.
+	//	//		//	FString RoomCode = GenerateRandomCode(5);
+	//	//		//	InviteWidget->CreateInviteCode(RoomCode);
+	//	//		//	
+	//	//		//}
+	//	//
+	//	//
+	//	//	}
+	//	//}
+	//}
 }
 
 void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccessful)
 {
 	if (bWasSuccessful)
 	{
-		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Box_indoor_Multi?Listen");
+		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Box_indoor_Multi?Listen", true);
 		OnCreateSessionCompleted.Broadcast();
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result : %s"), result ? *FString("Success") : *FString("Failed"));
 	}

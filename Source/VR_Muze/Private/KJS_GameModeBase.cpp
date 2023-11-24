@@ -23,30 +23,6 @@ void AKJS_GameModeBase::BeginPlay()
         {
             // 레벨 시퀀스를 재생한다.
             SeqActor->SequencePlayer->Play();
-            SeqActor->SequencePlayer->OnFinished.AddDynamic(this, &AKJS_GameModeBase::OnLevelSequenceEnd);
-        }
-    }
-}
-
-void AKJS_GameModeBase::OnLevelSequenceEnd()
-{
-    
-    // Default Pawn을 생성합니다.
-    for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
-    {
-        APlayerController* PC = It->Get();
-        if (PC && !PC->GetPawn())
-        {
-            RestartPlayer(PC);
-            if (PC->GetPawn() == nullptr)
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Character was not created correctly."));
-            }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Character is created and possessed."));
-                PC->Possess(PC->GetPawn());
-            }
         }
     }
 }
