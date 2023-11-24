@@ -9,8 +9,6 @@
 void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
     Super::InitGame(MapName, Options, ErrorMessage);
-
-
     gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
     if (gi)
@@ -20,13 +18,13 @@ void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Opt
 
         if (DoubleSit1State == ECheckBoxState::Checked)
         {
-            UsedPlayerStarts.Add(SpawnPlayerStart(FVector(-142.0, 16.8, 92), FRotator(0, 90, 0)));
-            UsedPlayerStarts.Add(SpawnPlayerStart(FVector(156.0, 16.8, 92), FRotator(0, 90, 0)));
+            UsedPlayerStarts.Add(SpawnPlayerStart(FVector(-142.0, 16.8, 92), FRotator(0, 90, 0), "First"));
+            UsedPlayerStarts.Add(SpawnPlayerStart(FVector(156.0, 16.8, 92), FRotator(0, 90, 0) , "Second"));
         }
         else if (DoubleSit2State == ECheckBoxState::Checked)
         {
-            UsedPlayerStarts.Add(SpawnPlayerStart(FVector(-84.0, 50.0, 92), FRotator(0, 90, 0)));
-            UsedPlayerStarts.Add(SpawnPlayerStart(FVector(72.0, 23.0, 92), FRotator(0, 90, 0)));
+            UsedPlayerStarts.Add(SpawnPlayerStart(FVector(-84.0, 50.0, 92), FRotator(0, 90, 0) , "First"));
+            UsedPlayerStarts.Add(SpawnPlayerStart(FVector(72.0, 23.0, 92), FRotator(0, 90, 0), "Second"));
         }
     }
 }
@@ -35,17 +33,17 @@ void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Opt
 
 void AKJS_MultiGameModeBase::BeginPlay()
 {
-    APlayerController* HostController = GetWorld()->GetFirstPlayerController();
-    if (HostController)
-    {
-        APlayerStart* HostStartSpot = UsedPlayerStarts[0];
-        UsedPlayerStarts.RemoveAt(0);
-        HostController->GetPawn()->SetActorLocation(HostStartSpot->GetActorLocation());
-        HostController->GetPawn()->SetActorRotation(HostStartSpot->GetActorRotation());
-    }
+	/*APlayerController* HostController = GetWorld()->GetFirstPlayerController();
+	if (HostController)
+	{
+		APlayerStart* HostStartSpot = UsedPlayerStarts[0];
+		UsedPlayerStarts.RemoveAt(0);
+		HostController->GetPawn()->SetActorLocation(HostStartSpot->GetActorLocation());
+		HostController->GetPawn()->SetActorRotation(HostStartSpot->GetActorRotation());
+	}*/
 }
 
-APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotator Rotation)
+APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotator Rotation , FString Tag)
 {
     FActorSpawnParameters Params;
     Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -53,10 +51,13 @@ APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotato
 	APlayerStart* SpawnedActor = GetWorld()->SpawnActor<APlayerStart>(Location, Rotation, Params);
 	if (SpawnedActor)
 	{
-		FVector SpawnedLocation = SpawnedActor->GetActorLocation();
+        // 태그를 추가합니다.
+        SpawnedActor->Tags.AddUnique(FName(*Tag));
+
+        FVector SpawnedLocation = SpawnedActor->GetActorLocation();
         FRotator SpawnedRotation = SpawnedActor->GetActorRotation();
-		UE_LOG(LogTemp, Warning, TEXT("PlayerStart spawned at: %s"), *SpawnedLocation.ToString());
-		UE_LOG(LogTemp, Warning, TEXT("PlayerStart Rotate: %s"), *SpawnedRotation.ToString());
+        UE_LOG(LogTemp, Warning, TEXT("PlayerStart (%s) spawned at: %s"), *Tag, *SpawnedLocation.ToString());
+        UE_LOG(LogTemp, Warning, TEXT("PlayerStart (%s) Rotate: %s"), *Tag, *SpawnedRotation.ToString());
 	}
     
 	return SpawnedActor;
@@ -65,13 +66,25 @@ APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotato
 
 AActor* AKJS_MultiGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
 {
-    if (UsedPlayerStarts.Num() > 0)
+    TArray<APlayerStart*> playerStarts;
+    playerStarts.SetNum(2);
+
+    for (TActorIterator<APlayerStart> it(GetWorld()); it; ++it)
     {
-        APlayerStart* StartSpot = UsedPlayerStarts[0];
-        UsedPlayerStarts.RemoveAt(0);
-        return StartSpot;
+        APlayerStart* ps = *it;
+
+        if (ps->ActorHasTag(FName("First")))
+        {
+            playerStarts[0] = ps;
+        }
+        else
+        {
+            playerStarts[1] = ps;
+        }
     }
 
-    return Super::ChoosePlayerStart_Implementation(Player);
+    APlayerStart* chooseStart = playerStarts[callNumber];
+    callNumber = (callNumber+1)% playerStarts.Num();
+    return chooseStart;
 }
 

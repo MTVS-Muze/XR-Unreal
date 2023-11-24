@@ -24,13 +24,15 @@ public:
 public:
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
-	APlayerStart* SpawnPlayerStart(FVector Location, FRotator Rotation);
+	APlayerStart* SpawnPlayerStart(FVector Location, FRotator Rotation, FString Tag);
 
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
 
 private:
 	TArray<APlayerStart*> UsedPlayerStarts;
+
+	int32 callNumber = 1;
 
 	
 };
