@@ -101,10 +101,6 @@ void UOSY_GameInstance::CreateMuzeSession(int32 playerCount)
 	//입장 가능 인원을 설정한다.
 	settings.NumPublicConnections = 4;
 
-	//세션 추가설정 넣기
-	//settings.Set(FName("Room_Name"),SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-	//settings.Set(FName("Host_Name"), mySessionName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-
 	settings.Set(FName("Room_Name"), SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 	settings.Set(FName("Host_Name"), mySessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 

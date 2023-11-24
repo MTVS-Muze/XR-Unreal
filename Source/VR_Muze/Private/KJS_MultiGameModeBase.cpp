@@ -33,21 +33,13 @@ void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Opt
 
 void AKJS_MultiGameModeBase::BeginPlay()
 {
-	/*APlayerController* HostController = GetWorld()->GetFirstPlayerController();
-	if (HostController)
-	{
-		APlayerStart* HostStartSpot = UsedPlayerStarts[0];
-		UsedPlayerStarts.RemoveAt(0);
-		HostController->GetPawn()->SetActorLocation(HostStartSpot->GetActorLocation());
-		HostController->GetPawn()->SetActorRotation(HostStartSpot->GetActorRotation());
-	}*/
+	
 }
 
 APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotator Rotation , FString Tag)
 {
     FActorSpawnParameters Params;
     Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-    //return GetWorld()->SpawnActor<APlayerStart>(Location, Rotation, Params);
 	APlayerStart* SpawnedActor = GetWorld()->SpawnActor<APlayerStart>(Location, Rotation, Params);
 	if (SpawnedActor)
 	{
