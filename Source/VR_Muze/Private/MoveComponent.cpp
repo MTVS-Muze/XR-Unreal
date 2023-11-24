@@ -68,18 +68,18 @@ void UMoveComponent::Move(const struct FInputActionValue& value)
 
 void UMoveComponent::Rotate(const struct FInputActionValue& value)
 {
-	//if(player)
-	//{
-	//	FVector2D rightConInput = value.Get<FVector2D>();
-	//	if (player->pc != nullptr)
-	//	{
-	//		player->pc->AddYawInput(rightConInput.X);
-	//		player->pc->AddPitchInput(rightConInput.Y);
-	//
-	//		player->AddControllerYawInput(rightConInput.X);
-	//		player->AddControllerPitchInput(rightConInput.Y);
-	//	}
-	//}
+	if(player)
+	{
+		FVector2D rightConInput = value.Get<FVector2D>();
+		if (player->pc != nullptr)
+		{
+			player->pc->AddYawInput(rightConInput.X);
+			player->pc->AddPitchInput(rightConInput.Y);
+	
+			player->AddControllerYawInput(rightConInput.X);
+			player->AddControllerPitchInput(rightConInput.Y);
+		}
+	}
 }
 
 void UMoveComponent::VisibiltyPlaylistWidget(const struct FInputActionValue& value)

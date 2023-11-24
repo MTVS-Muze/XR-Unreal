@@ -45,16 +45,13 @@ void UMediaLobbyWidget::NativeConstruct()
 	List.Add(btn_Song9);
 	List.Add(btn_Song10);
 
-	btn_BackMain->OnClicked.AddDynamic(this, &UMediaLobbyWidget::BackSelectMode);
-	btn_Single->OnClicked.AddDynamic(this, &UMediaLobbyWidget::CreateSingleRoom);
-	btn_Multi->OnClicked.AddDynamic(this, &UMediaLobbyWidget::CreateRoom);
-	btn_LeftOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Left);
-	btn_RightOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Right);
-	btn_UpOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_UpOriginal);
-	btn_DownOriginal->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_DownOriginal);
-
-	
-
+	btn_BackMain->OnPressed.AddDynamic(this, &UMediaLobbyWidget::BackSelectMode);
+	btn_Single->OnPressed.AddDynamic(this, &UMediaLobbyWidget::CreateSingleRoom);
+	btn_Multi->OnPressed.AddDynamic(this, &UMediaLobbyWidget::CreateRoom);
+	btn_LeftOriginal->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Left);
+	btn_RightOriginal->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Right);
+	btn_UpOriginal->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_UpOriginal);
+	btn_DownOriginal->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_DownOriginal);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	//Canvas_Social
@@ -69,29 +66,27 @@ void UMediaLobbyWidget::NativeConstruct()
 	ListSocial.Add(btn_Song9Social);
 	ListSocial.Add(btn_Song10Social);
 
-	btn_UpSocial->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_UpSocial);
-	btn_DownSocial->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_DownSocial);
-	btn_LeftSocial->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnCheckedbtn_LeftSocial);
-	btn_RightSocial->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnCheckedbtn_RightSocial);
-
-
+	btn_UpSocial->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_UpSocial);
+	btn_DownSocial->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_DownSocial);
+	btn_LeftSocial->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnCheckedbtn_LeftSocial);
+	btn_RightSocial->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnCheckedbtn_RightSocial);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
-	btn_JoinSession->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_JoinSession);
-	btn_CreateSession->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_CreateSession);
-	btn_Back1->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Back1);
+	btn_JoinSession->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_JoinSession);
+	btn_CreateSession->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_CreateSession);
+	btn_Back1->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Back1);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
-	btn_Count2->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Count2);
-	btn_Back2->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Back2);
-	btn_BackDouble->OnClicked.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_BackDouble);
+	btn_Count2->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Count2);
+	btn_Back2->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_Back2);
+	btn_BackDouble->OnPressed.AddDynamic(this, &UMediaLobbyWidget::OnClickedbtn_BackDouble);
 	
 	Check_DoubleSit1->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedDoubleSit1);
 	Check_DoubleSit2->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedDoubleSit2);
 	
 	if(gi)
 	{
-		btn_CreateDouble->OnClicked.AddDynamic(this, &UMediaLobbyWidget::CreateDoubleRoom);
+		btn_CreateDouble->OnPressed.AddDynamic(this, &UMediaLobbyWidget::CreateDoubleRoom);
 	}
 
 	player = Cast<AMyCharacter>(GetOwningPlayerPawn());
