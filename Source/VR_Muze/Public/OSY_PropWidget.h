@@ -129,6 +129,9 @@ public:
 	void SpawnNiagara5();
 	UFUNCTION()
 	void SpawnNiagara6();
+
+	void ChangeBackDrop();
+	void ChangeBackDrop2();
 #pragma endregion
 
 
