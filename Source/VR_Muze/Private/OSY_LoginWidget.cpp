@@ -51,7 +51,7 @@ void UOSY_LoginWidget::NativeConstruct()
 
 
 	btn_Login->OnClicked.AddDynamic(this, &UOSY_LoginWidget::GotoLoginCanvas);
-	btn_Start->OnClicked.AddDynamic(this, &UOSY_LoginWidget::GotoLobbyMap);
+	btn_Start->OnClicked.AddDynamic(this, &UOSY_LoginWidget::Request);
 	
 	loginGM = Cast<AOSY_LoginGameMode>(UGameplayStatics::GetGameMode(this));
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
@@ -95,6 +95,9 @@ void UOSY_LoginWidget::GotoStartCanvas()
 
 void UOSY_LoginWidget::GotoLobbyMap()
 {
+
+
+
 	FName LevelName = "1_2CH_MAP";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
@@ -181,6 +184,16 @@ void UOSY_LoginWidget::GetCustom()
 	
 
 	SwithchCanvas();
+}
+
+void UOSY_LoginWidget::Request()
+{
+	HttpActor->SendRequest(gi->MemberInfourl);
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UOSY_LoginWidget::GotoLobbyMap, 1.0f, false);
+
+
 }
 
 void UOSY_LoginWidget::BackToMain()

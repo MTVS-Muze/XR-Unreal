@@ -118,6 +118,9 @@ UPROPERTY()
 	UFUNCTION()
 	void GetCustom();
 
+	UFUNCTION()
+	void Request();
+
 
 	UPROPERTY()
 	FString BearerToken;
