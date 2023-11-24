@@ -47,6 +47,8 @@ void UOSY_PropWidget::NativeConstruct()
 	btn_Niagara4->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara4);
 	btn_Niagara5->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara5);
 	btn_Niagara6->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara6);
+	btn_meteorShower->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara7);
+	btn_Snow->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara8);
 #pragma endregion
 
 #pragma region Light
@@ -54,6 +56,13 @@ void UOSY_PropWidget::NativeConstruct()
 	btn_Point->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnPoint);
 	btn_Spot->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnSpot);
 #pragma endregion
+#pragma region Light
+	btn_HDRI1->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangeBackDrop);
+	btn_HDRI2->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangeBackDrop2);
+	btn_Plane1->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangePlane);
+	btn_Plane2->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangePlane2);
+#pragma endregion
+
 
 // back to main
 	btn_Exit->OnClicked.AddDynamic(this, &UOSY_PropWidget::BackToMain);
@@ -263,31 +272,164 @@ void UOSY_PropWidget::SpawnNiagara6()
 	}
 }
 
+void UOSY_PropWidget::SpawnNiagara7()
+{
+	FVector spawnLoc = FVector(0, 0, 15000);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(MeteorShower, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(MeteorShower);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnNiagara8()
+{
+	FVector spawnLoc = FVector(0, 0, 3000);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Snow, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(Snow);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
+		}
+	}
+}
+
 void UOSY_PropWidget::ChangeBackDrop()
 {
-	/*for (TActorIterator<> It(GetWorld()); It; ++It)
+	for (TActorIterator<AActor> it(GetWorld()); it; ++it)
 	{
-		AHDRIBackdrop* HDRIBackdrop = *It;
-		if (HDRIBackdrop)
+		AActor* FoundActor = *it;
+
+		if (FoundActor->ActorHasTag(FName("HDRI")))
 		{
-			// 새로운 CubeMap 로드
-			UTextureCube* NewCubeMap = LoadObject<UTextureCube>(NULL, TEXT("/Game/Path/To/Your/Cubemap.YourCubemap"));
-			if (NewCubeMap)
+			// 'HDRI' 태그를 가진 Actor를 찾았으므로, 여기에서 원하는 작업을 수행하세요.
+			UE_LOG(LogTemp, Warning, TEXT("Found HDRI Actor: %s"), *FoundActor->GetName());
+
+			if (FoundActor->ActorHasTag(FName("Evening")))
 			{
-				// CubeMap 변경
-				HDRIBackdrop->Cubemap = NewCubeMap;
-				HDRIBackdrop->MarkComponentsRenderStateDirty(); // Render state 갱신
+				FoundActor->SetActorHiddenInGame(true);
+
+			}
+			else 
+			{
+				FoundActor->SetActorHiddenInGame(false);
 			}
 		}
 	}
-	*/
+
 	
 }
 
 void UOSY_PropWidget::ChangeBackDrop2()
 {
+	for (TActorIterator<AActor> it(GetWorld()); it; ++it)
+	{
+		AActor* FoundActor = *it;
+
+		if (FoundActor->ActorHasTag(FName("HDRI")))
+		{
+			// 'HDRI' 태그를 가진 Actor를 찾았으므로, 여기에서 원하는 작업을 수행하세요.
+			UE_LOG(LogTemp, Warning, TEXT("Found HDRI Actor: %s"), *FoundActor->GetName());
+
+			if (FoundActor->ActorHasTag(FName("Evening")))
+			{
+				FoundActor->SetActorHiddenInGame(false);
+
+			}
+			else if (FoundActor->ActorHasTag(FName("Snow")))
+			{
+				FoundActor->SetActorHiddenInGame(true);
+			}
+		}
+	}
 
 }
+
+void UOSY_PropWidget::ChangePlane()
+{
+	for (TActorIterator<AActor> it(GetWorld()); it; ++it)
+	{
+		AActor* FoundActor = *it;
+
+		if (FoundActor->ActorHasTag(FName("Plane")))
+		{
+			// 'HDRI' 태그를 가진 Actor를 찾았으므로, 여기에서 원하는 작업을 수행하세요.
+			UE_LOG(LogTemp, Warning, TEXT("Found HDRI Actor: %s"), *FoundActor->GetName());
+
+			if (FoundActor->ActorHasTag(FName("Water")))
+			{
+				FoundActor->SetActorHiddenInGame(true);
+
+			}
+			else
+			{
+				FoundActor->SetActorHiddenInGame(false);
+			}
+		}
+	}
+}
+
+void UOSY_PropWidget::ChangePlane2()
+{
+	for (TActorIterator<AActor> it(GetWorld()); it; ++it)
+	{
+		AActor* FoundActor = *it;
+
+		if (FoundActor->ActorHasTag(FName("Plane")))
+		{
+			// 'HDRI' 태그를 가진 Actor를 찾았으므로, 여기에서 원하는 작업을 수행하세요.
+			UE_LOG(LogTemp, Warning, TEXT("Found HDRI Actor: %s"), *FoundActor->GetName());
+
+			if (FoundActor->ActorHasTag(FName("Water")))
+			{
+				FoundActor->SetActorHiddenInGame(false);
+
+			}
+			else if (FoundActor->ActorHasTag(FName("Snow")))
+			{
+				FoundActor->SetActorHiddenInGame(true);
+			}
+		}
+	}
+}	
 
 #pragma endregion 
 

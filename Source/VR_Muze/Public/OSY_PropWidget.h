@@ -44,6 +44,10 @@ public:
 	class UButton* btn_Niagara5;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_Niagara6;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_meteorShower;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Snow;
 
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> Niagara1;
@@ -57,6 +61,12 @@ public:
 	TSubclassOf<class AActor> Niagara5;
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> Niagara6;
+
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AActor> MeteorShower;
+
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AActor> Snow;
 #pragma endregion
 
 #pragma region Light
@@ -92,6 +102,17 @@ public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_PostJson;
 
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_HDRI1;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_HDRI2;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Plane1;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Plane2;
 
 	UPROPERTY()
 	FString posturl;
@@ -129,9 +150,21 @@ public:
 	void SpawnNiagara5();
 	UFUNCTION()
 	void SpawnNiagara6();
+	UFUNCTION()
+	void SpawnNiagara7();
 
+	UFUNCTION()
+	void SpawnNiagara8();
+
+
+	UFUNCTION()
 	void ChangeBackDrop();
+	UFUNCTION()
 	void ChangeBackDrop2();
+	UFUNCTION()
+	void ChangePlane();
+	UFUNCTION()
+	void ChangePlane2();
 #pragma endregion
 
 
