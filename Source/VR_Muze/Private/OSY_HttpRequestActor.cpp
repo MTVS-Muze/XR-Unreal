@@ -13,6 +13,8 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "KJS_GameModeBase.h"
 #include "ModeSelectGameModeBase.h"
+#include "Runtime/Engine/Public/ImageUtils.h"
+#include "KJS_CustomizeGameModeBase.h"
 
 // Sets default values
 AOSY_HttpRequestActor::AOSY_HttpRequestActor()
@@ -34,6 +36,7 @@ void AOSY_HttpRequestActor::BeginPlay()
 	OCgm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
 	MSgm = GetWorld()->GetAuthGameMode<AModeSelectGameModeBase>();
 	KVgm = GetWorld()->GetAuthGameMode<AKJS_GameModeBase>();
+	KCgm = GetWorld()->GetAuthGameMode<AKJS_CustomizeGameModeBase>();
 
 
 
@@ -119,6 +122,8 @@ void AOSY_HttpRequestActor::OnRecivedMemberData(FHttpRequestPtr Request, FHttpRe
 				gi->platform = parsedDataArray[5];
 				gi->role = parsedDataArray[6];
 				gi->email = parsedDataArray[7];
+
+				UE_LOG(LogTemp,Warning,TEXT("%s"),*gi->profileImage);
 		
 
 			gi->parsePlayerData = parsedData;
@@ -390,5 +395,28 @@ void AOSY_HttpRequestActor::ParseDataForURL1(const FString& ResponseData)
 void AOSY_HttpRequestActor::ParseDataForURL2(const FString& ResponseData)
 {
 
+}
+
+void AOSY_HttpRequestActor::GetImage(const FString url)
+{
+	TSharedRef<IHttpRequest> req = FHttpModule::Get().CreateRequest();
+	req->SetURL(url);
+	req->SetVerb("Get");
+	// 확장자는 검색하면서 받아보자 jpeg,png 중 하나겠지
+	req->SetHeader(TEXT("Content-Type"), TEXT("image/png"));
+	req->SetHeader(TEXT("Authorization"), gi->Token);
+	req->OnProcessRequestComplete().BindUObject(this,&AOSY_HttpRequestActor::OnGetImageData);
+	req->ProcessRequest();
+
+}
+
+void AOSY_HttpRequestActor::OnGetImageData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully)
+{
+	if (bConnectedSuccessfully)
+	{
+		TArray<uint8> texBite = Response->GetContent();
+		UTexture2D* realTex = FImageUtils::ImportBufferAsTexture2D(texBite);
+		KCgm->SetImage(realTex);
+	}
 }
 
