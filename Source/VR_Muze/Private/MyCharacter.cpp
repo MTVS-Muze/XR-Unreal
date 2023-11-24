@@ -24,6 +24,8 @@
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputAction.h"
 #include "KJS_GameModeBase.h"
 #include "OSY_GameInstance.h"
+#include "Net/UnrealNetwork.h"
+#include "KJS_MuzePlayerState.h"
 
 
 
@@ -291,6 +293,7 @@ void AMyCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	ps = Cast<AKJS_MuzePlayerState>(GetPlayerState());
 
 
 	if (gi)
@@ -461,22 +464,101 @@ void AMyCharacter::ChangeFOV(UWorld* LoadedWorld)
 
 void AMyCharacter::SwitchBodyColor(int32 Index)
 {
-	GetMesh()->SetMaterial(0, BodyMaterials[Index]);
+	
+	ServerSwtichBodyColor(Index);
+	
+	if (ps)
+	{
+		ColorIndex = ps->ColorIndex;
+	}
 }
 
 void AMyCharacter::AttachGlass(int32 Index)
 {
-	AttachedGlass->SetStaticMesh(GlassMeshes[Index]);
+
+	ServerAttachGlass(Index);
+	
+		if (ps)
+		{
+			GlassIndex = ps->GlassIndex;
+		}
+	
 }
 
 void AMyCharacter::AttachHat(int32 Index)
 {
-	AttachedHat->SetStaticMesh(HatMeshes[Index]);
+		ServerAttachHat(Index);
+	
+		if (ps)
+		{
+			HatIndex = ps->HatIndex;
+		}
+	
 }
 
 void AMyCharacter::AttachTie(int32 Index)
 {
-	AttachedTie->SetStaticMesh(TieMeshes[Index]);
+		ServerAttachTie(Index);
+    
 
+		if (ps)
+		{
+			TieIndex = ps->TieIndex;
+		}
+	
+}
+
+void AMyCharacter::ServerSwtichBodyColor_Implementation(int32 Index)
+{
+	ColorIndex = Index;
+	MulticastSwitchBodyColor(ColorIndex);
+}
+
+void AMyCharacter::MulticastSwitchBodyColor_Implementation(int32 Index)
+{
+	GetMesh()->SetMaterial(0, BodyMaterials[Index]);
+}
+
+void AMyCharacter::ServerAttachGlass_Implementation(int32 Index)
+{
+	GlassIndex = Index;
+	MulticastAttachGlass(GlassIndex);
+}
+
+void AMyCharacter::MulticastAttachGlass_Implementation(int32 Index)
+{
+	AttachedGlass->SetStaticMesh(GlassMeshes[Index]);
+}
+
+void AMyCharacter::ServerAttachHat_Implementation(int32 Index)
+{
+	HatIndex = Index;
+	MulticastAttachHat(HatIndex);
+}
+
+void AMyCharacter::MulticastAttachHat_Implementation(int32 Index)
+{
+	AttachedHat->SetStaticMesh(HatMeshes[Index]);
+}
+
+void AMyCharacter::ServerAttachTie_Implementation(int32 Index)
+{
+	TieIndex = Index;
+	MulticastAttachTie(TieIndex);
+}
+
+void AMyCharacter::MulticastAttachTie_Implementation(int32 Index)
+{
+	AttachedTie->SetStaticMesh(TieMeshes[Index]);
+}
+
+void AMyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMyCharacter, ColorIndex);
+	DOREPLIFETIME(AMyCharacter, HatIndex);
+	DOREPLIFETIME(AMyCharacter, GlassIndex);
+	DOREPLIFETIME(AMyCharacter, TieIndex);
 }
 
