@@ -37,6 +37,9 @@ public:
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
 
+    UFUNCTION()
+    void OnLevelSequenceFinished();
+
 public:
     class AMyCharacter* MyCharacter;
 
