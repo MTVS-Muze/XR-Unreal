@@ -19,6 +19,7 @@
 
 
 
+
 void UOSY_PropWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -260,6 +261,32 @@ void UOSY_PropWidget::SpawnNiagara6()
 			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
 		}
 	}
+}
+
+void UOSY_PropWidget::ChangeBackDrop()
+{
+	/*for (TActorIterator<> It(GetWorld()); It; ++It)
+	{
+		AHDRIBackdrop* HDRIBackdrop = *It;
+		if (HDRIBackdrop)
+		{
+			// 새로운 CubeMap 로드
+			UTextureCube* NewCubeMap = LoadObject<UTextureCube>(NULL, TEXT("/Game/Path/To/Your/Cubemap.YourCubemap"));
+			if (NewCubeMap)
+			{
+				// CubeMap 변경
+				HDRIBackdrop->Cubemap = NewCubeMap;
+				HDRIBackdrop->MarkComponentsRenderStateDirty(); // Render state 갱신
+			}
+		}
+	}
+	*/
+	
+}
+
+void UOSY_PropWidget::ChangeBackDrop2()
+{
+
 }
 
 #pragma endregion 
