@@ -23,5 +23,14 @@ public:
 
 	UFUNCTION()
 	void OnSequenceFinished();
+
+	UFUNCTION()
+	void SetImage(class UTexture2D* tex);
+
+	UPROPERTY(EditAnywhere,Category = MySettings)
+	TSubclassOf <class UOSY_MyInfoWidget> MyInfoWidget;
+	
+	class UOSY_MyInfoWidget* MyInfoUI;
+
 	
 };

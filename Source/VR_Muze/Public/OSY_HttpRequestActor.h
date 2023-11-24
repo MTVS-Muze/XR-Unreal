@@ -76,6 +76,9 @@ public:
 	UPROPERTY()
 	class AModeSelectGameModeBase* MSgm;
 
+	UPROPERTY()
+	class AKJS_CustomizeGameModeBase* KCgm;
+
 	// 파일 세이브하기
 	void SaveJson(const FString jsonData);
 
@@ -112,4 +115,7 @@ public:
 
 	void ParseDataForURL1(const FString& ResponseData);
 	void ParseDataForURL2(const FString& ResponseData);
+
+	void GetImage(const FString url);
+	void OnGetImageData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully);
 };
