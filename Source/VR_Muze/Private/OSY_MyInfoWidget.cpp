@@ -18,6 +18,10 @@ void UOSY_MyInfoWidget::NativeConstruct()
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
 	SetText();
+
+	tb_Name->SetText(FText::FromString(gi->name));
+	tb_email->SetText(FText::FromString(gi->email));
+
 }
 
 void UOSY_MyInfoWidget::SetText()

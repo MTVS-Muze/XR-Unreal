@@ -118,7 +118,7 @@ void AOSY_HttpRequestActor::OnRecivedMemberData(FHttpRequestPtr Request, FHttpRe
 				gi->id = FCString::Atoi(*parsedDataArray[0]);
 				gi->name = parsedDataArray[1];
 				gi->sub = parsedDataArray[2];
-				gi->profileImage = parsedDataArray[3]+parsedDataArray[4];
+				gi->profileImage = parsedDataArray[3]+":" + parsedDataArray[4];
 				gi->platform = parsedDataArray[5];
 				gi->role = parsedDataArray[6];
 				gi->email = parsedDataArray[7];
