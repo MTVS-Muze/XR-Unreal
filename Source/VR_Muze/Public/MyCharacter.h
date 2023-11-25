@@ -7,6 +7,7 @@
 #include "Runtime/UMG/Public/Components/WidgetComponent.h"
 #include "InputActionValue.h"
 #include "KJS_CharacterAnimInstance.h"
+#include "Net/UnrealNetwork.h"
 #include "MyCharacter.generated.h"
 
 //class UInputMappingContext;
@@ -112,12 +113,6 @@ public:
 	void SwitchVRCamera();
 
 	UFUNCTION()
-	void PlayLevelSequence();
-
-	UFUNCTION()
-	void SetViewToCineCamera();
-
-	UFUNCTION()
 	void ChangeFOV(UWorld* LoadedWorld);
 
 	UPROPERTY(EditDefaultsOnly, Category = Animation)
@@ -173,6 +168,54 @@ public:
 	UFUNCTION()
 	void AttachTie(int32 Index);
 
-	
+	UFUNCTION()
+	void SetVisibiltyMesh();
+
+	UPROPERTY(Replicated)
+	int32 ColorIndex;
+
+	UPROPERTY(Replicated)
+	int32 HatIndex;
+
+	UPROPERTY(Replicated)
+	int32 GlassIndex;
+
+	UPROPERTY(Replicated)
+	int32 TieIndex;
+
+	UPROPERTY()
+	class AKJS_MuzePlayerState* ps;
+	//////////////////////////// 서버함수
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void ServerSwtichBodyColor(int32 Index);
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastSwitchBodyColor(int32 Index);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void ServerAttachGlass(int32 Index);
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastAttachGlass(int32 Index);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void ServerAttachHat(int32 Index);
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastAttachHat(int32 Index);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void ServerAttachTie(int32 Index);
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastAttachTie(int32 Index);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void ServerSetVisibiltyMesh();
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastSetVisibiltyMesh();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };

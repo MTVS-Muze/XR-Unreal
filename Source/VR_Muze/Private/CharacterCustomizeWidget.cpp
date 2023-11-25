@@ -9,6 +9,7 @@
 #include "MyCharacter.h"
 #include "OSY_GameInstance.h"
 #include "OSY_HttpRequestActor.h"
+#include "KJS_MuzePlayerState.h"
 
 void UCharacterCustomizeWidget::NativeConstruct()
 {
@@ -18,6 +19,7 @@ void UCharacterCustomizeWidget::NativeConstruct()
 	APlayerController* PlayerController = World->GetFirstPlayerController();
 	APawn* Pawn = PlayerController->GetPawn();
 	player = Cast<AMyCharacter>(Pawn);
+	ps = Cast<AKJS_MuzePlayerState>(player->GetPlayerState());
 
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
@@ -98,33 +100,50 @@ void UCharacterCustomizeWidget::OnClickedbtn_BackSelect()
 
 void UCharacterCustomizeWidget::SwitchColorBlack()
 {
-	
 	color=0;
 	gi->color=color;
-	player->SwitchBodyColor(color);
+	player->ColorIndex = color;
+	if(ps&&player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 }
 
 void UCharacterCustomizeWidget::SwitchColorWhite()
 {
 	color=1;
 	gi->color = color;
-	
-	player->SwitchBodyColor(color);
+	player->ColorIndex = color;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 }
 
 void UCharacterCustomizeWidget::SwitchColorSkyBlue()
 {
 	color=2;
 	gi->color = color;
-	
-	player->SwitchBodyColor(color);
+	player->ColorIndex = color;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 }
 
 void UCharacterCustomizeWidget::SwitchColorPink()
 {
 	color=3;
 	player->SwitchBodyColor(color);
-	gi->color = color;
+	player->ColorIndex = color;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 
 }
 
@@ -132,48 +151,72 @@ void UCharacterCustomizeWidget::SwitchColorYellow()
 {
 	color=4;
 	gi->color = color;
-	
-	player->SwitchBodyColor(color);
+	player->ColorIndex = color;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 }
 
 void UCharacterCustomizeWidget::SwitchColorGreen()
 {
 	color=5;
 	gi->color = color;
-
-	player->SwitchBodyColor(color);
+	player->ColorIndex = color;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 }
 
 void UCharacterCustomizeWidget::SwitchColorDeepYellow()
 {
 	color=6;
 	gi->color = color;
-
-	player->SwitchBodyColor(color);
+	player->ColorIndex = color;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 }
 
 void UCharacterCustomizeWidget::SwitchColorViolet()
 {
 	color=7;
 	gi->color = color;
-
-	player->SwitchBodyColor(color);
+	player->ColorIndex = color;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 }
 
 void UCharacterCustomizeWidget::SwitchColorCoral()
 {
 	color=8;
 	gi->color = color;
-
-	player->SwitchBodyColor(color);
+	player->ColorIndex = color;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 }
 
 void UCharacterCustomizeWidget::SwitchColorNavy()
 {
 	color=9;
 	gi->color = color;
-	
-	player->SwitchBodyColor(color);
+	player->ColorIndex = color;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetColorIndex(color);
+	}
+	player->SwitchBodyColor(player->ColorIndex);
 }
 
 void UCharacterCustomizeWidget::SwitchAccessoryCanvas(int32 index)
@@ -202,49 +245,84 @@ void UCharacterCustomizeWidget::WearGlass0()
 {
 	face=0;
 	gi->face=face;
-	player->AttachGlass(face);
+	player->GlassIndex = face;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetGlassIndex(face);
+	}
+	player->AttachGlass(player->GlassIndex);
 }
 
 void UCharacterCustomizeWidget::WearGlass1()
 {
 	face=1;
 	gi->face = face;
-	player->AttachGlass(face);
+	player->GlassIndex = face;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetGlassIndex(face);
+	}
+	player->AttachGlass(player->GlassIndex);
 }
 
 void UCharacterCustomizeWidget::WearGlass2()
 {
 	face=2;
 	gi->face = face;
-	player->AttachGlass(face);
+	player->GlassIndex = face;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetGlassIndex(face);
+	}
+	player->AttachGlass(player->GlassIndex);
 }
 
 void UCharacterCustomizeWidget::WearGlass3()
 {
 	face=3;
 	gi->face = face;
-	player->AttachGlass(face);
+	player->GlassIndex = face;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetGlassIndex(face);
+	}
+	player->AttachGlass(player->GlassIndex);
 }
 
 void UCharacterCustomizeWidget::WearGlass4()
 {
 	face=4;
 	gi->face = face;
-	player->AttachGlass(face);
+	player->GlassIndex = face;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetGlassIndex(face);
+	}
+	player->AttachGlass(player->GlassIndex);
 }
 
 void UCharacterCustomizeWidget::WearGlass5()
 {
 	face=5;
 	gi->face = face;
-	player->AttachGlass(face);
+	player->GlassIndex = face;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetGlassIndex(face);
+	}
+	player->AttachGlass(player->GlassIndex);
 }
 
 void UCharacterCustomizeWidget::WearGlass6()
 {
 	face=6;
 	gi->face = face;
-	player->AttachGlass(face);
+	player->GlassIndex = face;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetGlassIndex(face);
+	}
+	player->AttachGlass(player->GlassIndex);
 }
 
 
@@ -252,14 +330,24 @@ void UCharacterCustomizeWidget::WearHat1()
 {
 	hat = 0;
 	gi->hat = hat;
-	player->AttachHat(hat);
+	player->HatIndex = hat;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetHatIndex(hat);
+	}
+	player->AttachHat(player->HatIndex);
 }
 
 void UCharacterCustomizeWidget::WearHat2()
 {
 	hat = 1;
 	gi->hat = hat;
-	player->AttachHat(hat);
+	player->HatIndex = hat;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetHatIndex(hat);
+	}
+	player->AttachHat(player->HatIndex);
 }
 
 
@@ -267,19 +355,34 @@ void UCharacterCustomizeWidget::WearTie1()
 {
 	tie = 0;
 	gi->tie = tie;
-	player->AttachTie(tie);
+	player->TieIndex = tie;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetTieIndex(tie);
+	}
+	player->AttachTie(player->TieIndex);
 }
 
 void UCharacterCustomizeWidget::WearTie2()
 {
 	tie = 1;
 	gi->tie = tie;
-	player->AttachTie(tie);
+	player->TieIndex = tie;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetTieIndex(tie);
+	}
+	player->AttachTie(player->TieIndex);
 }
 
 void UCharacterCustomizeWidget::WearTie3()
 {
 	tie = 2;
 	gi->tie = tie;
-	player->AttachTie(tie);
+	player->TieIndex = tie;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetTieIndex(tie);
+	}
+	player->AttachTie(player->TieIndex);
 }

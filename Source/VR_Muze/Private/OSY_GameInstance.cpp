@@ -136,7 +136,7 @@ void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccess
 {
 	if (bWasSuccessful)
 	{
-		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Box_indoor_Multi?Listen", true);
+		bool result = GetWorld()->ServerTravel("/Game/DEV/Map/Box_indoor_Multi?Listen");
 		OnCreateSessionCompleted.Broadcast();
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result : %s"), result ? *FString("Success") : *FString("Failed"));
 	}
@@ -168,7 +168,7 @@ void UOSY_GameInstance::FindOtherSession()
 	sessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 
 	//세션의 검색량을 설정
-	sessionSearch->MaxSearchResults = 10;
+	sessionSearch->MaxSearchResults = 5;
 
 	sessionInterface->FindSessions(0, sessionSearch.ToSharedRef());
 }

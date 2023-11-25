@@ -255,6 +255,8 @@ public:
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	FString JsonStringPost;
 
+	UPROPERTY()
+	class AKJS_MuzePlayerState* ps;
 
 	int color,face,tie,hat;
 
