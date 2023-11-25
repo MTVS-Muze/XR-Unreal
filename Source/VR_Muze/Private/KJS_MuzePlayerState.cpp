@@ -2,25 +2,46 @@
 
 
 #include "KJS_MuzePlayerState.h"
+#include "MyCharacter.h"
 
 void AKJS_MuzePlayerState::ServerSetColorIndex_Implementation(int32 NewIndex)
 {
-	ColorIndex = NewIndex;
+	MulticastSetColorIndex(NewIndex);
 }
 
 void AKJS_MuzePlayerState::ServerSetHatIndex_Implementation(int32 NewIndex)
 {
-	HatIndex = NewIndex;
+	MulticastSetHatIndex(NewIndex);
 }
 
 void AKJS_MuzePlayerState::ServerSetGlassIndex_Implementation(int32 NewIndex)
 {
-	GlassIndex = NewIndex;
+	MulticastSetGlassIndex(NewIndex);
 }
 
 void AKJS_MuzePlayerState::ServerSetTieIndex_Implementation(int32 NewIndex)
 {
-	TieIndex = NewIndex;
+	MulticastrSetTieIndex(NewIndex);
+}
+
+void AKJS_MuzePlayerState::MulticastSetColorIndex_Implementation(int32 NewIndex)
+{
+	ColorIndex = NewIndex;
+}
+
+void AKJS_MuzePlayerState::MulticastSetHatIndex_Implementation(int32 NewIndex)
+{
+	HatIndex = NewIndex;
+}
+
+void AKJS_MuzePlayerState::MulticastSetGlassIndex_Implementation(int32 NewIndex)
+{
+	GlassIndex = NewIndex;
+}
+
+void AKJS_MuzePlayerState::MulticastrSetTieIndex_Implementation(int32 NewIndex)
+{
+	GlassIndex = NewIndex;
 }
 
 void AKJS_MuzePlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

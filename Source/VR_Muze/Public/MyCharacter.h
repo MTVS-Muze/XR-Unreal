@@ -113,12 +113,6 @@ public:
 	void SwitchVRCamera();
 
 	UFUNCTION()
-	void PlayLevelSequence();
-
-	UFUNCTION()
-	void SetViewToCineCamera();
-
-	UFUNCTION()
 	void ChangeFOV(UWorld* LoadedWorld);
 
 	UPROPERTY(EditDefaultsOnly, Category = Animation)
@@ -174,6 +168,9 @@ public:
 	UFUNCTION()
 	void AttachTie(int32 Index);
 
+	UFUNCTION()
+	void SetVisibiltyMesh();
+
 	UPROPERTY(Replicated)
 	int32 ColorIndex;
 
@@ -212,8 +209,12 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
 	void MulticastAttachTie(int32 Index);
-	
 
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void ServerSetVisibiltyMesh();
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastSetVisibiltyMesh();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

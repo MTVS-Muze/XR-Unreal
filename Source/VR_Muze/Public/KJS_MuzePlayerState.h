@@ -40,6 +40,20 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ServerSetTieIndex(int32 NewIndex);
 
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastSetColorIndex(int32 NewIndex);
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastSetHatIndex(int32 NewIndex);
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastSetGlassIndex(int32 NewIndex);
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
+	void MulticastrSetTieIndex(int32 NewIndex);
+
+
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 };

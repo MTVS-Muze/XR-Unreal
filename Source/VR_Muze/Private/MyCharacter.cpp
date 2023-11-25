@@ -78,6 +78,11 @@ AMyCharacter::AMyCharacter()
 	
 	rightHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Right Hand Mesh"));
 	rightHand->SetupAttachment(rightMotionController);
+
+	rightHand->bOnlyOwnerSee = true;
+	rightHand->bOwnerNoSee = false;
+	leftHand->bOnlyOwnerSee = true;
+	leftHand->bOwnerNoSee = false;
 	
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempRight(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_right.SKM_MannyXR_right'"));
 	if (TempRight.Succeeded())
@@ -265,26 +270,6 @@ AMyCharacter::AMyCharacter()
 		TieMeshes.Add(TempTie3.Object);
 	}
 
-
-
-	//ConstructorHelpers::FObjectFinder<UInputMappingContext> tempIMC(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/DEV/KJS//Character//Input/IMC_Input.IMC_Input'"));
-	//if (tempIMC.Succeeded())
-	//{
-	//	DefaultMappingContext = tempIMC.Object;
-	//}
-	//
-	//ConstructorHelpers::FObjectFinder<UInputAction>tempTrigger(TEXT("/Script/EnhancedInput.InputAction'/Game/DEV/KJS/Character/Input///IA_Trigger.IA_Trigger'"));
-	//if (tempTrigger.Succeeded())
-	//{
-	//	InputTrigger = tempTrigger.Object;
-	//}
-	//
-	//ConstructorHelpers::FObjectFinder<UInputAction>tempVisible(TEXT("/Script/EnhancedInput.InputAction'/Game/DEV/KJS/Character/Input///IA_VisibiltyPlaylist.IA_VisibiltyPlaylist'"));
-	//if (tempVisible.Succeeded())
-	//{
-	//	VisibilityPlaylist = tempVisible.Object;
-	//}
-
 }
 
 // Called when the game starts or when spawned
@@ -295,14 +280,6 @@ void AMyCharacter::BeginPlay()
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 	ps = Cast<AKJS_MuzePlayerState>(GetPlayerState());
 
-
-	if (gi)
-	{
-		SwitchBodyColor(gi->color);
-		AttachHat(gi->hat);
-		AttachGlass(gi->face);
-		AttachTie(gi->tie);
-	}
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -331,7 +308,6 @@ void AMyCharacter::BeginPlay()
 	if (MapName == "Box_indoor_Single")
 	{
 		UGameplayStatics::PlaySound2D(this,enterSound);
-		// "Box_indoor_Single" 맵에서는 StartCam을 활성화합니다.
 		rightHand->SetVisibility(false);
 		leftHand->SetVisibility(false);
 		hmdMesh->SetVisibility(false);
@@ -363,11 +339,17 @@ void AMyCharacter::BeginPlay()
 	else if (MapName.Contains("Box_indoor_Multi"))
 	{
 		GetMesh()->PlayAnimation(SittingIdle, true);
+		SetVisibiltyMesh();
 	}
 	
-	//PlayLevelSequence();
+	if (gi)
+	{
+		SwitchBodyColor(gi->color);
+		AttachHat(gi->hat);
+		AttachGlass(gi->face);
+		AttachTie(gi->tie);
+	}
 
-	
 
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &AMyCharacter::ChangeFOV);
 }
@@ -419,24 +401,6 @@ void AMyCharacter::SwitchVRCamera()
 	}
 }
 
-void AMyCharacter::PlayLevelSequence()
-{
-	//SetViewToCineCamera();
-}
-
-void AMyCharacter::SetViewToCineCamera()
-{
-	//pc = GetWorld()->GetFirstPlayerController();
-	//if (ACineCameraActor* CineCamera = Cast<ACineCameraActor>(StaticFindObject(ACineCameraActor::StaticClass(), GetWorld(), TEXT("CineCameraActor"))))
-	//{
-	//	if (pc)
-	//	{
-	//		pc->SetViewTargetWithBlend(CineCamera, 0.5f);
-	//	}
-	//}
-
-}
-
 void AMyCharacter::ChangeFOV(UWorld* LoadedWorld)
 {
 	
@@ -464,48 +428,27 @@ void AMyCharacter::ChangeFOV(UWorld* LoadedWorld)
 
 void AMyCharacter::SwitchBodyColor(int32 Index)
 {
-	
 	ServerSwtichBodyColor(Index);
-	
-	if (ps)
-	{
-		ColorIndex = ps->ColorIndex;
-	}
 }
 
 void AMyCharacter::AttachGlass(int32 Index)
 {
-
 	ServerAttachGlass(Index);
-	
-		if (ps)
-		{
-			GlassIndex = ps->GlassIndex;
-		}
-	
 }
 
 void AMyCharacter::AttachHat(int32 Index)
 {
-		ServerAttachHat(Index);
-	
-		if (ps)
-		{
-			HatIndex = ps->HatIndex;
-		}
-	
+	ServerAttachHat(Index);
 }
 
 void AMyCharacter::AttachTie(int32 Index)
 {
-		ServerAttachTie(Index);
-    
+	ServerAttachTie(Index);
+}
 
-		if (ps)
-		{
-			TieIndex = ps->TieIndex;
-		}
-	
+void AMyCharacter::SetVisibiltyMesh()
+{
+	ServerSetVisibiltyMesh();
 }
 
 void AMyCharacter::ServerSwtichBodyColor_Implementation(int32 Index)
@@ -514,9 +457,15 @@ void AMyCharacter::ServerSwtichBodyColor_Implementation(int32 Index)
 	MulticastSwitchBodyColor(ColorIndex);
 }
 
+
 void AMyCharacter::MulticastSwitchBodyColor_Implementation(int32 Index)
 {
+	ColorIndex = Index;
 	GetMesh()->SetMaterial(0, BodyMaterials[Index]);
+	if (ps)
+	{
+		ColorIndex = ps->ColorIndex;
+	}
 }
 
 void AMyCharacter::ServerAttachGlass_Implementation(int32 Index)
@@ -525,9 +474,15 @@ void AMyCharacter::ServerAttachGlass_Implementation(int32 Index)
 	MulticastAttachGlass(GlassIndex);
 }
 
+
 void AMyCharacter::MulticastAttachGlass_Implementation(int32 Index)
 {
+	GlassIndex = Index;
 	AttachedGlass->SetStaticMesh(GlassMeshes[Index]);
+	if (ps)
+	{
+		GlassIndex = ps->GlassIndex;
+	}
 }
 
 void AMyCharacter::ServerAttachHat_Implementation(int32 Index)
@@ -538,7 +493,12 @@ void AMyCharacter::ServerAttachHat_Implementation(int32 Index)
 
 void AMyCharacter::MulticastAttachHat_Implementation(int32 Index)
 {
+	HatIndex = Index;
 	AttachedHat->SetStaticMesh(HatMeshes[Index]);
+	if (ps)
+	{
+		HatIndex = ps->HatIndex;
+	}
 }
 
 void AMyCharacter::ServerAttachTie_Implementation(int32 Index)
@@ -549,7 +509,29 @@ void AMyCharacter::ServerAttachTie_Implementation(int32 Index)
 
 void AMyCharacter::MulticastAttachTie_Implementation(int32 Index)
 {
+	TieIndex = Index;
 	AttachedTie->SetStaticMesh(TieMeshes[Index]);
+	if (ps)
+	{
+		TieIndex = ps->TieIndex;
+	}
+}
+
+void AMyCharacter::ServerSetVisibiltyMesh_Implementation()
+{
+	MulticastSetVisibiltyMesh();
+}
+
+void AMyCharacter::MulticastSetVisibiltyMesh_Implementation()
+{
+	GetMesh()->bOwnerNoSee = true;
+	GetMesh()->bOnlyOwnerSee = false;
+	AttachedGlass->bOwnerNoSee = true;
+	AttachedHat->bOwnerNoSee = true;
+	AttachedTie->bOwnerNoSee = true;
+	AttachedGlass->bOnlyOwnerSee = false;
+	AttachedHat->bOnlyOwnerSee = false;
+	AttachedTie->bOnlyOwnerSee = false;
 }
 
 void AMyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
