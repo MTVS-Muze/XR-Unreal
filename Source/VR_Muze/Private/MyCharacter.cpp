@@ -332,16 +332,20 @@ void AMyCharacter::BeginPlay()
 		GetMesh()->PlayAnimation(IdleAnimation, false);
 	}
 
-	else if (MapName.Contains("Box_indoor_Single"))
+	if (MapName.Contains("Box_indoor_Single"))
 	{
 		GetMesh()->PlayAnimation(SittingAnimation, false);
 	}
-	else if (MapName.Contains("Box_indoor_Multi"))
+	if (MapName.Contains("Box_indoor_Multi"))
 	{
 		GetMesh()->PlayAnimation(SittingIdle, true);
 		SetVisibiltyMesh();
 	}
-	
+	if (MapName.Contains("PlanetariumSetup0"))
+	{
+		PlaylistWidget->SetVisibility(false);
+	}
+
 	if (gi)
 	{
 		SwitchBodyColor(gi->color);

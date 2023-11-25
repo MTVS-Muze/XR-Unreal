@@ -36,7 +36,8 @@ void AKJS_MultiGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
 
-    StartLevelSequence();
+    FTimerHandle TimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AKJS_MultiGameModeBase::StartLevelSequence, 10.0f, false);
 }
 
 APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotator Rotation , FString Tag)
@@ -95,6 +96,7 @@ void AKJS_MultiGameModeBase::MulticastStartLevelSequence_Implementation()
             LevelSequencePlayer->Play();
 
             FString MapName = GetWorld()->GetMapName();
+
             if(MapName.Contains("PlanetariumSetup0"))
 			{
 				if (HasAuthority())
