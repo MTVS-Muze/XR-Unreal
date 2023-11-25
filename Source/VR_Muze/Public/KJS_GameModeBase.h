@@ -37,11 +37,17 @@ public:
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
 
-    UFUNCTION()
-    void OnLevelSequenceFinished();
+    
 
 public:
     class AMyCharacter* MyCharacter;
+
+    UPROPERTY(EditAnywhere, Category= MySettings)
+	class AOSY_HttpRequestActor* HttpActor;
+
+    UFUNCTION()
+    void SendReq();
+
 
 
 };

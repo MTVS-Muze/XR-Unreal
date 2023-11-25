@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "OSY_MainWidgetButton.h"
 #include "MediaLobbyWidget.generated.h"
 
 /**
@@ -16,7 +17,7 @@ class VR_MUZE_API UMediaLobbyWidget : public UUserWidget
 
 protected:
 	virtual void NativeConstruct() override;
-
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 public:
 	//ХыЧе
 
@@ -302,8 +303,24 @@ public:
 	void SetWidgetText(int id);
 
 	UPROPERTY(EditAnywhere,Category=MySettings)
-	int idnum=0;
+	int idnum;
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UBorder* bd_origin;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	class UButton* btn_socialPlay;
+
+
+	UFUNCTION()
+	void SetID();
+	UFUNCTION()
+	void SocialPlay(int LevelId);
+
+	UFUNCTION()
+	void UpdateButtonVisibility(int32 CanvasIndex);
+
+	bool bHasExecuted;
 	
 #pragma endregion
 

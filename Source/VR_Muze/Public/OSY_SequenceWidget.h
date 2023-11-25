@@ -51,6 +51,12 @@ public :
 	class UButton* btn_Stop;
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UButton* btn_Pause;
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* tb_SongName;
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* tb_Currentime;
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* tb_Maxtime;
   
 
 	
@@ -114,7 +120,8 @@ public :
 	class USoundBase* Song;
 
 	int32 currentIndex = 0;
-
+	UPROPERTY()
+	class UOSY_GameInstance* gi;
 
 
 	

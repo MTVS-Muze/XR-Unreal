@@ -11,11 +11,14 @@
 #include "OSY_TImeActor.h"
 #include "Components/AudioComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "OSY_GameInstance.h"
 
 void UOSY_SequenceWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+
+    gi = Cast<UOSY_GameInstance>(GetGameInstance());
     gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
 
     TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));
@@ -36,6 +39,10 @@ void UOSY_SequenceWidget::NativeConstruct()
 
     FTimerHandle TimerHandle;
     GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UOSY_SequenceWidget::LoadJsonData, 2.0f, false);
+
+    tb_SongName->SetText(FText::FromString(gi->song));
+
+   
 }
 
 void UOSY_SequenceWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -44,6 +51,13 @@ void UOSY_SequenceWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaT
 
     CurrentTime = TimeManager->CurrentTime;
     UE_LOG(LogTemp,Warning,TEXT("%f"),CurrentTime);
+
+    int32 TotalSeconds = FMath::RoundToInt(CurrentTime);
+    int32 Minutes = TotalSeconds / 60;
+    int32 Seconds = TotalSeconds % 60;
+
+    FString TimeString = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
+    tb_Currentime->SetText(FText::FromString(TimeString));
 
     if (CurrentTime <= MaxTime)
     {

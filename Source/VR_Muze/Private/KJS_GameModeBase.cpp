@@ -9,6 +9,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
 #include "MovieSceneSequencePlayer.h"
+#include "OSY_HttpRequestActor.h"
 
 
 void AKJS_GameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
@@ -19,6 +20,7 @@ void AKJS_GameModeBase::InitGame(const FString& MapName, const FString& Options,
 
 void AKJS_GameModeBase::BeginPlay()
 {
+
     Super::BeginPlay();
 
     for (TActorIterator<ALevelSequenceActor> It(GetWorld()); It; ++It)
@@ -26,22 +28,24 @@ void AKJS_GameModeBase::BeginPlay()
         ALevelSequenceActor* SeqActor = *It;
         if (SeqActor)
         {
-            ULevelSequencePlayer* LevelSequencePlayer = SeqActor->GetSequencePlayer();
-
-            FLevelSequenceCameraSettings CameraSettings;
-            LevelSequencePlayer->Initialize(SeqActor->GetSequence(), GetWorld()->GetCurrentLevel(), CameraSettings);
-
-            // 'OnFinished' 델리게이트에 바인딩 합니다.
-            LevelSequencePlayer->OnFinished.AddDynamic(this, &AKJS_GameModeBase::OnLevelSequenceFinished);
-
-            LevelSequencePlayer->Play();
+            SeqActor->SequencePlayer->Play();
         }
     }
+    gi = Cast<UOSY_GameInstance>(GetGameInstance());
+
+    HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
+
+    SendReq();
+    
 }
 
-void AKJS_GameModeBase::OnLevelSequenceFinished()
+void AKJS_GameModeBase::SendReq()
 {
-    FName LevelName = "Box_indoor_Multi";
+    if (HttpActor != nullptr)
+    {
+      HttpActor->SendRequest(gi->AllMap);
 
-    UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+    }
+
 }
+

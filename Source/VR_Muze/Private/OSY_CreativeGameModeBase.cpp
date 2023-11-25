@@ -12,6 +12,7 @@
 #include "OSY_OutLinerWidget.h"
 #include "OSY_GameInstance.h"
 #include "OSY_HttpRequestActor.h"
+#include "Runtime/UMG/Public/Components/TextBlock.h"
 
 AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
 {
@@ -108,8 +109,14 @@ void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
 
     if (Song)
     {
-        superShy=Song;
         SequnceUI->MaxTime = Song->Duration;
+        superShy=Song;
+        int32 TotalSeconds = FMath::RoundToInt(Song->Duration);
+        int32 Minutes = TotalSeconds / 60;
+        int32 Seconds = TotalSeconds % 60;
+
+        FString TimeString = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
+        SequnceUI->tb_Maxtime->SetText(FText::FromString(TimeString));
     }
 
 	

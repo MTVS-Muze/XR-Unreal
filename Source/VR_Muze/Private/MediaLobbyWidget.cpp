@@ -21,11 +21,14 @@
 #include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
 #include "OSY_HttpRequestActor.h"
 #include "ModeSelectGameModeBase.h"
+#include "OSY_MainWidgetButton.h"
 
 
 void UMediaLobbyWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	bHasExecuted = false;
 
 	gm =GetWorld()->GetAuthGameMode<AKJS_GameModeBase>();
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
@@ -83,6 +86,8 @@ void UMediaLobbyWidget::NativeConstruct()
 	
 	Check_DoubleSit1->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedDoubleSit1);
 	Check_DoubleSit2->OnCheckStateChanged.AddDynamic(this, &UMediaLobbyWidget::OnCheckedDoubleSit2);
+
+	btn_socialPlay->OnPressed.AddDynamic(this, &UMediaLobbyWidget::SetID);
 	
 	if(gi)
 	{
@@ -91,6 +96,45 @@ void UMediaLobbyWidget::NativeConstruct()
 
 	player = Cast<AMyCharacter>(GetOwningPlayerPawn());
 
+	int32 InitialCanvasIndex = 0;
+
+	// 버튼 가시성 업데이트
+	UpdateButtonVisibility(InitialCanvasIndex);
+
+
+
+	if (gm && gm->AllLevelArray.Num() > 0)
+	{
+		idnum = gm->AllLevelArray[0].Id;
+	}
+	else
+	{
+		// 배열이 비어있거나 null일 때 처리하려는 로직을 여기에 작성하실 수 있습니다.
+		UE_LOG(LogTemp, Warning, TEXT("AllLevelArray is empty or not initialized."));
+		return;
+	}
+
+}
+
+void UMediaLobbyWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry,InDeltaTime);
+
+	if (!bHasExecuted)
+	{
+		// 실행하려는 코드를 여기에 작성합니다.
+		if (gm && gm->AllLevelArray.Num() > 0)
+		{
+			idnum = gm->AllLevelArray[0].Id;
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("AllLevelArray is empty or not initialized."));
+		}
+
+		// 코드를 실행한 후 bHasExecuted를 true로 설정합니다.
+		bHasExecuted = true;
+	}
 }
 
 void UMediaLobbyWidget::SwitchCanvas(int32 index)
@@ -155,6 +199,8 @@ void UMediaLobbyWidget::OnClickedbtn_DownOriginal()
 	{
 		SetWidgetText(idnum);
 	}
+	
+	UpdateButtonVisibility(0);
 }
 #pragma region Social
 void UMediaLobbyWidget::OnClickedbtn_UpSocial()
@@ -249,20 +295,82 @@ void UMediaLobbyWidget::OnClickedbtn_BackDouble()
 
 void UMediaLobbyWidget::SetWidgetText(int id)
 {
-	FText IDText = FText::AsNumber(gm->AllLevelArray[id].Id);
+	FText IDText = FText::AsNumber(idnum);
 	text_ID->SetText(IDText);
 
-	FText TitleText = FText::FromString(gm->AllLevelArray[id].Title);
+	FText TitleText = FText::FromString(gm->AllLevelArray[idnum-6].Title);
 	text_Title->SetText(TitleText);
 
-	FText SingerText = FText::FromString(gm->AllLevelArray[id].Singer);
+	FText SingerText = FText::FromString(gm->AllLevelArray[idnum-6].Singer);
 	text_Singer->SetText(SingerText);
 
-	FText ArtistText = FText::FromString(gm->AllLevelArray[id].MemberName);
+	FText ArtistText = FText::FromString(gm->AllLevelArray[idnum-6].MemberName);
 	text_Artist->SetText(ArtistText);
 
-	FText InfoText = FText::FromString(gm->AllLevelArray[id].Info);
+	FText InfoText = FText::FromString(gm->AllLevelArray[idnum-6].Info);
 	text_Info->SetText(InfoText);
+}
+
+void UMediaLobbyWidget::SetID()
+{
+	gi->ReceiveLevelDataID(idnum);
+
+	gi->song = gm->AllLevelArray[idnum-6].Song;
+	gi->singer=gm->AllLevelArray[idnum-6].Singer;
+	// 레벨 트레블 해
+
+	FName LevelName = "3_3CreateMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+
+	
+}
+
+void UMediaLobbyWidget::SocialPlay(int LevelId)
+{
+	TArray<FAllLevelData> AllLevel = gm->AllLevelArray;
+	AllLevel[LevelId].Id;
+	UE_LOG(LogTemp,Warning,TEXT("SocialPlay Pressed"));
+	if (!gi)
+	{
+		return;
+	}
+
+	//gi->song=LevelId;
+	gi->ReceiveLevelDataID(LevelId);
+
+
+	FName LevelName = "3_3CreateMap";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+
+}
+
+void UMediaLobbyWidget::UpdateButtonVisibility(int32 CanvasIndex)
+{
+	// WidgetSwitcher 참조를 가져옵니다.
+	UWidgetSwitcher* CategorySwitcher = Cast<UWidgetSwitcher>(GetWidgetFromName(TEXT("ws_CategorySwitcher")));
+
+	// 버튼 위젯 참조를 가져옵니다.
+	UButton* SingleButton = Cast<UButton>(GetWidgetFromName(TEXT("btn_Single")));
+	UButton* SocialPlayButton = Cast<UButton>(GetWidgetFromName(TEXT("btn_SocialPlay")));
+
+	if (CategorySwitcher && SingleButton && SocialPlayButton)
+	{
+		// 현재 캔버스 인덱스가 0이고, WidgetSwitcher의 인덱스가 0일 때
+		if (CanvasIndex == 0 && CategorySwitcher->GetActiveWidgetIndex() == 0)
+		{
+			SingleButton->SetVisibility(ESlateVisibility::Visible);
+			SocialPlayButton->SetVisibility(ESlateVisibility::Hidden);
+		}
+		// 현재 캔버스 인덱스가 0이고, WidgetSwitcher의 인덱스가 1일 때
+		else if (CanvasIndex == 0 && CategorySwitcher->GetActiveWidgetIndex() == 1)
+		{
+			SingleButton->SetVisibility(ESlateVisibility::Hidden);
+			SocialPlayButton->SetVisibility(ESlateVisibility::Visible);
+		}
+		
+	}
 }
 
 void UMediaLobbyWidget::CreateDoubleRoom()

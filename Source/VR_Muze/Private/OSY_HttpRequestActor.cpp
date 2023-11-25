@@ -61,7 +61,7 @@ void AOSY_HttpRequestActor::SendRequest(const FString url)
 
 	//RequestedURL = url;
 
-	UE_LOG(LogTemp,Warning,TEXT("SibalZom : %s"),*gi->Token);
+	//UE_LOG(LogTemp,Warning,TEXT("SibalZom : %s"),*gi->Token);
 	// 요청하기 위한 정보를 설정한다.
 	req->SetURL(url);
 	req->SetVerb(TEXT("GET"));

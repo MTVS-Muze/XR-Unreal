@@ -5,6 +5,8 @@
 #include "OSY_GameInstance.h"
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerStart.h"
+#include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -31,7 +33,24 @@ void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Opt
 
 void AKJS_MultiGameModeBase::BeginPlay()
 {
-	
+    Super::BeginPlay();
+
+    for (TActorIterator<ALevelSequenceActor> It(GetWorld()); It; ++It)
+    {
+        ALevelSequenceActor* SeqActor = *It;
+        if (SeqActor)
+        {
+            ULevelSequencePlayer* LevelSequencePlayer = SeqActor->GetSequencePlayer();
+
+            FLevelSequenceCameraSettings CameraSettings;
+            LevelSequencePlayer->Initialize(SeqActor->GetSequence(), GetWorld()->GetCurrentLevel(), CameraSettings);
+
+            // 'OnFinished' 델리게이트에 바인딩 합니다.
+            LevelSequencePlayer->OnFinished.AddDynamic(this, &AKJS_MultiGameModeBase::OnLevelSequenceFinished);
+
+            LevelSequencePlayer->Play();
+        }
+    }
 }
 
 APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotator Rotation , FString Tag)
@@ -53,6 +72,13 @@ APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotato
 	return SpawnedActor;
 }
 
+
+void AKJS_MultiGameModeBase::OnLevelSequenceFinished()
+{
+    FName LevelName = "Box_indoor_Multi";
+
+    UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+}
 
 AActor* AKJS_MultiGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
 {

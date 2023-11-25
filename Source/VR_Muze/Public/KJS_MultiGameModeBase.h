@@ -29,6 +29,9 @@ public:
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
 
+	   UFUNCTION()
+    void OnLevelSequenceFinished();
+
 private:
 	TArray<APlayerStart*> UsedPlayerStarts;
 
