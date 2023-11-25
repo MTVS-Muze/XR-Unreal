@@ -210,12 +210,6 @@ public:
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
 	void MulticastAttachTie(int32 Index);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
-	void ServerSetVisibiltyMesh();
-
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = CharacterNetworkFunction)
-	void MulticastSetVisibiltyMesh();
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };

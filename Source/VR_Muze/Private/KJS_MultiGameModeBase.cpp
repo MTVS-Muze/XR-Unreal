@@ -36,22 +36,7 @@ void AKJS_MultiGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
 
-    for (TActorIterator<ALevelSequenceActor> It(GetWorld()); It; ++It)
-    {
-        ALevelSequenceActor* SeqActor = *It;
-        if (SeqActor)
-        {
-            ULevelSequencePlayer* LevelSequencePlayer = SeqActor->GetSequencePlayer();
-
-            FLevelSequenceCameraSettings CameraSettings;
-            LevelSequencePlayer->Initialize(SeqActor->GetSequence(), GetWorld()->GetCurrentLevel(), CameraSettings);
-
-            // 'OnFinished' 델리게이트에 바인딩 합니다.
-            //LevelSequencePlayer->OnFinished.AddDynamic(this, &AKJS_MultiGameModeBase::OnLevelSequenceFinished);
-
-            LevelSequencePlayer->Play();
-        }
-    }
+    StartLevelSequence();
 }
 
 APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotator Rotation , FString Tag)
@@ -76,9 +61,49 @@ APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotato
 
 void AKJS_MultiGameModeBase::OnLevelSequenceFinished()
 {
-    FName LevelName = "Box_indoor_Multi";
+    FString MapName = GetWorld()->GetMapName();
 
-    UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		GetWorld()->ServerTravel("/Game/DEV/Map/Box_indoor_Multi?Listen");
+	}
+}
+
+void AKJS_MultiGameModeBase::StartLevelSequence()
+{
+    ServerStartLevelSequence();
+}
+
+void AKJS_MultiGameModeBase::ServerStartLevelSequence_Implementation()
+{
+    MulticastStartLevelSequence();
+}
+
+void AKJS_MultiGameModeBase::MulticastStartLevelSequence_Implementation()
+{
+    for (TActorIterator<ALevelSequenceActor> It(GetWorld()); It; ++It)
+    {
+        ALevelSequenceActor* SeqActor = *It;
+        if (SeqActor)
+        {
+            ULevelSequencePlayer* LevelSequencePlayer = SeqActor->GetSequencePlayer();
+
+            FLevelSequenceCameraSettings CameraSettings;
+            LevelSequencePlayer->Initialize(SeqActor->GetSequence(), GetWorld()->GetCurrentLevel(), CameraSettings);
+
+            LevelSequencePlayer->Play();
+
+            FString MapName = GetWorld()->GetMapName();
+            if(MapName.Contains("PlanetariumSetup0"))
+			{
+				if (HasAuthority())
+				{
+					LevelSequencePlayer->OnFinished.AddDynamic(this, &AKJS_MultiGameModeBase::OnLevelSequenceFinished);
+				}
+			}
+        }
+    }
 }
 
 AActor* AKJS_MultiGameModeBase::ChoosePlayerStart_Implementation(AController* Player)

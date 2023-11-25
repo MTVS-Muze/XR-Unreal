@@ -29,8 +29,17 @@ public:
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
 
-	   UFUNCTION()
+	UFUNCTION()
     void OnLevelSequenceFinished();
+
+	UFUNCTION()
+	void StartLevelSequence();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = NetworkFunction)
+	void ServerStartLevelSequence();
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = NetworkFunction)
+	void MulticastStartLevelSequence();
 
 private:
 	TArray<APlayerStart*> UsedPlayerStarts;

@@ -186,7 +186,6 @@ void UOSY_GameInstance::OnFindOtherSession(bool bWasSuccessful)
 
 			if (roomName == mySessionName)
 			{
-				// 세션 참가 코드 추가
 				JoinMuzeSession(result);
 				break;
 			}
@@ -310,7 +309,7 @@ void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("%s(%d) map name: %s"), *FString(__FUNCTION__), __LINE__, *LoadedWorld->GetMapName());
 
-	if (LoadedWorld->GetMapName() == "Box_indoor_Single"|| LoadedWorld->GetMapName() == "Box_indoor_Multi" || LoadedWorld->GetMapName() == "StreetCar_Play")
+	if (LoadedWorld->GetMapName() == "Box_indoor_Single"|| LoadedWorld->GetMapName() == "Box_indoor_Multi" || LoadedWorld->GetMapName() == "PlanetariumSetup0")
 	{
 		UHeadMountedDisplayFunctionLibrary::EnableHMD(true);
 	}

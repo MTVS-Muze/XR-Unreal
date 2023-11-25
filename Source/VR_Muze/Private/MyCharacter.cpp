@@ -448,7 +448,16 @@ void AMyCharacter::AttachTie(int32 Index)
 
 void AMyCharacter::SetVisibiltyMesh()
 {
-	ServerSetVisibiltyMesh();
+	GetMesh()->bOwnerNoSee = true;
+	GetMesh()->bOnlyOwnerSee = false;
+	AttachedGlass->bOwnerNoSee = true;
+	AttachedHat->bOwnerNoSee = true;
+	AttachedTie->bOwnerNoSee = true;
+	AttachedGlass->bOnlyOwnerSee = false;
+	AttachedHat->bOnlyOwnerSee = false;
+	AttachedTie->bOnlyOwnerSee = false;
+	
+	//ServerSetVisibiltyMesh();
 }
 
 void AMyCharacter::ServerSwtichBodyColor_Implementation(int32 Index)
@@ -517,22 +526,6 @@ void AMyCharacter::MulticastAttachTie_Implementation(int32 Index)
 	}
 }
 
-void AMyCharacter::ServerSetVisibiltyMesh_Implementation()
-{
-	MulticastSetVisibiltyMesh();
-}
-
-void AMyCharacter::MulticastSetVisibiltyMesh_Implementation()
-{
-	GetMesh()->bOwnerNoSee = true;
-	GetMesh()->bOnlyOwnerSee = false;
-	AttachedGlass->bOwnerNoSee = true;
-	AttachedHat->bOwnerNoSee = true;
-	AttachedTie->bOwnerNoSee = true;
-	AttachedGlass->bOnlyOwnerSee = false;
-	AttachedHat->bOnlyOwnerSee = false;
-	AttachedTie->bOnlyOwnerSee = false;
-}
 
 void AMyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {

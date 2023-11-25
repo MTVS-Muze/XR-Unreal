@@ -266,20 +266,17 @@ void UMediaLobbyWidget::CreateSingleRoom()
 
 	if (MapName.Contains("Single"))
 	{
-		FName LevelName = "loveya";
+		FName LevelName = "PlanetariumSetup0";
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
 	else if (MapName.Contains("Multi"))
 	{
-		//UWorld* World = GetWorld();
-		//if (World)
-		//{
-		//	GetWorld()->ServerTravel("/Game/DEV/Map/Box_indoor_Multi?//Listen");
-		//	
-		//}
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			GetWorld()->ServerTravel("/Game/AccretionDisk/Levels/PlanetariumSetup0?Listen");
+		}
 	}
-
-
 }
 
 
