@@ -261,9 +261,37 @@ void UMediaLobbyWidget::OnClickedbtn_Back2()
 
 void UMediaLobbyWidget::CreateSingleRoom()
 {
-	FName LevelName = "loveya";
-	
-	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+
+	FString MapName = GetWorld()->GetMapName();
+
+	if (MapName.Contains("Single"))
+	{
+		FName LevelName = "loveya";
+		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	}
+	else if (MapName.Contains("Multi"))
+	{
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			// 'bAbsolute' 변수를 true로 설정하면, 경로가 절대 경로가 됩니다.
+			// false로 설정하면, 경로가 상대 경로가 됩니다.
+			bool bAbsolute = true;
+
+			FString LevelPath = FPaths::Combine(FPaths::ProjectContentDir(), TEXT("DEV/Map/Box_indoor_Single.Box_indoor_Single'"));
+
+			FString AbsoluteLevelPath = IFileManager::Get().ConvertToAbsolutePathForExternalAppForRead(*LevelPath);
+			FString URL = FPaths::IsRelative(AbsoluteLevelPath) && !bAbsolute ? FPaths::Combine(FPaths::ProjectContentDir(), AbsoluteLevelPath) : AbsoluteLevelPath;
+
+			APlayerController* PlayerController = World->GetFirstPlayerController();
+			if (PlayerController && PlayerController->IsLocalPlayerController())
+			{
+				// ServerTravel 명령을 실행합니다.
+				FString Command = FString::Printf(TEXT("ServerTravel \"%s\""), *URL);
+				World->Exec(World, *Command);
+			}
+		}
+	}
 }
 
 
