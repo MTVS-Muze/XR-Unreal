@@ -11,6 +11,7 @@
 void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
     Super::InitGame(MapName, Options, ErrorMessage);
+
     gi = Cast<UOSY_GameInstance>(GetGameInstance());
 
     if (gi)
@@ -46,7 +47,7 @@ void AKJS_MultiGameModeBase::BeginPlay()
             LevelSequencePlayer->Initialize(SeqActor->GetSequence(), GetWorld()->GetCurrentLevel(), CameraSettings);
 
             // 'OnFinished' 델리게이트에 바인딩 합니다.
-            LevelSequencePlayer->OnFinished.AddDynamic(this, &AKJS_MultiGameModeBase::OnLevelSequenceFinished);
+            //LevelSequencePlayer->OnFinished.AddDynamic(this, &AKJS_MultiGameModeBase::OnLevelSequenceFinished);
 
             LevelSequencePlayer->Play();
         }
