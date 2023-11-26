@@ -121,18 +121,18 @@ void UMainWidget::SwitchCanvas(int32 index)
 
 void UMainWidget::OnClickedButtonMedia()
 {
-	
-	if (GEngine->XRSystem.IsValid())
-	{
-		FName LevelName = "Box_indoor_Single";
+	FName LevelName = "Box_indoor_Single";
 
-		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-	}
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	//if (GEngine->XRSystem.IsValid())
+	//{
+	//	
+	//}
 
-	else
-	{
-		ErrorUI->SetVisibility(ESlateVisibility::Visible);
-	}
+	//else
+	//{
+	//	ErrorUI->SetVisibility(ESlateVisibility::Visible);
+	//}
 	
 }
 
