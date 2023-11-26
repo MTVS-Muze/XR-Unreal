@@ -248,8 +248,11 @@ void UMainWidget::DisplayLevelInfo()
 		{
 			// 버튼 위젯 생성
 			ButtonWidget = NewObject<UOSY_MainWidgetButton>(this);
+
+			FVector2D ButtonSize(200.0f, 50.0f);
 			if (ButtonWidget)
 			{	
+			ButtonWidget->SetButtonSize(ButtonSize);
 				ButtonWidget->SetId(i);
 				// 버튼을 호리즌탈 박스에 추가
 				ButtonWidget->LevelDataID = AllLevel[i].Id;

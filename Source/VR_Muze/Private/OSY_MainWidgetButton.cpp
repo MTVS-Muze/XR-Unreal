@@ -2,7 +2,22 @@
 
 
 #include "OSY_MainWidgetButton.h"
+#include "Runtime/UMG/Public/Components/Button.h"
+#include "Runtime/UMG/Public/Components/ButtonSlot.h"
+#include "Runtime/UMG/Public/Components/SizeBoxSlot.h"
 
+
+void UOSY_MainWidgetButton::SetButtonSize(FVector2D ButtonSize)
+{
+/*	USizeBoxSlot* ButtonSlot = Cast<USizeBoxSlot>(Slot);
+	if (ButtonSlot)
+	{
+		ButtonSlot->SetHorizontalAlignment(EHorizontalAlignment::HAlign_Center);
+		ButtonSlot->SetVerticalAlignment(EVerticalAlignment::VAlign_Center);
+		ButtonSlot->SetSize(ButtonSize);
+	}
+	-*/
+}
 
 void UOSY_MainWidgetButton::SetId(int ID)
 {
@@ -28,3 +43,4 @@ void UOSY_MainWidgetButton::OnButtonClicked()
 		OnButtonClickedDelegate.Broadcast(LevelDataID);
 	}
 }
+

@@ -9,21 +9,21 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMainButtonClicked, int, ID);
 
 UCLASS()
-class VR_MUZE_API UOSY_MainWidgetButton : public UUserWidget
+class VR_MUZE_API UOSY_MainWidgetButton : public UButton
 {
 	GENERATED_BODY()
 
 
-	virtual void NativeConstruct() override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 
 public:
 
-
+	
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
 	class UButton* btn_Play;
 
 
+	UFUNCTION(BlueprintCallable, Category = "Button")
+    void SetButtonSize(FVector2D ButtonSize);
 
 	int LevelDataID;
 
@@ -40,6 +40,8 @@ public:
 
 	UFUNCTION()
     void OnButtonClicked();
+
+
 
 	
 };
