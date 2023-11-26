@@ -127,6 +127,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Animation)
 	class UAnimSequence* SittingIdle;
 
+	UPROPERTY(EditDefaultsOnly, Category = Animation)
+	class UAnimSequence* Dancing;
+
 	UPROPERTY()
     class UAnimSequence* AnimToPlay;
 	/// <summary>

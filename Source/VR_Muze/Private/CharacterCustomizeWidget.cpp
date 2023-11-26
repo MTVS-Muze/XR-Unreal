@@ -59,6 +59,7 @@ void UCharacterCustomizeWidget::NativeConstruct()
 	btn_Tie1->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearTie1);
 	btn_Tie2->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearTie2);
 	btn_Tie3->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearTie3);
+	btn_Tie4->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::WearTie4);
 
 }
 
@@ -378,6 +379,18 @@ void UCharacterCustomizeWidget::WearTie2()
 void UCharacterCustomizeWidget::WearTie3()
 {
 	tie = 2;
+	gi->tie = tie;
+	player->TieIndex = tie;
+	if (ps && player->IsLocallyControlled())
+	{
+		ps->ServerSetTieIndex(tie);
+	}
+	player->AttachTie(player->TieIndex);
+}
+
+void UCharacterCustomizeWidget::WearTie4()
+{
+	tie = 3;
 	gi->tie = tie;
 	player->TieIndex = tie;
 	if (ps && player->IsLocallyControlled())

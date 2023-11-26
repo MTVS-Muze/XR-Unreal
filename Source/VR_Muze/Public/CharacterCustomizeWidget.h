@@ -195,6 +195,8 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryHat)
 	class UButton* btn_Tie3;
 
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryHat)
+	class UButton* btn_Tie4;
 
 	UFUNCTION()
 	void WearGlass0();
@@ -244,6 +246,9 @@ public:
 
 	UFUNCTION()
 	void WearTie3();
+
+	UFUNCTION()
+	void WearTie4();
 
 
 	UPROPERTY(EditAnywhere, Category= MySettings)
