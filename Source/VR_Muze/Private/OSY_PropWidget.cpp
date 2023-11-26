@@ -16,6 +16,7 @@
 #include "OSY_GameInstance.h"
 #include "OSY_OutLinerWidget.h"
 #include "OSY_LightBaseActor.h"
+#include "Runtime/UMG/Public/Components/WidgetSwitcher.h"
 
 
 
@@ -40,7 +41,20 @@ void UOSY_PropWidget::NativeConstruct()
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 #pragma endregion
 
-#pragma region Niagara
+
+#pragma region Sky
+	btn_Directional->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnDirectional);
+	btn_Point->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnPoint);
+	btn_Spot->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnSpot);
+	btn_HDRI1->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangeBackDrop);
+	btn_HDRI2->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangeBackDrop2);
+#pragma endregion
+#pragma region Floor
+	btn_Plane1->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangePlane);
+	btn_Plane2->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangePlane2);
+	
+#pragma endregion
+#pragma region Effect
 	btn_Niagara1->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara1);
 	btn_Niagara2->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara2);
 	btn_Niagara3->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara3);
@@ -49,20 +63,17 @@ void UOSY_PropWidget::NativeConstruct()
 	btn_Niagara6->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara6);
 	btn_meteorShower->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara7);
 	btn_Snow->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara8);
+	btn_Niagara9->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara9);
+	btn_Niagara10->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnNiagara10);
+	btn_Whale->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnMoon);
+	btn_Moon->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnWhale);
 #pragma endregion
+#pragma region Switch
+	btn_Sky->OnClicked.AddDynamic(this, &UOSY_PropWidget::OnClickedbtn_Sky);
+	btn_Floor->OnClicked.AddDynamic(this, &UOSY_PropWidget::OnClickedbtn_Floor);
+	btn_Effect->OnClicked.AddDynamic(this, &UOSY_PropWidget::OnClickedbtn_Effect);
 
-#pragma region Light
-	btn_Directional->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnDirectional);
-	btn_Point->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnPoint);
-	btn_Spot->OnClicked.AddDynamic(this, &UOSY_PropWidget::SpawnSpot);
 #pragma endregion
-#pragma region Light
-	btn_HDRI1->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangeBackDrop);
-	btn_HDRI2->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangeBackDrop2);
-	btn_Plane1->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangePlane);
-	btn_Plane2->OnClicked.AddDynamic(this, &UOSY_PropWidget::ChangePlane2);
-#pragma endregion
-
 
 // back to main
 	btn_Exit->OnClicked.AddDynamic(this, &UOSY_PropWidget::BackToMain);
@@ -74,8 +85,7 @@ void UOSY_PropWidget::NativeConstruct()
 	btn_PostJson->OnClicked.AddDynamic(this, &UOSY_PropWidget::PostJSon);
 // sever get(????)
 	btn_GetLevel->OnClicked.AddDynamic(this, &UOSY_PropWidget::GetLevel);
-// sever check
-	btn_LoadJsonData->OnClicked.AddDynamic(this,&UOSY_PropWidget::LoadJson);
+
 
 }
 
@@ -326,6 +336,126 @@ void UOSY_PropWidget::SpawnNiagara8()
 			SavedRotations.Add(SpawnedProp->GetActorRotation());
 			SavedScales.Add(SpawnedProp->GetActorScale3D());
 			SavedActorClasses.Add(Snow);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnNiagara9()
+{
+	FVector spawnLoc = FVector(200, 0, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara9, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(Niagara9);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnNiagara10()
+{
+	FVector spawnLoc = FVector(200, 0, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Niagara10, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(Niagara10);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnMoon()
+{
+	FVector spawnLoc = FVector(200, 0, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Moon, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(Moon);
+			SavedSpawnTimes.Add(CurrentTime);
+			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
+		}
+	}
+}
+
+void UOSY_PropWidget::SpawnWhale()
+{
+	FVector spawnLoc = FVector(200, 0, 0);
+	FRotator spawnRot = FRotator(0, 0, 0);
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AActor* SpawnedProp = World->SpawnActor<AActor>(Whale, spawnLoc, spawnRot);
+
+		if (gm->OutLinerUI != nullptr)
+		{
+			gm->OutLinerUI->DisplayActorInfo();
+		}
+
+
+		if (SpawnedProp)
+		{
+			SavedLocations.Add(SpawnedProp->GetActorLocation());
+			SavedRotations.Add(SpawnedProp->GetActorRotation());
+			SavedScales.Add(SpawnedProp->GetActorScale3D());
+			SavedActorClasses.Add(Whale);
 			SavedSpawnTimes.Add(CurrentTime);
 			SavedLifeSpans.Add(SpawnedProp->GetLifeSpan());
 		}
@@ -653,39 +783,29 @@ void UOSY_PropWidget::PostJSon()
 }
 
 
-void UOSY_PropWidget::LoadJson()
+
+
+void UOSY_PropWidget::SwitchPropCanvas(int32 index)
 {
+	ws_PropSwitch->SetActiveWidgetIndex(index);
+}
 
-	// 로그 출력
-	UE_LOG(LogTemp, Warning, TEXT("Locations:"));
-	for (const FVector& Location : gm->Locations)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *Location.ToString());
-	}
+void UOSY_PropWidget::OnClickedbtn_Sky()
+{
+	SwitchPropCanvas(0);
 
-	UE_LOG(LogTemp, Warning, TEXT("Rotations:"));
-	for (const FRotator& Rotation : gm->Rotations)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *Rotation.ToString());
-	}
+}
 
-	UE_LOG(LogTemp, Warning, TEXT("Scales:"));
-	for (const FVector& Scale : gm->Scales)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *Scale.ToString());
-	}
+void UOSY_PropWidget::OnClickedbtn_Floor()
+{
+	SwitchPropCanvas(1);
 
-	UE_LOG(LogTemp, Warning, TEXT("ActorClasses:"));
-	for (const FString& ActorClass : gm->ActorClasses)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *ActorClass);
-	}
+}
 
-	UE_LOG(LogTemp, Warning, TEXT("SpawnTimes:"));
-	for (double SpawnTime : gm->SpawnTimes)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%f"), SpawnTime);
-	}
+void UOSY_PropWidget::OnClickedbtn_Effect()
+{
+	SwitchPropCanvas(2);
+
 }
 
 // 레벨데이터를 받아내는 함수

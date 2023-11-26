@@ -119,21 +119,34 @@ void UMediaLobbyWidget::NativeConstruct()
 void UMediaLobbyWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry,InDeltaTime);
+	// 만약 레벨이 이거라면 하지마
+	
+	MapNames = GetWorld()->GetMapName();
+	//MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 
-	if (!bHasExecuted)
+
+	if (MapNames.Contains("lobby"))
 	{
-		// 실행하려는 코드를 여기에 작성합니다.
-		if (gm && gm->AllLevelArray.Num() > 0)
-		{
-			idnum = gm->AllLevelArray[0].Id;
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("AllLevelArray is empty or not initialized."));
-		}
+		return;
+	}
+	else
+	{
 
-		// 코드를 실행한 후 bHasExecuted를 true로 설정합니다.
-		bHasExecuted = true;
+		if (!bHasExecuted)
+		{
+			// 실행하려는 코드를 여기에 작성합니다.
+			if (gm && gm->AllLevelArray.Num() > 0)
+			{
+				idnum = gm->AllLevelArray[0].Id;
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("AllLevelArray is empty or not initialized."));
+			}
+
+			// 코드를 실행한 후 bHasExecuted를 true로 설정합니다.
+			bHasExecuted = true;
+		}
 	}
 }
 

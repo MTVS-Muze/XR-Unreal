@@ -31,7 +31,52 @@ public:
 
 public:
 
-#pragma region Naigara
+#pragma region Sky
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
+	class UButton* btn_Directional;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
+	class UButton* btn_Point;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
+	class UButton* btn_Spot;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_HDRI1;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_HDRI2;
+
+	UPROPERTY(EditAnywhere, Category = MySettings)
+	TSubclassOf<class AOSY_LightBaseActor> Directional;
+	UPROPERTY(EditAnywhere, Category = MySettings)
+	TSubclassOf<class AOSY_LightBaseActor> Point;
+	UPROPERTY(EditAnywhere, Category = MySettings)
+	TSubclassOf<class AOSY_LightBaseActor> Spot;
+
+	UFUNCTION()
+	void SpawnDirectional();
+	UFUNCTION()
+	void SpawnPoint();
+	UFUNCTION()
+	void SpawnSpot();
+	UFUNCTION()
+	void ChangeBackDrop();
+	UFUNCTION()
+	void ChangeBackDrop2();
+#pragma endregion
+#pragma region Floor
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Plane1;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Plane2;
+
+	UFUNCTION()
+	void ChangePlane();
+	UFUNCTION()
+	void ChangePlane2();
+#pragma endregion
+
+#pragma region Effect
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_Niagara1;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
@@ -48,6 +93,16 @@ public:
 	class UButton* btn_meteorShower;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_Snow;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Moon;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Whale;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Niagara9;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Niagara10;
+	
+
 
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> Niagara1;
@@ -61,30 +116,77 @@ public:
 	TSubclassOf<class AActor> Niagara5;
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> Niagara6;
-
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> MeteorShower;
-
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	TSubclassOf<class AActor> Snow;
-#pragma endregion
-
-#pragma region Light
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_Directional;
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_Point;
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_Spot;
-
 	UPROPERTY(EditAnywhere, Category= MySettings)
-	TSubclassOf<class AOSY_LightBaseActor> Directional;
+	TSubclassOf<class AActor> Niagara9;
 	UPROPERTY(EditAnywhere, Category= MySettings)
-	TSubclassOf<class AOSY_LightBaseActor> Point;
+	TSubclassOf<class AActor> Niagara10;
 	UPROPERTY(EditAnywhere, Category= MySettings)
-	TSubclassOf<class AOSY_LightBaseActor> Spot;
-#pragma endregion
+	TSubclassOf<class AActor> Moon;
+	UPROPERTY(EditAnywhere, Category= MySettings)
+	TSubclassOf<class AActor> Whale;
 
+	UFUNCTION()
+	void SpawnNiagara1();
+	UFUNCTION()
+	void SpawnNiagara2();
+	UFUNCTION()
+	void SpawnNiagara3();
+	UFUNCTION()
+	void SpawnNiagara4();
+	UFUNCTION()
+	void SpawnNiagara5();
+	UFUNCTION()
+	void SpawnNiagara6();
+	UFUNCTION()
+	void SpawnNiagara7();
+	UFUNCTION()
+	void SpawnNiagara8();
+	UFUNCTION()
+	void SpawnNiagara9();
+	UFUNCTION()
+	void SpawnNiagara10();
+	UFUNCTION()
+	void SpawnMoon();
+	UFUNCTION()
+	void SpawnWhale();
+#pragma endregion 
+
+#pragma region Switch
+	UPROPERTY()
+	class UOSY_OutLinerWidget* OutlinerWidgetInstance;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryMain)
+	class UWidgetSwitcher* ws_PropSwitch;
+
+	UFUNCTION()
+	void SwitchPropCanvas(int32 index);
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryMain)
+	class UButton* btn_Sky;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryMain)
+	class UButton* btn_Floor;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = AccessoryMain)
+	class UButton* btn_Effect;
+
+	UFUNCTION()
+	void OnClickedbtn_Sky();
+
+	UFUNCTION()
+	void OnClickedbtn_Floor();
+
+	UFUNCTION()
+	void OnClickedbtn_Effect();
+
+#pragma endregion 
+
+
+#pragma region Else
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_Save;
 
@@ -102,17 +204,7 @@ public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
 	class UButton* btn_PostJson;
 
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_HDRI1;
 
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_HDRI2;
-
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_Plane1;
-
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
-	class UButton* btn_Plane2;
 
 	UPROPERTY()
 	FString posturl;
@@ -138,42 +230,11 @@ public:
 	float CurrentTime;
 
 #pragma region Niagara
-	UFUNCTION()
-	void SpawnNiagara1();
-	UFUNCTION()
-	void SpawnNiagara2();
-	UFUNCTION()
-	void SpawnNiagara3();
-	UFUNCTION()
-	void SpawnNiagara4();
-	UFUNCTION()
-	void SpawnNiagara5();
-	UFUNCTION()
-	void SpawnNiagara6();
-	UFUNCTION()
-	void SpawnNiagara7();
-
-	UFUNCTION()
-	void SpawnNiagara8();
 
 
-	UFUNCTION()
-	void ChangeBackDrop();
-	UFUNCTION()
-	void ChangeBackDrop2();
-	UFUNCTION()
-	void ChangePlane();
-	UFUNCTION()
-	void ChangePlane2();
 #pragma endregion
 
 
-	UFUNCTION()
-	void SpawnDirectional();
-	UFUNCTION()
-	void SpawnPoint();
-	UFUNCTION()
-	void SpawnSpot();
 	UFUNCTION()
 	void BackToMain();
 
@@ -222,15 +283,6 @@ public:
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	FString JsonStringPost;
-
-	
-	
-	UPROPERTY()
-   class UOSY_OutLinerWidget* OutlinerWidgetInstance;
-
-   UFUNCTION()
-   void LoadJson();
-    
 
 	
 };

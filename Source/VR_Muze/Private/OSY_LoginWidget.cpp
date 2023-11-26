@@ -98,7 +98,7 @@ void UOSY_LoginWidget::GotoLobbyMap()
 
 
 
-	FName LevelName = "1_2CH_MAP";
+	FName LevelName = "Lobby2";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }

@@ -321,6 +321,9 @@ public:
 	void UpdateButtonVisibility(int32 CanvasIndex);
 
 	bool bHasExecuted;
+
+	UPROPERTY()
+	FString MapNames;
 	
 #pragma endregion
 
