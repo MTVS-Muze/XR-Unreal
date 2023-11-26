@@ -9,11 +9,21 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMainButtonClicked, int, ID);
 
 UCLASS()
-class VR_MUZE_API UOSY_MainWidgetButton : public UButton
+class VR_MUZE_API UOSY_MainWidgetButton : public UUserWidget
 {
 	GENERATED_BODY()
 
+
+	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
+
 public:
+
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=ModeSelect)
+	class UButton* btn_Play;
+
+
 
 	int LevelDataID;
 
