@@ -88,9 +88,6 @@ public:
 
 	float currenTime = 0;
 
-	UPROPERTY(EditAnywhere, Category= MySettings)
-	TSubclassOf<class UOSY_PropWidget> PropWidget;
-
 	UPROPERTY()
 	FString url2 ="http://192.168.0.189:8080/map/create";
 	

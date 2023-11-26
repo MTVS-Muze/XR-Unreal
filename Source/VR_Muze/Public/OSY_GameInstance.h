@@ -87,18 +87,7 @@ public:
 
 public:	// ¼¼¿µ
 	// widget source
-	UPROPERTY(BlueprintReadWrite)
-	TSubclassOf<class UOSY_PropWidget> sideToolPanel;
-
-	UPROPERTY()
-	class UOSY_PropWidget* sideToolPanelInstance;
-
-	// Function
-	UFUNCTION(BlueprintCallable)
-	void OpenSideToolPanel();
-
-	UFUNCTION(BlueprintCallable)
-	void CloseSideToolPanel();
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FString> HttpRecieveData;

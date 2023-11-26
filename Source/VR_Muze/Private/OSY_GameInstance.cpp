@@ -16,12 +16,7 @@
 
 UOSY_GameInstance::UOSY_GameInstance()
 {
-	ConstructorHelpers::FClassFinder<UOSY_PropWidget> TempWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/DEV/OOSY/Blueprints/BP_OSY_PropWidget.BP_OSY_PropWidget_C'"));
-
-	if (TempWidget.Succeeded()) 
-	{
-		sideToolPanel = TempWidget.Class;
-	}
+	
 
 	mySessionName = TEXT("Muze");
 
@@ -30,28 +25,6 @@ UOSY_GameInstance::UOSY_GameInstance()
 }
 
 
-
-void UOSY_GameInstance::OpenSideToolPanel()
-{
-
-	if (sideToolPanel != nullptr)
-	{
-		sideToolPanelInstance = CreateWidget<UOSY_PropWidget>(GetWorld(),sideToolPanel);
-
-		if (sideToolPanelInstance != nullptr)
-		{
-			sideToolPanelInstance->AddToViewport();
-		}
-	}
-}
-
-void UOSY_GameInstance::CloseSideToolPanel()
-{
-	if (sideToolPanelInstance != nullptr)
-	{
-		sideToolPanelInstance->RemoveFromParent();
-	}
-}
 /// <summary>
 /// /////////////////////////////////////////////////////////////////////////////////////////
 /// </summary>
