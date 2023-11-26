@@ -10,6 +10,7 @@
 #include "Components/Image.h"
 #include "OSY_GameInstance.h"
 #include "Runtime/Engine/Public/ImageUtils.h"
+#include "CharacterCustomizeWidget.h"
 
 void AKJS_CustomizeGameModeBase::BeginPlay()
 {
@@ -32,6 +33,12 @@ void AKJS_CustomizeGameModeBase::BeginPlay()
     if (MyInfoUI != nullptr)
     {
         MyInfoUI->AddToViewport();
+    }
+
+    CustomUI = CreateWidget<UCharacterCustomizeWidget>(GetWorld(), CustomWidget);
+    if (CustomUI != nullptr)
+    {
+        CustomUI->AddToViewport();
     }
 }
 

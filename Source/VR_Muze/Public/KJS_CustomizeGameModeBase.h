@@ -32,5 +32,10 @@ public:
 	
 	class UOSY_MyInfoWidget* MyInfoUI;
 
+
+	UPROPERTY(EditAnywhere,Category = MySettings)
+	TSubclassOf <class UCharacterCustomizeWidget> CustomWidget;
+	
+	class UCharacterCustomizeWidget* CustomUI;
 	
 };

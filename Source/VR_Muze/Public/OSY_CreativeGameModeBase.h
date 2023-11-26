@@ -33,8 +33,7 @@ public:
 	virtual void Tick(float DeltaTime)override;
 
 
-private:
-	class UDataTable* LevelInfoTable;
+
 
 
 public:
