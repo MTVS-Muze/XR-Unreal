@@ -144,8 +144,12 @@ void UMainWidget::OnClickedButtonSwitchCreative()
 
 void UMainWidget::OnClickedButtonCreativeMode()
 {
-	DisplayLevelInfo();
-	SwitchCanvas(2);
+	//DisplayLevelInfo();
+	//SwitchCanvas(2);
+
+	FName LevelName = "3_2CreateInfo";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 
 }
 
