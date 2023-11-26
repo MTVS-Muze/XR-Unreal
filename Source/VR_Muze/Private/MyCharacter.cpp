@@ -123,6 +123,7 @@ AMyCharacter::AMyCharacter()
 	IdleAnimation = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/Idle.Idle"));
 	SittingAnimation = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/SittingAnim.SittingAnim"));
 	SittingIdle = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/Sitting_Idle.Sitting_Idle"));
+	Dancing = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/DEV/KJS/Character/Character/Animation/ListeningMusic.ListeningMusic"));
 	//////////////////////////////////////////////////////////////////////////////////
 
 	AttachedGlass = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Glass"));
@@ -270,6 +271,12 @@ AMyCharacter::AMyCharacter()
 		TieMeshes.Add(TempTie3.Object);
 	}
 
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempTie4(TEXT("/Script/Engine.StaticMesh'/Game/ART/Ocean/Customize/Tie/BowTie4.BowTie4'"));
+	if (TempTie3.Succeeded())
+	{
+		TieMeshes.Add(TempTie4.Object);
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -315,10 +322,12 @@ void AMyCharacter::BeginPlay()
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMyCharacter::SwitchVRCamera, 16.5f, false);
 	}
 
-	if (MapName == "CustomizeMap"||MapName.Contains("CH_MAP"))
+	if (MapName == "Lobby2"||MapName.Contains("CH_MAP"))
 	{
 		hmdCam->Deactivate();
 		CustomizeCam->Activate();
+		GetMesh()->PlayAnimation(Dancing, true);
+		PlaylistWidget->SetVisibility(false);
 	}
 
 	UKJS_CharacterAnimInstance* AnimInstance = Cast<UKJS_CharacterAnimInstance>(GetMesh()->GetAnimInstance());
