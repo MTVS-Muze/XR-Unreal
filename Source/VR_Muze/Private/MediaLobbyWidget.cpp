@@ -345,7 +345,7 @@ void UMediaLobbyWidget::SetID()
 	gi->singer=gm->AllLevelArray[idnum-6].Singer;
 	// 레벨 트레블 해
 
-	FName LevelName = "3_3CreateMap";
+	FName LevelName = "C_Ocean";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 

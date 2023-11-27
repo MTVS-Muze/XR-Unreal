@@ -185,7 +185,7 @@ void AOSY_HttpRequestActor::OnReceivedAllLevel(FHttpRequestPtr Request, FHttpRes
 		
 		
 		FString currentLevel = UGameplayStatics::GetCurrentLevelName(this, true);
-		if (currentLevel == "A")
+		if (currentLevel == "C_Ocean")
 		{
 			OCgm->AllLevel = AllLevel;
 		}
@@ -226,7 +226,7 @@ void AOSY_HttpRequestActor::OnReceivedlevelData(FHttpRequestPtr Request, FHttpRe
 	{
 		FString res = Response->GetContentAsString();
 		UOSY_JsonParseLibrary::LevelJsonParse(res,OCgm);
-
+		
 		
 	}
 	else
