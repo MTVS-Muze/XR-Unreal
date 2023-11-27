@@ -5,22 +5,19 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "KJS_GameModeBase.h"
+#include "OSY_SequenceWidget.h"
 #include "OSY_CreativeGameModeBase.generated.h"
 
-USTRUCT(BlueprintType)
-struct FActorTransformInfo
+struct FLevelInfo2
 {
-    GENERATED_BODY()
-
-public:
 	FVector Location;
 	FRotator Rotation;
 	FVector Scale;
 	UClass* ActorClass;
 	float SpawnTime;
 	float LifeSpan;
-	int text;
 };
+
 UCLASS()
 class VR_MUZE_API AOSY_CreativeGameModeBase : public AGameModeBase
 {
@@ -28,6 +25,10 @@ class VR_MUZE_API AOSY_CreativeGameModeBase : public AGameModeBase
 
 public:
 	AOSY_CreativeGameModeBase();
+
+public:
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime)override;
@@ -46,12 +47,15 @@ public:
 	TSubclassOf <class UOSY_SequenceWidget> SequenceWidget;
 	
 	class UOSY_SequenceWidget* SequnceUI;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MySequence)
+	float CurrentTime;
 
 	UPROPERTY(EditAnywhere,Category = MySettings)
 	TSubclassOf <class UOSY_OutLinerWidget> OutLinerWidget;
 	
 	class UOSY_OutLinerWidget* OutLinerUI;
 
+	int32 currentIndex = 0;
 	
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
@@ -65,9 +69,8 @@ public:
 	void SetMaxTimeFromSong();
 
 	
-	TArray<FActorTransformInfo> postData;
+	//TArray<FActorTransformInfo> postData;
 
-	TArray<FAllLevelData> AllLevel;
 
 	UPROPERTY()
 	USoundBase* Song;
@@ -89,5 +92,12 @@ public:
 	TArray<float> SpawnTimes;
 	TArray<float> LifeSpans;
 	
+	TArray<FLevelInfo2> PendingSpawns;
+	TArray<FAllLevelData> AllLevel;
+	UFUNCTION()
+	void LoadJsonData();
+
+	UFUNCTION()
+	void Play();
 
 };
