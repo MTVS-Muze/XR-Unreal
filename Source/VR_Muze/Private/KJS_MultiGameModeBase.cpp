@@ -37,7 +37,7 @@ void AKJS_MultiGameModeBase::BeginPlay()
     Super::BeginPlay();
 
     FTimerHandle TimerHandle;
-    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AKJS_MultiGameModeBase::StartLevelSequence, 10.0f, false);
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AKJS_MultiGameModeBase::StartLevelSequence, 5.0f, false);
 }
 
 APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotator Rotation , FString Tag)
