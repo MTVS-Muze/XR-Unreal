@@ -27,7 +27,7 @@ void AOSY_CreativeGameModeBase::InitGame(const FString& MapName, const FString& 
     GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AOSY_CreativeGameModeBase::LoadJsonData, 2.0f, false); 
 
 
-    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AOSY_CreativeGameModeBase::Play, 5.0f, false);
+   // GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AOSY_CreativeGameModeBase::Play, 5.0f, false);
 }
 
 AOSY_CreativeGameModeBase::AOSY_CreativeGameModeBase()
@@ -110,6 +110,7 @@ void AOSY_CreativeGameModeBase::Tick(float DeltaTime)
 
     CurrentTime = TimeManager->CurrentTime;
 
+
  }
 
 void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
@@ -181,12 +182,13 @@ void AOSY_CreativeGameModeBase::LoadJsonData()
     }
 
     TimeManager->bShouldTick = true;
+    Play();
 }
 
 void AOSY_CreativeGameModeBase::Play()
 {
     const FLevelInfo2& SpawnInfo = PendingSpawns[currentIndex];
-    if (CurrentTime >= SpawnInfo.SpawnTime)
+   // if (CurrentTime >= SpawnInfo.SpawnTime)
     {
         UWorld* World = GetWorld();
         if (World && SpawnInfo.ActorClass)
