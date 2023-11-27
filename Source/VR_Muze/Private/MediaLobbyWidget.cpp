@@ -282,14 +282,14 @@ void UMediaLobbyWidget::CreateSingleRoom()
 		FName LevelName = "PlanetariumSetup0";
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
-	else if (MapName.Contains("Multi"))
-	{
-		UWorld* World = GetWorld();
-		if (World)
-		{
-			GetWorld()->ServerTravel("/Game/AccretionDisk/Levels/PlanetariumSetup0?Listen");
-		}
-	}
+	//else if (MapName.Contains("Multi"))
+	//{
+	//	UWorld* World = GetWorld();
+	//	if (World)
+	//	{
+	//		GetWorld()->ServerTravel("/Game/AccretionDisk/Levels/PlanetariumSetup0?Listen");
+	//	}
+	//}
 }
 
 
@@ -345,7 +345,7 @@ void UMediaLobbyWidget::SetID()
 	gi->singer=gm->AllLevelArray[idnum-6].Singer;
 	// 레벨 트레블 해
 
-	FName LevelName = "3_3CreateMap";
+	FName LevelName = "C_Ocean";
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 
@@ -365,11 +365,15 @@ void UMediaLobbyWidget::SocialPlay(int LevelId)
 	//gi->song=LevelId;
 	gi->ReceiveLevelDataID(LevelId);
 
-
-	FName LevelName = "3_3CreateMap";
-
-	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-
+	FString MapName = GetWorld()->GetMapName();
+	if (MapName.Contains("Multi"))
+	{
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			GetWorld()->ServerTravel("/Game/DEV/Map/3_3CreateMap.3_3CreateMap?Listen");
+		}
+	}
 }
 
 void UMediaLobbyWidget::UpdateButtonVisibility(int32 CanvasIndex)

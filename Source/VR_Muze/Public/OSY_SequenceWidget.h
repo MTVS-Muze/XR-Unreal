@@ -58,7 +58,7 @@ public :
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UTextBlock* tb_Maxtime;
   
-
+  
 	
 
 #pragma endregion
@@ -87,13 +87,6 @@ public :
 
 	UFUNCTION()
 	void LoadJsonData();
-
-	TArray<FVector> SavedLocations;
-	TArray<FRotator> SavedRotations;
-	TArray<FVector> SavedScales;
-	TArray<float> SavedSpawnTimes;
-	TArray<TSubclassOf<AActor>> SavedActorClasses;
-
 
 	
 	UPROPERTY()
@@ -127,5 +120,33 @@ public :
 	
 #pragma endregion 
 
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_Save;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	class UButton* btn_PostJson;
+
+	UFUNCTION()
+	void SaveJsonData();
+
+	UFUNCTION()
+	void PostJSon();
+	TSharedPtr<FJsonObject> JsonObject;
+
+	FString JsonString;
+
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	FString JsonStringPost;
+
+	TArray<FVector> SavedLocations;
+	TArray<FRotator> SavedRotations;
+	TArray<FVector> SavedScales;
+	TArray<float> SavedSpawnTimes;
+	TArray<float> SavedLifeSpans;
+	TArray<TSubclassOf<AActor>> SavedActorClasses;
+
+
+
+	
 
 };

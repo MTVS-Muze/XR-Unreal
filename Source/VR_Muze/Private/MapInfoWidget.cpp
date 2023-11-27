@@ -113,7 +113,7 @@ void UMapInfoWidget::GoCreateMap()
 	}
 	else
 	{
-		FName LevelName = "C_Ocean";
+		FName LevelName = "3_3CreateMap";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}

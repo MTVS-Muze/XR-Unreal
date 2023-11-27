@@ -780,6 +780,8 @@ void UOSY_PropWidget::PostJSon()
 	{
 		HttpActor->PostRequest(gi->PostMyMap,JsonStringPost);
 	}
+
+	UE_LOG(LogTemp,Warning,TEXT("json : %s"),*JsonStringPost);
 }
 
 
