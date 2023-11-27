@@ -314,7 +314,6 @@ void AMyCharacter::BeginPlay()
 
 	if (MapName == "Box_indoor_Single")
 	{
-		UGameplayStatics::PlaySound2D(this,enterSound);
 		rightHand->SetVisibility(false);
 		leftHand->SetVisibility(false);
 		hmdMesh->SetVisibility(false);
