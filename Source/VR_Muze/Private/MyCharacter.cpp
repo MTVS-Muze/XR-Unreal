@@ -344,7 +344,7 @@ void AMyCharacter::BeginPlay()
 	{
 		GetMesh()->PlayAnimation(SittingAnimation, false);
 	}
-	if (MapName.Contains("Box_indoor_Multi"))
+	if (MapName.Contains("Box_indoor_Multi") || MapName.Contains("3_3CreateMap"))
 	{
 		GetMesh()->PlayAnimation(SittingIdle, true);
 		SetVisibiltyMesh();
