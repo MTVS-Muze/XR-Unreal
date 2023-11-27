@@ -120,10 +120,10 @@ public :
 	
 #pragma endregion 
 
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
 	class UButton* btn_Save;
 
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=Button)
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = Button)
 	class UButton* btn_PostJson;
 
 	UFUNCTION()

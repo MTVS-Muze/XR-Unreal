@@ -55,7 +55,7 @@ void AOSY_CreativeGameModeBase::BeginPlay()
         
         Request();
     }
-    else
+    else if(MapName.Contains("Create"))
     {
 		httpUI = CreateWidget<UOSY_PropWidget>(GetWorld(), httpWidget);
 		if (httpUI != nullptr)
@@ -110,7 +110,10 @@ void AOSY_CreativeGameModeBase::Tick(float DeltaTime)
 
     CurrentTime = TimeManager->CurrentTime;
 
-
+    if (TimeManager->bShouldTick)
+    {
+        Play();
+    }
  }
 
 void AOSY_CreativeGameModeBase::SetMaxTimeFromSong()
@@ -182,13 +185,17 @@ void AOSY_CreativeGameModeBase::LoadJsonData()
     }
 
     TimeManager->bShouldTick = true;
-    Play();
+    //Play();
 }
 
 void AOSY_CreativeGameModeBase::Play()
 {
+    if (currentIndex >= PendingSpawns.Num())
+    {
+        return;
+    }
     const FLevelInfo2& SpawnInfo = PendingSpawns[currentIndex];
-   // if (CurrentTime >= SpawnInfo.SpawnTime)
+    if (CurrentTime >= SpawnInfo.SpawnTime)
     {
         UWorld* World = GetWorld();
         if (World && SpawnInfo.ActorClass)
