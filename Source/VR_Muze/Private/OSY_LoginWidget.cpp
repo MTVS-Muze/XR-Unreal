@@ -191,7 +191,7 @@ void UOSY_LoginWidget::Request()
 	HttpActor->SendRequest(gi->MemberInfourl);
 
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UOSY_LoginWidget::GotoLobbyMap, 1.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UOSY_LoginWidget::GotoLobbyMap, 3.0f, false);
 
 
 }

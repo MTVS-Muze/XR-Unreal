@@ -22,6 +22,7 @@
 #include "OSY_HttpRequestActor.h"
 #include "ModeSelectGameModeBase.h"
 #include "OSY_MainWidgetButton.h"
+#include "KJS_MultiGameModeBase.h"
 
 
 void UMediaLobbyWidget::NativeConstruct()
@@ -30,7 +31,11 @@ void UMediaLobbyWidget::NativeConstruct()
 
 	bHasExecuted = false;
 
+	
+	
 	gm =GetWorld()->GetAuthGameMode<AKJS_GameModeBase>();
+	Multigm = GetWorld()->GetAuthGameMode<AKJS_MultiGameModeBase>();
+	
 	gi = Cast<UOSY_GameInstance>(GetGameInstance());
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
@@ -167,20 +172,10 @@ void UMediaLobbyWidget::BackSelectMode()
 	FString MapName = GetWorld()->GetMapName();
 	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 
-	if(MapName == "Box_indoor_Single")
-
-	{
-		FName LevelName = "2_LobbyMap";
+		FName LevelName = "2_ViewLevel";
 
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-	}
-
-	else if (MapName == "Box_indoor_Multi")
-	{
-		FName LevelName = "Box_indoor_Single";
-
-		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
-	}
+	
 }
 
 void UMediaLobbyWidget::CreateRoom()
@@ -207,10 +202,15 @@ void UMediaLobbyWidget::OnClickedbtn_UpOriginal()
 void UMediaLobbyWidget::OnClickedbtn_DownOriginal()
 {
 	SwitchCanvasCategory(1);
-	HttpActor->SendRequest(gi->AllMap);
-	if (!gm->AllLevelArray.IsEmpty())
+	//HttpActor->SendRequest(gi->AllMap);
+	if (gm!= nullptr && !gm->AllLevelArray.IsEmpty())
 	{
 		SetWidgetText(idnum);
+	}
+	else if (Multigm != nullptr && !Multigm->AllLevelArray.IsEmpty())
+	{
+		SetWidgetMultiText(idnum);
+
 	}
 	
 	UpdateButtonVisibility(0);
@@ -337,18 +337,52 @@ void UMediaLobbyWidget::SetWidgetText(int id)
 	text_Info->SetText(InfoText);
 }
 
+void UMediaLobbyWidget::SetWidgetMultiText(int id)
+{
+	FText IDText = FText::AsNumber(idnum);
+	text_ID->SetText(IDText);
+
+	FText TitleText = FText::FromString(Multigm->AllLevelArray[idnum].Title);
+	text_Title->SetText(TitleText);
+
+	FText SingerText = FText::FromString(Multigm->AllLevelArray[idnum].Singer);
+	text_Singer->SetText(SingerText);
+
+	FText ArtistText = FText::FromString(Multigm->AllLevelArray[idnum].MemberName);
+	text_Artist->SetText(ArtistText);
+
+	FText InfoText = FText::FromString(Multigm->AllLevelArray[idnum].Info);
+	text_Info->SetText(InfoText);
+}
+
 void UMediaLobbyWidget::SetID()
 {
 	gi->ReceiveLevelDataID(idnum);
 
-	gi->song = gm->AllLevelArray[idnum-6].Song;
-	gi->singer=gm->AllLevelArray[idnum-6].Singer;
+	if (gm != nullptr)
+	{
+		gi->song = gm->AllLevelArray[idnum-6].Song;
+		gi->singer=gm->AllLevelArray[idnum-6].Singer;
+
+	}
+	else if (Multigm != nullptr)
+	{
+		gi->song = Multigm->AllLevelArray[idnum].Song;
+		gi->singer = Multigm->AllLevelArray[idnum].Singer;
+	}
 	// 레벨 트레블 해
 
-	FName LevelName = "C_Ocean";
 
-	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	// 서버 트레블해
+	//FName LevelName = "C_Ocean";
 
+	//UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		GetWorld()->ServerTravel("/Game/ART/Sojin/MeteorMap?Listen");
+
+	}
 	
 }
 
@@ -371,7 +405,7 @@ void UMediaLobbyWidget::SocialPlay(int LevelId)
 		UWorld* World = GetWorld();
 		if (World)
 		{
-			GetWorld()->ServerTravel("/Game/DEV/Map/3_3CreateMap.3_3CreateMap?Listen");
+			GetWorld()->ServerTravel("/Game/DEV/Map/3_3CreateMap?Listen");
 		}
 	}
 }
@@ -420,6 +454,9 @@ void UMediaLobbyWidget::CreateDoubleRoom()
 
 	if (Check_DoubleSit1->GetCheckedState() == ECheckBoxState::Checked)
 	{
+		
+
+
 		FName LevelName = "Box_indoor_Multi";
 		// 레벨 로드 후 호출될 함수를 바인딩
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);

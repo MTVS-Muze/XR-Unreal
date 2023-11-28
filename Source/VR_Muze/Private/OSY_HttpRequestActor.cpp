@@ -15,6 +15,7 @@
 #include "ModeSelectGameModeBase.h"
 #include "Runtime/Engine/Public/ImageUtils.h"
 #include "KJS_CustomizeGameModeBase.h"
+#include "KJS_MultiGameModeBase.h"
 
 // Sets default values
 AOSY_HttpRequestActor::AOSY_HttpRequestActor()
@@ -37,6 +38,7 @@ void AOSY_HttpRequestActor::BeginPlay()
 	MSgm = GetWorld()->GetAuthGameMode<AModeSelectGameModeBase>();
 	KVgm = GetWorld()->GetAuthGameMode<AKJS_GameModeBase>();
 	KCgm = GetWorld()->GetAuthGameMode<AKJS_CustomizeGameModeBase>();
+	Multigm = GetWorld()->GetAuthGameMode<AKJS_MultiGameModeBase>();
 
 
 
@@ -182,6 +184,7 @@ void AOSY_HttpRequestActor::OnReceivedAllLevel(FHttpRequestPtr Request, FHttpRes
 	{
 		FString res = Response->GetContentAsString();
 		TArray<FAllLevelData> AllLevel = UOSY_JsonParseLibrary::AllLevelJsonParse(res);
+
 		
 		
 		FString currentLevel = UGameplayStatics::GetCurrentLevelName(this, true);
@@ -193,6 +196,11 @@ void AOSY_HttpRequestActor::OnReceivedAllLevel(FHttpRequestPtr Request, FHttpRes
 		{
 			KVgm->AllLevelArray=AllLevel;
 		}
+		else if (currentLevel == "Box_indoor_Multi")
+		{
+			Multigm->AllLevelArray = AllLevel;
+		}
+
 		else if (currentLevel == "4_ViewMapLobby"||currentLevel =="3_CreativeLevel" )
 		{
 			MSgm->AllLevelArray=AllLevel;

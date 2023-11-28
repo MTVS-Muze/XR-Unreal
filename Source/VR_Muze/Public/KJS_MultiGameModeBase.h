@@ -5,11 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerStart.h"
+#include "KJS_GameModeBase.h"
 #include "KJS_MultiGameModeBase.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class VR_MUZE_API AKJS_MultiGameModeBase : public AGameModeBase
 {
@@ -26,6 +25,8 @@ public:
 
 	APlayerStart* SpawnPlayerStart(FVector Location, FRotator Rotation, FString Tag);
 
+	TArray<FAllLevelData> AllLevelArray;
+	
 	UPROPERTY()
 	class UOSY_GameInstance* gi;
 
@@ -40,6 +41,12 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = NetworkFunction)
 	void MulticastStartLevelSequence();
+
+	UFUNCTION()
+    void SendReq();
+
+	 UPROPERTY(EditAnywhere, Category= MySettings)
+	class AOSY_HttpRequestActor* HttpActor;
 
 private:
 	TArray<APlayerStart*> UsedPlayerStarts;

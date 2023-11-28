@@ -134,7 +134,7 @@ void UOSY_PropWidget::SpawnNiagara1()
 
 void UOSY_PropWidget::SpawnNiagara2()
 {
-	FVector spawnLoc = FVector(200, -200, 0);
+	FVector spawnLoc = FVector(240, -1110, 960);
 	FRotator spawnRot = FRotator(0, 0, 0);
 
 	UWorld* World = GetWorld();

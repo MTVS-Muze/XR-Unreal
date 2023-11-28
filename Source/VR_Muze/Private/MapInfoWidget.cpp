@@ -18,7 +18,7 @@ void UMapInfoWidget::NativeConstruct()
 	{
 		btn_GoCreateMap->OnClicked.AddDynamic(this,&UMapInfoWidget::GoCreateMap);
 	}
-
+	btn_Back2->OnClicked.AddDynamic(this,&UMapInfoWidget::GoMain);
 	if (edit_Title)
 	{
 		edit_Title->OnTextCommitted.AddDynamic(this, &UMapInfoWidget::TitleCommitted);
@@ -118,4 +118,11 @@ void UMapInfoWidget::GoCreateMap()
 		UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 	}
 	
+}
+
+void UMapInfoWidget::GoMain()
+{
+	FName LevelName = "2_ViewLevel";
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName, true);
 }

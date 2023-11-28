@@ -50,8 +50,14 @@ public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=CreateSettings)
 	class UButton* btn_GoCreateMap;
 
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=CreateSettings)
+	class UButton* btn_Back2;
+
 	UFUNCTION()
 	void GoCreateMap();
+
+	UFUNCTION()
+	void GoMain();
 
 
 

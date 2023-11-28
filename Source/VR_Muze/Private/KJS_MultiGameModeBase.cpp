@@ -7,6 +7,7 @@
 #include "Runtime/Engine/Classes/GameFramework/PlayerStart.h"
 #include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "OSY_HttpRequestActor.h"
 
 void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -30,6 +31,8 @@ void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Opt
             UsedPlayerStarts.Add(SpawnPlayerStart(FVector(72.0, 23.0, 92), FRotator(0, 90, 0), "Second"));
         }
     }
+
+    
 }
 
 void AKJS_MultiGameModeBase::BeginPlay()
@@ -38,6 +41,19 @@ void AKJS_MultiGameModeBase::BeginPlay()
 
     FTimerHandle TimerHandle;
     GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AKJS_MultiGameModeBase::StartLevelSequence, 5.0f, false);
+
+    for (TActorIterator<ALevelSequenceActor> It(GetWorld()); It; ++It)
+    {
+        ALevelSequenceActor* SeqActor = *It;
+        if (SeqActor)
+        {
+            SeqActor->SequencePlayer->Play();
+        }
+    }
+
+    HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
+
+    SendReq();
 }
 
 APlayerStart* AKJS_MultiGameModeBase::SpawnPlayerStart(FVector Location, FRotator Rotation , FString Tag)
@@ -83,6 +99,7 @@ void AKJS_MultiGameModeBase::ServerStartLevelSequence_Implementation()
 
 void AKJS_MultiGameModeBase::MulticastStartLevelSequence_Implementation()
 {
+
     for (TActorIterator<ALevelSequenceActor> It(GetWorld()); It; ++It)
     {
         ALevelSequenceActor* SeqActor = *It;
@@ -105,6 +122,15 @@ void AKJS_MultiGameModeBase::MulticastStartLevelSequence_Implementation()
 				}
 			}
         }
+    }
+}
+
+void AKJS_MultiGameModeBase::SendReq()
+{
+    if (HttpActor != nullptr)
+    {
+        HttpActor->SendRequest(gi->AllMap);
+
     }
 }
 

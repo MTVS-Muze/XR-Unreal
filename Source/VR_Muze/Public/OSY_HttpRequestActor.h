@@ -79,6 +79,9 @@ public:
 	UPROPERTY()
 	class AKJS_CustomizeGameModeBase* KCgm;
 
+	UPROPERTY()
+	class AKJS_MultiGameModeBase* Multigm;
+
 	// 파일 세이브하기
 	void SaveJson(const FString jsonData);
 
@@ -115,4 +118,6 @@ public:
 
 	void GetImage(const FString url);
 	void OnGetImageData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully);
+
+	
 };

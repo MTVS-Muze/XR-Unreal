@@ -302,6 +302,9 @@ public:
 	UFUNCTION()
 	void SetWidgetText(int id);
 
+	UFUNCTION()
+	void SetWidgetMultiText(int id);
+
 	UPROPERTY(EditAnywhere,Category=MySettings)
 	int idnum;
 	
@@ -324,6 +327,9 @@ public:
 
 	UPROPERTY()
 	FString MapNames;
+
+	UPROPERTY()
+	class AKJS_MultiGameModeBase* Multigm;
 	
 #pragma endregion
 
