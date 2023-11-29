@@ -8,6 +8,15 @@
 #include "KJS_GameModeBase.h"
 #include "KJS_MultiGameModeBase.generated.h"
 
+struct FLevelInfo3
+{
+	FVector Location;
+	FRotator Rotation;
+	FVector Scale;
+	UClass* ActorClass;
+	float SpawnTime;
+	float LifeSpan;
+};
 
 UCLASS()
 class VR_MUZE_API AKJS_MultiGameModeBase : public AGameModeBase
@@ -16,8 +25,10 @@ class VR_MUZE_API AKJS_MultiGameModeBase : public AGameModeBase
 
 protected:
 	void BeginPlay() override;
+	virtual void Tick(float DeltaTime)override;
 
 public:
+	AKJS_MultiGameModeBase();
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
 public:
@@ -47,6 +58,31 @@ public:
 
 	 UPROPERTY(EditAnywhere, Category= MySettings)
 	class AOSY_HttpRequestActor* HttpActor;
+
+	UFUNCTION()
+	void LoadJsonData();
+
+	UFUNCTION()
+	void Play();
+
+	TArray<FVector> Locations;
+	TArray<FRotator> Rotations;
+	TArray<FVector> Scales;
+	TArray<FString> ActorClasses;
+	TArray<float> SpawnTimes;
+	TArray<float> LifeSpans;
+	TArray<FLevelInfo3> PendingSpawns;
+
+	UPROPERTY(EditAnywhere,Category = "MySettings")
+	class AOSY_TImeActor* TimeManager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MySequence)
+	float CurrentTime;
+
+	int32 currentIndex = 0;
+
+	UFUNCTION()
+	void Request();
 
 private:
 	TArray<APlayerStart*> UsedPlayerStarts;

@@ -196,7 +196,7 @@ void AOSY_HttpRequestActor::OnReceivedAllLevel(FHttpRequestPtr Request, FHttpRes
 		{
 			KVgm->AllLevelArray=AllLevel;
 		}
-		else if (currentLevel == "Box_indoor_Multi")
+		else if (currentLevel == "Box_indoor_Multi" || currentLevel == "MeteorMap")
 		{
 			Multigm->AllLevelArray = AllLevel;
 		}

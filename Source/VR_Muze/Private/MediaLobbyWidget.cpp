@@ -230,14 +230,15 @@ void UMediaLobbyWidget::OnCheckedbtn_LeftSocial()
 {
 	// 데이터 불러와
 	idnum++;
-	SetWidgetText(idnum);
+
+	SetWidgetMultiText(idnum);
 }
 
 void UMediaLobbyWidget::OnCheckedbtn_RightSocial()
 {
 	// 데이터 불러와
 	idnum--;
-	SetWidgetText(idnum);
+	SetWidgetMultiText(idnum);
 }
 #pragma endregion 
 
