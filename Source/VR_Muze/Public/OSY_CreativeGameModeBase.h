@@ -72,7 +72,7 @@ public:
 	UPROPERTY()
 	USoundBase* Song;
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 
 	UPROPERTY()

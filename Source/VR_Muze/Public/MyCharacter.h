@@ -69,7 +69,7 @@ public:
 	class UWidgetComponent* PlaylistWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base")
 	//class UWidgetComponent* ShowHostCodeWidget;

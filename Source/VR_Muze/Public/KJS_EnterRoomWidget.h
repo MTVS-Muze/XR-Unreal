@@ -25,7 +25,7 @@ public:
 	class UEditableText* edit_EnterRoomCode;
 	
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 	UFUNCTION()
 	void OnEnterClicked();

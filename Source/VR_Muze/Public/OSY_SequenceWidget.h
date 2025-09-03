@@ -121,7 +121,7 @@ public :
 
 	int32 currentIndex = 0;
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 
 	

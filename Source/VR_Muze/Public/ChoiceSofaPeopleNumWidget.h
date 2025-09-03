@@ -54,7 +54,7 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category=MakingRoom)
 	class UButton* btn_Back;
 
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 public:
 	UFUNCTION()
 	void OnSliderMoved(float value);

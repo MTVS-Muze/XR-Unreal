@@ -4,13 +4,13 @@
 #include "KJS_EnterRoomWidget.h"
 #include "Runtime/UMG/Public/Components/Button.h"
 #include "Runtime/UMG/Public/Components/EditableText.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 
 void UKJS_EnterRoomWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 
 	btn_Enter->OnClicked.AddDynamic(this, &UKJS_EnterRoomWidget::OnEnterClicked);
 	

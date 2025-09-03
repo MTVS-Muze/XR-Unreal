@@ -3,7 +3,7 @@
 
 #include "OSY_CustomGameMode.h"
 #include "CharacterCustomizeWidget.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "OSY_HttpRequestActor.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
@@ -24,7 +24,7 @@ void AOSY_CustomGameMode::BeginPlay()
         CustomUI->AddToViewport();
     }
 
-    gi = Cast<UOSY_GameInstance>(GetGameInstance());
+    gi = Cast<UMuzeGameInstance>(GetGameInstance());
     HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
     //HttpActor->SendRequest(gi->CustomURL);

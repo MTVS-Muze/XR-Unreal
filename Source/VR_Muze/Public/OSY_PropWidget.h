@@ -279,7 +279,7 @@ public:
 	class AOSY_CreativeGameModeBase* gm;
 
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 	UPROPERTY(EditAnywhere,Category = "MySettings")
 	FString JsonStringPost;

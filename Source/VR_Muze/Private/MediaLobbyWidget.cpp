@@ -9,7 +9,7 @@
 #include "Components/TextBlock.h"
 #include "Components/CheckBox.h"
 #include "KJS_BoxSofa.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "KJS_TypeInviteNumWidget.h"
 #include "MyCharacter.h"
 #include "Components/WidgetComponent.h"
@@ -31,7 +31,7 @@ void UMediaLobbyWidget::NativeConstruct()
 	bHasExecuted = false;
 
 	gm =GetWorld()->GetAuthGameMode<AKJS_GameModeBase>();
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
 	//MediaBox= Cast<AKJS_Box>(UGameplayStatics::)

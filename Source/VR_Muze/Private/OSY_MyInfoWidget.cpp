@@ -2,7 +2,7 @@
 
 
 #include "OSY_MyInfoWidget.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "Runtime/UMG/Public/Components/TextBlock.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "OSY_HttpRequestActor.h"
@@ -12,7 +12,7 @@ void UOSY_MyInfoWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 
 	KCgm = GetWorld()->GetAuthGameMode<AKJS_CustomizeGameModeBase>();
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));

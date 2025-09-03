@@ -27,7 +27,7 @@ public:
 
 
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 	UPROPERTY()
 	class AKJS_CustomizeGameModeBase* KCgm;

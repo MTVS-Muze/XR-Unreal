@@ -19,7 +19,7 @@ protected:
 
 public:
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 	UFUNCTION()
 	void OnSequenceFinished();

@@ -26,6 +26,6 @@ public:
 	class AOSY_HttpRequestActor* HttpActor;
 
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 	
 };

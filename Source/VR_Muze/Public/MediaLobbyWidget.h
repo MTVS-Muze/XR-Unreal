@@ -294,7 +294,7 @@ public:
 	class AKJS_GameModeBase* gm;
 
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 	UPROPERTY(EditAnywhere, Category= MySettings)
 	class AOSY_HttpRequestActor* HttpActor;

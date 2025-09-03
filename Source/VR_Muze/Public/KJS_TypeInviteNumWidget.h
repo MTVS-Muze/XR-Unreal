@@ -25,6 +25,6 @@ public:
 	void CreateInviteCode(const FString& InviteCode);
 
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 };

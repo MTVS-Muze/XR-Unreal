@@ -3,7 +3,7 @@
 
 #include "MapInfoWidget.h"
 #include "Runtime/UMG/Public/Components/EditableText.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "Runtime/UMG/Public/Components/ComboBoxString.h"
 #include "Runtime/UMG/Public/Components/Button.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -12,7 +12,7 @@ void UMapInfoWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 
 	if (btn_GoCreateMap)
 	{

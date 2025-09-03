@@ -7,7 +7,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/Materials/MaterialInstance.h"
 #include "MyCharacter.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "OSY_HttpRequestActor.h"
 #include "KJS_MuzePlayerState.h"
 
@@ -21,7 +21,7 @@ void UCharacterCustomizeWidget::NativeConstruct()
 	player = Cast<AMyCharacter>(Pawn);
 	ps = Cast<AKJS_MuzePlayerState>(player->GetPlayerState());
 
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
 	btn_IntoBox->OnClicked.AddDynamic(this, &UCharacterCustomizeWidget::OnClickedbtn_IntoBox);
@@ -104,10 +104,11 @@ void UCharacterCustomizeWidget::SwitchColorBlack()
 	color=0;
 	gi->color=color;
 	player->ColorIndex = color;
-	if(ps&&player->IsLocallyControlled())
-	{
-		ps->ServerSetColorIndex(color);
-	}
+	ps->ServerSetColorIndex(color);
+	//if(ps&&player->IsLocallyControlled())
+	//{
+	//	ps->ServerSetColorIndex(color);
+	//}
 	player->SwitchBodyColor(player->ColorIndex);
 }
 

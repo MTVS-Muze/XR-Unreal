@@ -6,7 +6,7 @@
 #include "Runtime/Online/HTTP/Public/Interfaces/IHttpRequest.h"
 #include "Runtime/Online/HTTP/Public/Interfaces/IHttpResponse.h"
 #include "OSY_CSVParseLibrary.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "OSY_CreativeGameModeBase.h"
 #include "OSY_JsonParseLibrary.h"
 #include "OSY_PropWidget.h"
@@ -22,7 +22,7 @@ AOSY_HttpRequestActor::AOSY_HttpRequestActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//MyGameInstance = Cast<UOSY_GameInstance>(GetGameInstance());
+	//MyGameInstance = Cast<UMuzeGameInstance>(GetGameInstance());
 
 }
 
@@ -31,7 +31,7 @@ void AOSY_HttpRequestActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 
 	OCgm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
 	MSgm = GetWorld()->GetAuthGameMode<AModeSelectGameModeBase>();

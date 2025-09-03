@@ -23,7 +23,7 @@
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputMappingContext.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputAction.h"
 #include "KJS_GameModeBase.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "Net/UnrealNetwork.h"
 #include "KJS_MuzePlayerState.h"
 
@@ -284,7 +284,7 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 	ps = Cast<AKJS_MuzePlayerState>(GetPlayerState());
 
 

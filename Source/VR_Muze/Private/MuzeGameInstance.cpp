@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "OSY_PropWidget.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
@@ -14,7 +14,7 @@
 
 
 
-UOSY_GameInstance::UOSY_GameInstance()
+UMuzeGameInstance::UMuzeGameInstance()
 {
 	
 
@@ -28,7 +28,7 @@ UOSY_GameInstance::UOSY_GameInstance()
 /// <summary>
 /// /////////////////////////////////////////////////////////////////////////////////////////
 /// </summary>
-void UOSY_GameInstance::Init()
+void UMuzeGameInstance::Init()
 {
 	Super::Init();
 
@@ -38,12 +38,12 @@ void UOSY_GameInstance::Init()
 		sessionInterface = subsys->GetSessionInterface();
 
 		//세션 이벤트에 함수 바인딩 하기
-		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UOSY_GameInstance::OnCreatedMuzeSession);
-		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UOSY_GameInstance::OnFindOtherSession);
-		sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UOSY_GameInstance::OnJoinFindSameSession);
+		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UMuzeGameInstance::OnCreatedMuzeSession);
+		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UMuzeGameInstance::OnFindOtherSession);
+		sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UMuzeGameInstance::OnJoinFindSameSession);
 	}
 
-	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UOSY_GameInstance::OnLevelLoaded);
+	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UMuzeGameInstance::OnLevelLoaded);
 #pragma region Seyoung
 
 	
@@ -53,7 +53,7 @@ void UOSY_GameInstance::Init()
 
 }
 
-void UOSY_GameInstance::CreateMuzeSession(int32 playerCount)
+void UMuzeGameInstance::CreateMuzeSession(int32 playerCount)
 {
 	FName SessionName = mySessionName;
 	FOnlineSessionSettings settings;
@@ -105,7 +105,7 @@ void UOSY_GameInstance::CreateMuzeSession(int32 playerCount)
 	//}
 }
 
-void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccessful)
+void UMuzeGameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccessful)
 {
 	if (bWasSuccessful)
 	{
@@ -115,7 +115,7 @@ void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccess
 	}
 }
 
-//FString UOSY_GameInstance::GenerateRandomCode(int32 Length)
+//FString UMuzeGameInstance::GenerateRandomCode(int32 Length)
 //{
 //	FString Code;
 //	FString Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -130,7 +130,7 @@ void UOSY_GameInstance::OnCreatedMuzeSession(FName sessionName, bool bWasSuccess
 //	return Code;
 //}
 
-void UOSY_GameInstance::FindOtherSession()
+void UMuzeGameInstance::FindOtherSession()
 {
 	sessionSearch = MakeShareable(new FOnlineSessionSearch());
 
@@ -146,7 +146,7 @@ void UOSY_GameInstance::FindOtherSession()
 	sessionInterface->FindSessions(0, sessionSearch.ToSharedRef());
 }
 
-void UOSY_GameInstance::OnFindOtherSession(bool bWasSuccessful)
+void UMuzeGameInstance::OnFindOtherSession(bool bWasSuccessful)
 {
 	if (bWasSuccessful)
 	{
@@ -192,7 +192,7 @@ void UOSY_GameInstance::OnFindOtherSession(bool bWasSuccessful)
 }
 
 
-//void UOSY_GameInstance::JoinSelectedSession(FString RoomCode)
+//void UMuzeGameInstance::JoinSelectedSession(FString RoomCode)
 //{
 //	if (sessionSearch.IsValid())
 //	{
@@ -209,7 +209,7 @@ void UOSY_GameInstance::OnFindOtherSession(bool bWasSuccessful)
 //	}
 //}
 
-void UOSY_GameInstance::JoinMuzeSession(FOnlineSessionSearchResult SearchResult)
+void UMuzeGameInstance::JoinMuzeSession(FOnlineSessionSearchResult SearchResult)
 {
 	FName SessionName = mySessionName;
 
@@ -225,7 +225,7 @@ void UOSY_GameInstance::JoinMuzeSession(FOnlineSessionSearchResult SearchResult)
 	}
 }
 
-void UOSY_GameInstance::OnJoinFindSameSession(FName sessionName, EOnJoinSessionCompleteResult::Type result)
+void UMuzeGameInstance::OnJoinFindSameSession(FName sessionName, EOnJoinSessionCompleteResult::Type result)
 {
 	UE_LOG(LogTemp, Warning, TEXT("%s"), result == EOnJoinSessionCompleteResult::Success ? *FString(TEXT("Success")) : *FString(TEXT("Failed")));
 
@@ -269,7 +269,7 @@ void UOSY_GameInstance::OnJoinFindSameSession(FName sessionName, EOnJoinSessionC
 	}
 }
 
-void UOSY_GameInstance::OnUpdateSession(FName sessionName, bool bIsUpdate)
+void UMuzeGameInstance::OnUpdateSession(FName sessionName, bool bIsUpdate)
 {
 	if (sessionName == currentSessionName)
 	{
@@ -278,7 +278,7 @@ void UOSY_GameInstance::OnUpdateSession(FName sessionName, bool bIsUpdate)
 }
 
 
-void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
+void UMuzeGameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("%s(%d) map name: %s"), *FString(__FUNCTION__), __LINE__, *LoadedWorld->GetMapName());
 
@@ -338,14 +338,14 @@ void UOSY_GameInstance::OnLevelLoaded(UWorld* LoadedWorld)
 }
 
 
-void UOSY_GameInstance::ReceiveLevelDataID(int LevelDataID)
+void UMuzeGameInstance::ReceiveLevelDataID(int LevelDataID)
 {
 	PlayId=LevelDataID;
 
 	UE_LOG(LogTemp,Warning,TEXT("%d"),PlayId);
 }
 
-void UOSY_GameInstance::ParsePlayerData()
+void UMuzeGameInstance::ParsePlayerData()
 {
 	parsePlayerData.ParseIntoArray(DataArray, TEXT(":"), true);
 
@@ -359,12 +359,12 @@ void UOSY_GameInstance::ParsePlayerData()
 }
 
 
-//void UOSY_GameInstance::ServerOnLevelLoaded_Implementation(UWorld* LoadedWorld)
+//void UMuzeGameInstance::ServerOnLevelLoaded_Implementation(UWorld* LoadedWorld)
 //{
 //	MulticastOnLevelLoaded(LoadedWorld);
 //}
 //
-//void UOSY_GameInstance::MulticastOnLevelLoaded_Implementation(UWorld* LoadedWorld)
+//void UMuzeGameInstance::MulticastOnLevelLoaded_Implementation(UWorld* LoadedWorld)
 //{
 //	if (LoadedWorld->GetMapName() == "Box_indoor_Single" || LoadedWorld->GetMapName() == "Box_indoor_Multi" || LoadedWorld->GetMapName() == "StreetCar_Play")
 //	{

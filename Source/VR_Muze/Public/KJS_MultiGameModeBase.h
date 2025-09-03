@@ -27,7 +27,7 @@ public:
 	APlayerStart* SpawnPlayerStart(FVector Location, FRotator Rotation, FString Tag);
 
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 	UFUNCTION()
     void OnLevelSequenceFinished();

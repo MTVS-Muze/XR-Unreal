@@ -2,7 +2,7 @@
 
 
 #include "KJS_MultiGameModeBase.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerStart.h"
 #include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
@@ -12,7 +12,7 @@ void AKJS_MultiGameModeBase::InitGame(const FString& MapName, const FString& Opt
 {
     Super::InitGame(MapName, Options, ErrorMessage);
 
-    gi = Cast<UOSY_GameInstance>(GetGameInstance());
+    gi = Cast<UMuzeGameInstance>(GetGameInstance());
 
     if (gi)
     {

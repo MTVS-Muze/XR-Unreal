@@ -4,7 +4,7 @@
 #include "ModeSelectGameModeBase.h"
 #include "MainWidget.h"
 #include "OSY_HttpRequestActor.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 AModeSelectGameModeBase::AModeSelectGameModeBase()
@@ -21,7 +21,7 @@ void AModeSelectGameModeBase::BeginPlay()
         ModeSelectUI->AddToViewport();
 
     }
-    gi = Cast<UOSY_GameInstance>(GetGameInstance());
+    gi = Cast<UMuzeGameInstance>(GetGameInstance());
     HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
    
    

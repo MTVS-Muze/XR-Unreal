@@ -3,14 +3,14 @@
 
 #include "KJS_TypeInviteNumWidget.h"
 #include "Runtime/UMG/Public/Components/TextBlock.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "MediaLobbyWidget.h"
 
 void UKJS_TypeInviteNumWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 }
 
 void UKJS_TypeInviteNumWidget::CreateInviteCode(const FString& InviteCode)

@@ -10,7 +10,7 @@
 #include "OSY_TImeActor.h"
 #include "OSY_LoginWidget.h"
 #include "OSY_OutLinerWidget.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "OSY_HttpRequestActor.h"
 #include "Runtime/UMG/Public/Components/TextBlock.h"
 
@@ -24,7 +24,7 @@ void AOSY_CreativeGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
 
-    gi = Cast<UOSY_GameInstance>(GetGameInstance());
+    gi = Cast<UMuzeGameInstance>(GetGameInstance());
     HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
     TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));

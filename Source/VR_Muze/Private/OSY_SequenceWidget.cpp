@@ -11,14 +11,14 @@
 #include "OSY_TImeActor.h"
 #include "Components/AudioComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 
 void UOSY_SequenceWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 
-    gi = Cast<UOSY_GameInstance>(GetGameInstance());
+    gi = Cast<UMuzeGameInstance>(GetGameInstance());
     gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
 
     TimeManager = Cast<AOSY_TImeActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TImeActor::StaticClass()));

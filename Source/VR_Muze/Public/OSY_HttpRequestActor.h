@@ -65,7 +65,7 @@ public:
 	FString sourceURL;
 
 	// GameInstance
-	class UOSY_GameInstance* MyGameInstance;
+	class UMuzeGameInstance* MyGameInstance;
 
 	UPROPERTY()
 	class AOSY_CreativeGameModeBase* OCgm;
@@ -103,7 +103,7 @@ public:
 	
 
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 	UPROPERTY()
 	FString BearerToken;

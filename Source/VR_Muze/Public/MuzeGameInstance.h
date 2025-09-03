@@ -6,7 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "KJS_BoxSofa.h"
-#include "OSY_GameInstance.generated.h"
+#include "MuzeGameInstance.generated.h"
 
  USTRUCT(BlueprintType)
 struct FSessionSlotInfo
@@ -75,12 +75,12 @@ struct FSpawnData
  * 
  */
 UCLASS()
-class VR_MUZE_API UOSY_GameInstance : public UGameInstance
+class VR_MUZE_API UMuzeGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
 protected:
-	UOSY_GameInstance();
+	UMuzeGameInstance();
 
 public:
 	virtual void Init() override;

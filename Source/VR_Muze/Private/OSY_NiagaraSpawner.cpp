@@ -2,7 +2,7 @@
 
 
 #include "OSY_NiagaraSpawner.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "LevelInfoTable.h"
 #include "OSY_CSVParseLibrary.h"
 
@@ -13,7 +13,7 @@ AOSY_NiagaraSpawner::AOSY_NiagaraSpawner()
 	PrimaryActorTick.bCanEverTick = true;
 
 
-	//MyGameInstance = Cast<UOSY_GameInstance>(GetGameInstance());
+	//MyGameInstance = Cast<UMuzeGameInstance>(GetGameInstance());
 	//if (MyGameInstance != nullptr)
 	//{
 	//	TArray<FString> spawnData = MyGameInstance->HttpRecieveData;

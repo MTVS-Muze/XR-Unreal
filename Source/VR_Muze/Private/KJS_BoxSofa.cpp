@@ -7,7 +7,7 @@
 #include "Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "MediaLobbyWidget.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -34,7 +34,7 @@ void AKJS_BoxSofa::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UOSY_GameInstance* gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	UMuzeGameInstance* gi = Cast<UMuzeGameInstance>(GetGameInstance());
 	if (gi)
 	{
 		//체크상태 확인

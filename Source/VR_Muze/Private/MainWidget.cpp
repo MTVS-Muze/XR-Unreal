@@ -6,7 +6,7 @@
 #include "Components/EditableText.h"
 #include "Components/WidgetSwitcher.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "Components/CanvasPanel.h" 
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "IXRTrackingSystem.h"
@@ -32,7 +32,7 @@ void UMainWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	MSgm=GetWorld()->GetAuthGameMode<AModeSelectGameModeBase>();
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 	
 	LevelName2 = UGameplayStatics::GetCurrentLevelName(this);

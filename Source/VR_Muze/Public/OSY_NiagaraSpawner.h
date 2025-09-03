@@ -24,7 +24,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// GameInstance
-	class UOSY_GameInstance* MyGameInstance;
+	class UMuzeGameInstance* MyGameInstance;
 
 	//UPROPERTY(EditAnywhere, Category = "MySettings")
 	

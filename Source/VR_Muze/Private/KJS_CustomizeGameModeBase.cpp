@@ -8,7 +8,7 @@
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "OSY_MYinfoWidget.h"
 #include "Components/Image.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "Runtime/Engine/Public/ImageUtils.h"
 #include "CharacterCustomizeWidget.h"
 
@@ -16,7 +16,7 @@ void AKJS_CustomizeGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-    gi = Cast<UOSY_GameInstance>(GetGameInstance());
+    gi = Cast<UMuzeGameInstance>(GetGameInstance());
 
     for (TActorIterator<ALevelSequenceActor> It(GetWorld()); It; ++It)
     {

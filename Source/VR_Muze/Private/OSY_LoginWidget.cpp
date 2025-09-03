@@ -7,13 +7,13 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "OSY_KakaoHttpRequestActor.h"
 #include "WebBrowser.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "OSY_LoginGameMode.h"
 #include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
 #include "Runtime/MovieScene/Public/MovieSceneSequencePlayer.h"
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "OSY_HttpRequestActor.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 
 void UOSY_LoginWidget::NativeConstruct()
 {
@@ -54,7 +54,7 @@ void UOSY_LoginWidget::NativeConstruct()
 	btn_Start->OnClicked.AddDynamic(this, &UOSY_LoginWidget::Request);
 	
 	loginGM = Cast<AOSY_LoginGameMode>(UGameplayStatics::GetGameMode(this));
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 
 	HttpActor = Cast<AOSY_HttpRequestActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_HttpRequestActor::StaticClass()));
 
@@ -121,7 +121,7 @@ void UOSY_LoginWidget::HandleUrlChanged(const FText& InText)
 
 	if (!Token2.IsEmpty())
 	{
-		UOSY_GameInstance* MyGameInstance = Cast<UOSY_GameInstance>(GetWorld()->GetGameInstance());
+		UMuzeGameInstance* MyGameInstance = Cast<UMuzeGameInstance>(GetWorld()->GetGameInstance());
 		if (MyGameInstance != nullptr)
 		{
 

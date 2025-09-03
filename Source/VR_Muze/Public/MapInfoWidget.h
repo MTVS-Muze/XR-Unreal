@@ -34,7 +34,7 @@ public:
     void InfoCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 
 	UPROPERTY()
-	class UOSY_GameInstance* gi;
+	class UMuzeGameInstance* gi;
 
 
 

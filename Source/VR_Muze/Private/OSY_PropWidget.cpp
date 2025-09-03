@@ -13,7 +13,7 @@
 #include "OSY_NiagaraSpawner.h"
 #include "OSY_TImeActor.h"
 #include "OSY_CreativeGameModeBase.h"
-#include "OSY_GameInstance.h"
+#include "MuzeGameInstance.h"
 #include "OSY_OutLinerWidget.h"
 #include "OSY_LightBaseActor.h"
 #include "Runtime/UMG/Public/Components/WidgetSwitcher.h"
@@ -29,7 +29,7 @@ void UOSY_PropWidget::NativeConstruct()
 
 	gm = GetWorld()->GetAuthGameMode<AOSY_CreativeGameModeBase>();
 
-	gi = Cast<UOSY_GameInstance>(GetGameInstance());
+	gi = Cast<UMuzeGameInstance>(GetGameInstance());
 	if (gi != nullptr)
 	{
 		posturl = gi->Posturl;
